@@ -1,0 +1,27 @@
+==================
+Document meta
+==================
+@document
+  title: Hello
+@end
+---
+(document
+  (document_meta
+    (document_meta_field
+      (document_meta_field_key)
+      (document_meta_field_value)
+    ))
+)
+
+==================
+Document title
+==================
+= Document title
+---
+(document
+  (document_title_basic
+    (document_title_basic_marker)
+    (text_to_eol)
+  )
+)
+

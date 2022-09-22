@@ -1,0 +1,27 @@
+{
+  "name": "tree-sitter-syslang",
+  "version": "0.1.0",
+  "private": true,
+  "main": "bindings/node",
+  "tree-sitter": [
+    {
+      "scope": "document.syslang",
+      "file-types": [
+        "syslang"
+      ]
+    }
+  ],
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "parse": "tree-sitter parse",
+    "highlight": "tree-sitter highlight",
+    "debug": "tree-sitter parse --debug-build"
+  },
+  "dependencies": {
+    "nan": "^2.14.2"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.0"
+  }
+}

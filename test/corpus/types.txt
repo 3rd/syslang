@@ -1,0 +1,15 @@
+==================
+Basic types
+==================
+"String" 123
+---
+(document (text_line
+  (string) (number)))
+
+==================
+Ticket
+==================
+APP-123
+---
+(document 
+  (text_line (ticket)))

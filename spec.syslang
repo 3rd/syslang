@@ -1,0 +1,67 @@
+@document
+  title: Title
+  tags: consume, article, public
+@end
+
+* Attached modifiers
+  - *bold*
+  - /italic/
+  - _underline_
+  - -strikethrough- -- TODO
+  - `inline code` -- TODO
+  - --inline comment-- -- TODO
+* Detached modifiers
+  ** Structure
+    Comment -- to the end of line
+    *** Heading
+      > Section
+        Text after section *bold*.
+        | Quote
+        - List item
+  ** Task items
+    [ ] Sample task #asd
+      Subtext with attached modifier *support*.
+    [-] Pending
+    [x] Done
+  ** Task scheduling
+    Tasks can be scheduled (using the regular datetime / datetime range syntax).
+    [ ] Sample task
+      Schedule: 2022/01/01 10:30-10:40
+  ** Time tracking
+    A work session can be added to a task (using the regular datetime / datetime range syntax).
+    [ ] Sample task
+      Session: 2022/01/01 10:30-10:40
+* Types
+  - "String"
+  - 123
+  - TICKET-123
+  - 10:00
+  - 10:00 - 10:30
+  - 2022-01-01
+  - 2022.01.01
+  - 2022/01/01
+  - 2022-01-01 - 2022-01-02
+  - 2022.01.01 - 2022.01.02
+  - 2022/01/01 - 2022/01/02
+  - 2022-01-01 10:00
+  - 2022.01.01 10:00
+  - 2022/01/01 10:00
+  - 2022-01-01 10:00 - 2022-01-02 10:30
+  - 2022.01.01 10:00 - 2022-01-02 10:30
+  - 2022/01/01 10:00 - 2022-01-02 10:30
+  - #hash @context $var +positive -negative !danger
+* Code
+  ** Code block
+    @code bash
+      # shell script
+      openssl rand -hex 20
+    @end
+  ** TODO Tangling
+    -- @code sh tangle:out.sh
+    --   echo "This was tangled to out.sh"
+    -- @end
+    -- @code :notangle
+    --   This won't be tangled if `document.export` is set and tangle is called.
+    -- @end
+
+

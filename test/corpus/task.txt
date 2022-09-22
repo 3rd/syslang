@@ -1,0 +1,79 @@
+==================
+Task type
+==================
+[ ] Task
+[-] Active task
+[x] Done task
+
+> section
+  -- comment
+  [ ] normal task
+  [-] active task
+---
+(document
+  (task_normal (task_normal_marker) (text_line))
+  (task_active (task_active_marker) (text_line))
+  (task_done (task_done_marker) (text_to_eol))
+
+  (section
+    (section_marker) (text_to_eol)
+    (text_line (comment))
+    (task_normal (task_normal_marker) (text_line))
+    (task_active (task_active_marker) (text_line)))
+)
+
+==================
+Task details
+==================
+[ ] Sample task
+Task details.
+Also task details.
+
+---
+(document
+  (task_normal
+    (task_normal_marker) (text_line)
+    (text_line)
+    (text_line)
+))
+
+==================
+Task session
+==================
+[ ] Task
+  Session: 2022-01-01 10:00 - 2022-01-01 11:00
+  Session: 2022-01-01 10:00
+---
+(document
+  (task_normal
+    (task_normal_marker) (text_line)
+    (task_session
+      (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+    (task_session
+      (datetime (date) (time))))
+)
+
+==================
+Task schedule
+==================
+[ ] Task
+  Schedule: 2022-01-01
+  Schedule: 2022-01-01 10:00
+  Schedule: 2022-01-01 10:00 - 10:30
+  Schedule: 2022-01-01 10:00 - 2022-01-01 11:00
+---
+(document
+  (task_normal
+    (task_normal_marker) (text_line)
+    (task_schedule (date))
+    (task_schedule (datetime (date) (time)))
+    (task_schedule (datetimerange (datetime (date) (time)) (time)))
+    (task_schedule
+      (datetimerange
+        (datetime (date) (time)) (datetime (date) (time))
+      )
+    ))
+)
+
+
+

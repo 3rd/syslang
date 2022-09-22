@@ -1,0 +1,18 @@
+==================
+Links
+==================
+[labeled link](target)
+---
+(document (text_line
+  (link)
+))
+
+==================
+Plain links
+==================
+http://example.local/test/?query&param=val#hash
+---
+(document
+  (text_line (link_plain))
+)
+

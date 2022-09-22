@@ -1,0 +1,28 @@
+==================
+Bold
+==================
+*bold*, *bold* and *bold*.
+---
+(document 
+  (text_line (bold) (bold) (bold))
+)
+
+==================
+Italic
+==================
+/italic/, /italic/ and /italic/.
+---
+(document 
+  (text_line (italic) (italic) (italic))
+)
+
+==================
+Underline
+==================
+_underline_, _underline_ and _underline_.
+---
+(document 
+  (text_line (underline) (underline) (underline))
+)
+
+

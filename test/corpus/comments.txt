@@ -1,0 +1,11 @@
+==================
+Inline comment
+==================
+-- A commented line.
+A partially -- commented line.
+---
+(document
+  (text_line (comment))
+  (text_line (comment))
+)
+

@@ -1,0 +1,70 @@
+==================
+Date
+==================
+2022-01-01 2022-01-02
+---
+(document (text_line
+  (date) (date)))
+
+==================
+Date range
+==================
+2022-01-01 - 2022-01-02
+2022.01.01 - 2022.01.02
+2022/01/01 - 2022/01/02
+---
+(document
+  (text_line (daterange (date) (date)))
+  (text_line (daterange (date) (date)))
+  (text_line (daterange (date) (date)))
+)
+
+==================
+Time
+==================
+12:00 12:00:30
+---
+(document (text_line
+  (time) (time)))
+
+==================
+Time range
+==================
+12:00 - 12:30
+12:00 - 12:30:30
+12:00:00 - 12:30:00
+---
+(document
+  (text_line (timerange (time) (time)))
+  (text_line (timerange (time) (time)))
+  (text_line (timerange (time) (time)))
+)
+
+==================
+Datetime
+==================
+2022-01-01 12:00
+2022.01.01 12:00
+2022/01/01 12:00
+---
+(document
+  (text_line (datetime (date) (time)))
+  (text_line (datetime (date) (time)))
+  (text_line (datetime (date) (time)))
+)
+
+==================
+Datetime range
+==================
+2022-01-01 12:00 - 12:30
+2022-01-01 12:00 - 2022-01-02 12:00
+2022.01.01 12:00 - 2022.01.02 12:00
+2022/01/01 12:00 - 2022/01/02 12:00
+---
+(document
+  (text_line (datetimerange (datetime (date) (time)) (time)))
+  (text_line (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+  (text_line (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+  (text_line (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+)
+

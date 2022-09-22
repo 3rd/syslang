@@ -1,0 +1,9 @@
+==================
+Tags
+==================
++positive -negative @context #hash !danger
+---
+(document
+  (text_line (tag_positive) (tag_negative) (tag_context) (tag_hash) (tag_danger))
+)
+

@@ -1,0 +1,1194 @@
+[
+  {
+    "type": "code_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block_content",
+          "named": true
+        },
+        {
+          "type": "code_block_end",
+          "named": true
+        },
+        {
+          "type": "code_block_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "code_block_content",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "code_block_start",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "code_block_language",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "date",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "daterange",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "datetime",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "time",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "datetimerange",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "datetime",
+          "named": true
+        },
+        {
+          "type": "time",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "document",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "document_meta",
+          "named": true
+        },
+        {
+          "type": "document_title_basic",
+          "named": true
+        },
+        {
+          "type": "heading_1",
+          "named": true
+        },
+        {
+          "type": "heading_2",
+          "named": true
+        },
+        {
+          "type": "heading_3",
+          "named": true
+        },
+        {
+          "type": "heading_4",
+          "named": true
+        },
+        {
+          "type": "heading_5",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "document_meta",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "document_meta_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "document_meta_field",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "document_meta_field_key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "document_meta_field_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "document_meta_field_value",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "document_title_basic",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "document_title_basic_marker",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_1",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_1_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "heading_2",
+          "named": true
+        },
+        {
+          "type": "heading_3",
+          "named": true
+        },
+        {
+          "type": "heading_4",
+          "named": true
+        },
+        {
+          "type": "heading_5",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_2",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_2_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "heading_3",
+          "named": true
+        },
+        {
+          "type": "heading_4",
+          "named": true
+        },
+        {
+          "type": "heading_5",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_3",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_3_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "heading_4",
+          "named": true
+        },
+        {
+          "type": "heading_5",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_4",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_4_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "heading_5",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_5",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_5_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "heading_6",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_6",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "heading_6_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "link",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "list_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "list_item_marker",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "list_item_marker",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "pipe",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe_marker",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "paragraph_break",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "section_marker",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_normal",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_active",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "task_active_marker",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_done",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "task_done_marker",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_normal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "task_normal_marker",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_schedule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "daterange",
+          "named": true
+        },
+        {
+          "type": "datetime",
+          "named": true
+        },
+        {
+          "type": "datetimerange",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_session",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "datetime",
+          "named": true
+        },
+        {
+          "type": "datetimerange",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "text_line",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bold",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "daterange",
+          "named": true
+        },
+        {
+          "type": "datetime",
+          "named": true
+        },
+        {
+          "type": "datetimerange",
+          "named": true
+        },
+        {
+          "type": "italic",
+          "named": true
+        },
+        {
+          "type": "link",
+          "named": true
+        },
+        {
+          "type": "link_plain",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tag_context",
+          "named": true
+        },
+        {
+          "type": "tag_danger",
+          "named": true
+        },
+        {
+          "type": "tag_hash",
+          "named": true
+        },
+        {
+          "type": "tag_negative",
+          "named": true
+        },
+        {
+          "type": "tag_positive",
+          "named": true
+        },
+        {
+          "type": "ticket",
+          "named": true
+        },
+        {
+          "type": "time",
+          "named": true
+        },
+        {
+          "type": "timerange",
+          "named": true
+        },
+        {
+          "type": "underline",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "text_to_eol",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "time",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "timerange",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "time",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\n",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
+    "type": "@code",
+    "named": false
+  },
+  {
+    "type": "bold",
+    "named": true
+  },
+  {
+    "type": "code_block_end",
+    "named": true
+  },
+  {
+    "type": "code_block_language",
+    "named": true
+  },
+  {
+    "type": "document_meta_field_key",
+    "named": true
+  },
+  {
+    "type": "document_title_basic_marker",
+    "named": true
+  },
+  {
+    "type": "heading_1_marker",
+    "named": true
+  },
+  {
+    "type": "heading_2_marker",
+    "named": true
+  },
+  {
+    "type": "heading_3_marker",
+    "named": true
+  },
+  {
+    "type": "heading_4_marker",
+    "named": true
+  },
+  {
+    "type": "heading_5_marker",
+    "named": true
+  },
+  {
+    "type": "heading_6_marker",
+    "named": true
+  },
+  {
+    "type": "italic",
+    "named": true
+  },
+  {
+    "type": "link_plain",
+    "named": true
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "paragraph_break",
+    "named": true
+  },
+  {
+    "type": "pipe_marker",
+    "named": true
+  },
+  {
+    "type": "section_marker",
+    "named": true
+  },
+  {
+    "type": "string",
+    "named": true
+  },
+  {
+    "type": "tag_context",
+    "named": true
+  },
+  {
+    "type": "tag_danger",
+    "named": true
+  },
+  {
+    "type": "tag_hash",
+    "named": true
+  },
+  {
+    "type": "tag_negative",
+    "named": true
+  },
+  {
+    "type": "tag_positive",
+    "named": true
+  },
+  {
+    "type": "task_active_marker",
+    "named": true
+  },
+  {
+    "type": "task_done_marker",
+    "named": true
+  },
+  {
+    "type": "task_normal_marker",
+    "named": true
+  },
+  {
+    "type": "ticket",
+    "named": true
+  },
+  {
+    "type": "underline",
+    "named": true
+  }
+]

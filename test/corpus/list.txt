@@ -1,0 +1,25 @@
+==================
+List items
+==================
+- List item
+
+* Heading
+  - List item
+    Subtext
+  - List item
+---
+(document
+  (list_item
+    (list_item_marker)
+    (text_line))
+  (heading_1
+    (heading_1_marker)
+    (text_to_eol)
+    (list_item
+      (list_item_marker)
+      (text_line)
+      (text_line))
+    (list_item
+      (list_item_marker)
+      (text_line))))
+
