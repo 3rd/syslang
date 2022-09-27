@@ -8,5 +8,6 @@
  (task_normal)
  (task_active)
  (task_done)
+ (task_blocked)
  (section)
 ] @fold

@@ -1,9 +1,16 @@
 ==================
 Tags
 ==================
-+positive -negative @context #hash !danger
++positive -negative @context #hash !danger $identifier
 ---
 (document
-  (text_line (tag_positive) (tag_negative) (tag_context) (tag_hash) (tag_danger))
+  (text_line
+    (tag_positive)
+    (tag_negative)
+    (tag_context)
+    (tag_hash)
+    (tag_danger)
+    (tag_identifier)
+  )
 )
 

@@ -166,6 +166,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -309,6 +313,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -387,6 +395,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -461,6 +473,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -531,6 +547,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -597,6 +617,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -656,6 +680,10 @@
         },
         {
           "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_blocked",
           "named": true
         },
         {
@@ -766,6 +794,10 @@
           "named": true
         },
         {
+          "type": "task_blocked",
+          "named": true
+        },
+        {
           "type": "task_done",
           "named": true
         },
@@ -818,6 +850,49 @@
         },
         {
           "type": "text_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_blocked",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "pipe",
+          "named": true
+        },
+        {
+          "type": "task_blocked_marker",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
           "named": true
         }
       ]
@@ -984,6 +1059,10 @@
           "named": true
         },
         {
+          "type": "inline_code",
+          "named": true
+        },
+        {
           "type": "italic",
           "named": true
         },
@@ -1013,6 +1092,10 @@
         },
         {
           "type": "tag_hash",
+          "named": true
+        },
+        {
+          "type": "tag_identifier",
           "named": true
         },
         {
@@ -1124,6 +1207,10 @@
     "named": true
   },
   {
+    "type": "inline_code",
+    "named": true
+  },
+  {
     "type": "italic",
     "named": true
   },
@@ -1164,6 +1251,10 @@
     "named": true
   },
   {
+    "type": "tag_identifier",
+    "named": true
+  },
+  {
     "type": "tag_negative",
     "named": true
   },
@@ -1173,6 +1264,10 @@
   },
   {
     "type": "task_active_marker",
+    "named": true
+  },
+  {
+    "type": "task_blocked_marker",
     "named": true
   },
   {

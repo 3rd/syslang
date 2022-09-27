@@ -4,6 +4,7 @@ Task type
 [ ] Task
 [-] Active task
 [x] Done task
+[_] Blocked task
 
 > section
   -- comment
@@ -14,12 +15,14 @@ Task type
   (task_normal (task_normal_marker) (text_line))
   (task_active (task_active_marker) (text_line))
   (task_done (task_done_marker) (text_to_eol))
+  (task_blocked (task_blocked_marker) (text_to_eol))
 
   (section
     (section_marker) (text_to_eol)
     (text_line (comment))
     (task_normal (task_normal_marker) (text_line))
-    (task_active (task_active_marker) (text_line)))
+    (task_active (task_active_marker) (text_line))
+  )
 )
 
 ==================

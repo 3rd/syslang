@@ -40,6 +40,7 @@ module.exports = grammar({
             $.task_normal,
             $.task_active,
             $.task_done,
+            $.task_blocked,
             $.list_item,
             $.text_line
           )
@@ -287,7 +288,8 @@ module.exports = grammar({
     ticket: () => token(/[A-Z]+-\d+:?/),
 
     // tasks
-    _task: ($) => choice($.task_normal, $.task_active, $.task_done),
+    _task: ($) =>
+      choice($.task_normal, $.task_active, $.task_done, $.task_blocked),
     task_normal_marker: () => token(/\[ \]/),
     task_normal: ($) =>
       prec.right(
@@ -303,6 +305,16 @@ module.exports = grammar({
       prec.right(
         seq(
           $.task_done_marker,
+          $.text_to_eol,
+          choice(token(/\n/), $._eof),
+          repeat($._task_children)
+        )
+      ),
+    task_blocked_marker: () => token(/\[_\]/),
+    task_blocked: ($) =>
+      prec.right(
+        seq(
+          $.task_blocked_marker,
           $.text_to_eol,
           choice(token(/\n/), $._eof),
           repeat($._task_children)
@@ -347,6 +359,7 @@ module.exports = grammar({
     tag_hash: () => token(/#\w+/),
     tag_context: () => token(/@\w+/),
     tag_danger: () => token(/!\w+/),
+    tag_identifier: () => token(/\$\w+/),
 
     // TODO: link
     // [target]
@@ -378,6 +391,9 @@ module.exports = grammar({
     // comments
     _comment_marker: () => choice(token(/#/), token(/--/)),
     comment: ($) => seq($._comment_marker, /[^\n]+/),
+
+    // inline code
+    inline_code: () => token(/`[^`]+`/),
 
     // code blocks
     code_block_language: () => token.immediate(/[a-z]+/),
@@ -419,11 +435,13 @@ module.exports = grammar({
         $.tag_hash,
         $.tag_context,
         $.tag_danger,
+        $.tag_identifier,
         $.comment,
         $.string,
         $.number,
         $.link,
         $.link_plain,
+        $.inline_code,
         $._text
       ),
 

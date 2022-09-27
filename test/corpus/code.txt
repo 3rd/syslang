@@ -1,4 +1,13 @@
 ==================
+Inline code
+==================
+`inline code`
+---
+(document (text_line
+  (inline_code)
+))
+
+==================
 Code blocks
 ==================
 @code

@@ -78,29 +78,37 @@
 (task_normal (text_line) @slang.task_normal)
 (task_active (text_line) @slang.task_active)
 (task_done (text_to_eol) @slang.task_done)
-(task_session) @slang.task_session
-(task_schedule) @slang.task_schedule
+(task_blocked (text_to_eol) @slang.task_blocked)
 (
  (task_normal_marker) @conceal
  (#set! conceal "")
 )
 (
  (task_active_marker) @conceal
- (#set! conceal "▢")
+ (#set! conceal "🞆")
 )
 (
  (task_done_marker) @conceal
  (#set! conceal "")
 )
+(
+ (task_blocked_marker) @conceal
+ (#set! conceal "✘")
+)
+(task_session) @slang.task_session
+(task_schedule) @slang.task_schedule
 
 (tag_hash) @slang.tag.hash
 (tag_positive) @slang.tag.positive
 (tag_negative) @slang.tag.negative
 (tag_context) @slang.tag.context
 (tag_danger) @slang.tag.danger
+(tag_identifier) @slang.tag.identifier
 
 (link_plain) @slang.link_plain
 (link) @slang.link
+
+(inline_code) @slang.inline_code
 
 (code_block) @slang.code_block
 (code_block_start) @slang.code_block_start

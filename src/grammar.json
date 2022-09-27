@@ -80,6 +80,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "task_blocked"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "list_item"
               },
               {
@@ -1187,6 +1191,10 @@
         {
           "type": "SYMBOL",
           "name": "task_done"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "task_blocked"
         }
       ]
     },
@@ -1268,6 +1276,53 @@
           {
             "type": "SYMBOL",
             "name": "task_done_marker"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "text_to_eol"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "\\n"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_eof"
+              }
+            ]
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_task_children"
+            }
+          }
+        ]
+      }
+    },
+    "task_blocked_marker": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\[_\\]"
+      }
+    },
+    "task_blocked": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "task_blocked_marker"
           },
           {
             "type": "SYMBOL",
@@ -1486,6 +1541,13 @@
         "value": "!\\w+"
       }
     },
+    "tag_identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\$\\w+"
+      }
+    },
     "_labeled_link": {
       "type": "TOKEN",
       "content": {
@@ -1535,6 +1597,13 @@
           "value": "[^\\n]+"
         }
       ]
+    },
+    "inline_code": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "`[^`]+`"
+      }
     },
     "code_block_language": {
       "type": "IMMEDIATE_TOKEN",
@@ -1732,6 +1801,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "tag_identifier"
+        },
+        {
+          "type": "SYMBOL",
           "name": "comment"
         },
         {
@@ -1749,6 +1822,10 @@
         {
           "type": "SYMBOL",
           "name": "link_plain"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inline_code"
         },
         {
           "type": "SYMBOL",
