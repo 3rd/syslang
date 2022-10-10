@@ -66,7 +66,7 @@
 (section (text_to_eol) @slang.section)
 (
  (section_marker) @conceal
- (#set! conceal "⮞")
+ (#set! conceal "⮟")
 )
 
 (pipe (text_to_eol) @slang.pipe)
