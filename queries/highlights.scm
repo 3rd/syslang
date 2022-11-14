@@ -69,30 +69,30 @@
  (#set! conceal "⮟")
 )
 
-(pipe (text_to_eol) @slang.pipe)
-(
- (pipe_marker) @conceal
- (#set! conceal "❙")
-)
+; (pipe (text_to_eol) @slang.pipe)
+; (
+;  (pipe_marker) @conceal
+;  (#set! conceal "❙")
+; )
 
-(task_normal (text_line) @slang.task_normal)
+(task_default (text_line) @slang.task_default)
 (task_active (text_line) @slang.task_active)
 (task_done (text_to_eol) @slang.task_done)
-(task_blocked (text_to_eol) @slang.task_blocked)
+(task_cancelled (text_to_eol) @slang.task_cancelled)
 (
- (task_normal_marker) @conceal
+ (task_marker_default) @conceal
  (#set! conceal "")
 )
 (
- (task_active_marker) @conceal
+ (task_marker_active) @conceal
  (#set! conceal "🞆")
 )
 (
- (task_done_marker) @conceal
+ (task_marker_done) @conceal
  (#set! conceal "")
 )
 (
- (task_blocked_marker) @conceal
+ (task_marker_cancelled) @conceal
  (#set! conceal "✘")
 )
 (task_session) @slang.task_session
@@ -105,8 +105,8 @@
 (tag_danger) @slang.tag.danger
 (tag_identifier) @slang.tag.identifier
 
-(link_plain) @slang.link_plain
-(link) @slang.link
+; (link_plain) @slang.link_plain
+; (link) @slang.link
 
 (inline_code) @slang.inline_code
 

@@ -1,0 +1,75 @@
+==================
+Task structure
+==================
+Not a [ ] task
+  [ ] Level 0 task
+[-] Level 0 task
+  [ ] Level 1 task
+    Task children
+  [ ] Level 2 task
+[x] Level 0 task
+---
+(document
+  (text_line)
+  (task_default (task_marker_default) (text_line (number)))
+  (task_active
+    (task_marker_active) (text_line (number))
+      (task_default (task_marker_default) (text_line (number))
+        (text_line))
+      (task_default (task_marker_default) (text_line (number)))
+  )
+  (task_done (task_marker_done) (text_to_eol)))
+
+==================
+Task types
+==================
+[ ] Default
+[-] Active
+[x] Done
+[_] Cancelled
+---
+(document
+  (task_default
+    (task_marker_default)
+    (text_line))
+  (task_active
+    (task_marker_active)
+    (text_line))
+  (task_done
+    (task_marker_done)
+    (text_to_eol))
+  (task_cancelled
+    (task_marker_cancelled)
+    (text_to_eol)))
+
+==================
+Task session
+==================
+[ ] Task
+  Session: 2022-01-01 10:00 - 2022-01-01 11:00
+  Session: 2022-01-01 10:00
+---
+(document
+  (task_default
+    (task_marker_default) (text_line)
+    (task_session
+      (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+    (task_session
+      (datetime (date) (time))))
+)
+
+==================
+Task schedule
+==================
+[ ] Task
+  Schedule: 2022-01-01
+  Schedule: 2022-01-01 10:00
+  Schedule: 2022-01-01 10:00 - 10:30
+  Schedule: 2022-01-01 10:00 - 2022-01-01 11:00
+---
+(document
+  (task_default (task_marker_default) (text_line)
+    (task_schedule (date))
+    (task_schedule (datetime (date) (time)))
+    (task_schedule (datetimerange (datetime (date) (time)) (time)))
+    (task_schedule (datetimerange (datetime (date) (time)) (datetime (date) (time))))))

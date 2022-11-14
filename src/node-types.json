@@ -154,10 +154,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -166,15 +162,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -301,10 +297,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -313,15 +305,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -383,10 +375,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -395,15 +383,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -461,10 +449,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -473,15 +457,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -535,10 +519,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -547,15 +527,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -605,10 +585,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -617,15 +593,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -671,10 +647,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section",
           "named": true
         },
@@ -683,15 +655,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -704,11 +676,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "link",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "list_item",
@@ -719,43 +686,15 @@
       "required": true,
       "types": [
         {
+          "type": "list_item",
+          "named": true
+        },
+        {
           "type": "list_item_marker",
           "named": true
         },
         {
           "type": "text_line",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "list_item_marker",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "pipe",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "paragraph_break",
-          "named": true
-        },
-        {
-          "type": "pipe_marker",
-          "named": true
-        },
-        {
-          "type": "text_line",
-          "named": true
-        },
-        {
-          "type": "text_to_eol",
           "named": true
         }
       ]
@@ -782,10 +721,6 @@
           "named": true
         },
         {
-          "type": "pipe",
-          "named": true
-        },
-        {
           "type": "section_marker",
           "named": true
         },
@@ -794,15 +729,15 @@
           "named": true
         },
         {
-          "type": "task_blocked",
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
           "named": true
         },
         {
           "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "task_normal",
           "named": true
         },
         {
@@ -825,19 +760,23 @@
       "required": true,
       "types": [
         {
-          "type": "code_block",
+          "type": "task_active",
           "named": true
         },
         {
-          "type": "list_item",
+          "type": "task_cancelled",
           "named": true
         },
         {
-          "type": "pipe",
+          "type": "task_default",
           "named": true
         },
         {
-          "type": "task_active_marker",
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_marker_active",
           "named": true
         },
         {
@@ -856,7 +795,7 @@
     }
   },
   {
-    "type": "task_blocked",
+    "type": "task_cancelled",
     "named": true,
     "fields": {},
     "children": {
@@ -864,19 +803,23 @@
       "required": true,
       "types": [
         {
-          "type": "code_block",
+          "type": "task_active",
           "named": true
         },
         {
-          "type": "list_item",
+          "type": "task_cancelled",
           "named": true
         },
         {
-          "type": "pipe",
+          "type": "task_default",
           "named": true
         },
         {
-          "type": "task_blocked_marker",
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_marker_cancelled",
           "named": true
         },
         {
@@ -893,6 +836,49 @@
         },
         {
           "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_default",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_marker_default",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
+          "named": true
+        },
+        {
+          "type": "text_line",
           "named": true
         }
       ]
@@ -907,19 +893,23 @@
       "required": true,
       "types": [
         {
-          "type": "code_block",
+          "type": "task_active",
           "named": true
         },
         {
-          "type": "list_item",
+          "type": "task_cancelled",
           "named": true
         },
         {
-          "type": "pipe",
+          "type": "task_default",
           "named": true
         },
         {
-          "type": "task_done_marker",
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_marker_done",
           "named": true
         },
         {
@@ -936,45 +926,6 @@
         },
         {
           "type": "text_to_eol",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "task_normal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "pipe",
-          "named": true
-        },
-        {
-          "type": "task_normal_marker",
-          "named": true
-        },
-        {
-          "type": "task_schedule",
-          "named": true
-        },
-        {
-          "type": "task_session",
-          "named": true
-        },
-        {
-          "type": "text_line",
           "named": true
         }
       ]
@@ -1064,14 +1015,6 @@
         },
         {
           "type": "italic",
-          "named": true
-        },
-        {
-          "type": "link",
-          "named": true
-        },
-        {
-          "type": "link_plain",
           "named": true
         },
         {
@@ -1215,7 +1158,7 @@
     "named": true
   },
   {
-    "type": "link_plain",
+    "type": "list_item_marker",
     "named": true
   },
   {
@@ -1224,10 +1167,6 @@
   },
   {
     "type": "paragraph_break",
-    "named": true
-  },
-  {
-    "type": "pipe_marker",
     "named": true
   },
   {
@@ -1263,19 +1202,19 @@
     "named": true
   },
   {
-    "type": "task_active_marker",
+    "type": "task_marker_active",
     "named": true
   },
   {
-    "type": "task_blocked_marker",
+    "type": "task_marker_cancelled",
     "named": true
   },
   {
-    "type": "task_done_marker",
+    "type": "task_marker_default",
     "named": true
   },
   {
-    "type": "task_normal_marker",
+    "type": "task_marker_done",
     "named": true
   },
   {
