@@ -129,8 +129,7 @@ module.exports = grammar({
                 $.list_item,
                 $._task,
                 $.text_line
-              ),
-              optional($.paragraph_break)
+              )
             )
           )
         )
@@ -155,9 +154,7 @@ module.exports = grammar({
                 $.list_item,
                 $._task,
                 $.text_line
-              ),
-
-              optional($.paragraph_break)
+              )
             )
           )
         )
@@ -181,8 +178,7 @@ module.exports = grammar({
                 $.list_item,
                 $._task,
                 $.text_line
-              ),
-              optional($.paragraph_break)
+              )
             )
           )
         )
@@ -196,17 +192,14 @@ module.exports = grammar({
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(
-              choice(
-                $.heading_5,
-                $.heading_6,
-                $.section,
-                $.code_block,
-                $.list_item,
-                $._task,
-                $.text_line
-              ),
-              optional($.paragraph_break)
+            choice(
+              $.heading_5,
+              $.heading_6,
+              $.section,
+              $.code_block,
+              $.list_item,
+              $._task,
+              $.text_line
             )
           )
         )
@@ -220,16 +213,13 @@ module.exports = grammar({
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(
-              choice(
-                $.heading_6,
-                $.section,
-                $.code_block,
-                $.list_item,
-                $._task,
-                $.text_line
-              ),
-              optional($.paragraph_break)
+            choice(
+              $.heading_6,
+              $.section,
+              $.code_block,
+              $.list_item,
+              $._task,
+              $.text_line
             )
           )
         )
@@ -243,10 +233,7 @@ module.exports = grammar({
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(
-              choice($.section, $.code_block, $.list_item, $._task, $.text_line),
-              optional($.paragraph_break)
-            )
+            choice($.section, $.code_block, $.list_item, $._task, $.text_line)
           )
         )
       ),
@@ -259,12 +246,7 @@ module.exports = grammar({
           $.section_marker,
           $.text_to_eol,
           choice($._eol, $._eof),
-          repeat(
-            seq(
-              choice($.code_block, $.list_item, $._task, $.text_line),
-              optional($.paragraph_break)
-            )
-          )
+          repeat(seq(choice($.code_block, $.list_item, $._task, $.text_line)))
         )
       ),
 
@@ -367,10 +349,10 @@ module.exports = grammar({
         $._text
       ),
     text_to_eol: () => token(/[^\n]+/),
-    text_line: ($) => prec.left(seq(repeat1($._inline), choice($._eol, $._eof))),
+    text_line: ($) =>
+      prec.left(seq(repeat1($._inline), choice(token(/\n/), $._eof))),
     _text: () => prec.left(-100, repeat1(token(/[^\s]+/))),
     _raw_text_line: ($) =>
       prec.left(seq(repeat1($._text), choice($._eol, $._eof))),
-    paragraph_break: () => /\n\n/,
   },
 });

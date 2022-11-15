@@ -26,3 +26,23 @@ Heading
   )
 )
 
+==================
+Heading with spaced children and chaotic indent
+==================
+* Heading 1
+  Heading child.
+
+    Also heading child.
+
+
+
+Not heading child.
+---
+(document
+  (heading_1
+    (heading_1_marker)
+    (text_to_eol)
+    (text_line)
+    (text_line)
+    (text_line)))
+
