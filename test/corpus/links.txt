@@ -1,0 +1,8 @@
+==================
+External link
+==================
+http://example.local/test/?query&param=val#hash
+---
+(document
+  (text_line (external_link))
+)

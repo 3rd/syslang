@@ -316,6 +316,9 @@ module.exports = grammar({
         choice(/\n/, $._eof)
       ),
 
+    // links
+    external_link: () => token(/https?:\/\/\S+/),
+
     // inline element & text line
     _inline: ($) =>
       choice(
@@ -343,6 +346,8 @@ module.exports = grammar({
         $.tag_identifier,
         // inline code
         $.inline_code,
+        // links
+        $.external_link,
         // comments
         $.comment,
         // text
