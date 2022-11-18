@@ -1529,6 +1529,13 @@
         }
       ]
     },
+    "external_link": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "https?:\\/\\/\\S+"
+      }
+    },
     "_inline": {
       "type": "CHOICE",
       "members": [
@@ -1607,6 +1614,10 @@
         {
           "type": "SYMBOL",
           "name": "inline_code"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "external_link"
         },
         {
           "type": "SYMBOL",

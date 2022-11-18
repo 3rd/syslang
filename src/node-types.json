@@ -982,6 +982,10 @@
           "named": true
         },
         {
+          "type": "external_link",
+          "named": true
+        },
+        {
           "type": "inline_code",
           "named": true
         },
@@ -1095,6 +1099,10 @@
   },
   {
     "type": "document_title_basic_marker",
+    "named": true
+  },
+  {
+    "type": "external_link",
     "named": true
   },
   {
