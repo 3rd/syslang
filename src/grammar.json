@@ -1244,6 +1244,10 @@
               {
                 "type": "SYMBOL",
                 "name": "text_line"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "list_item"
               }
             ]
           }

@@ -12,6 +12,7 @@
   (task_cancelled)
   (section)
   (list_item)
+  (document_meta)
   ] @fold
 )
 

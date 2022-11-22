@@ -77,8 +77,8 @@
 
 (task_default (text_line) @slang.task_default)
 (task_active (text_line) @slang.task_active)
-(task_done (text_to_eol) @slang.task_done)
 (task_cancelled (text_to_eol) @slang.task_cancelled)
+(task_done (_) @slang.task_done)
 (
  (task_marker_default) @conceal
  (#set! conceal "")
@@ -105,8 +105,8 @@
 (tag_danger) @slang.tag.danger
 (tag_identifier) @slang.tag.identifier
 
+(external_link) @slang.external_link
 ; (link_plain) @slang.link_plain
-; (link) @slang.link
 
 (inline_code) @slang.inline_code
 

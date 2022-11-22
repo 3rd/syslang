@@ -732,6 +732,10 @@
       "required": true,
       "types": [
         {
+          "type": "list_item",
+          "named": true
+        },
+        {
           "type": "task_active",
           "named": true
         },
@@ -774,6 +778,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "list_item",
+          "named": true
+        },
         {
           "type": "task_active",
           "named": true
@@ -822,6 +830,10 @@
       "required": true,
       "types": [
         {
+          "type": "list_item",
+          "named": true
+        },
+        {
           "type": "task_active",
           "named": true
         },
@@ -864,6 +876,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "list_item",
+          "named": true
+        },
         {
           "type": "task_active",
           "named": true

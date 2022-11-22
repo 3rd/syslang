@@ -264,7 +264,15 @@ module.exports = grammar({
     _task_children: ($) =>
       seq(
         $._indent,
-        repeat1(choice($.task_session, $.task_schedule, $._task, $.text_line)),
+        repeat1(
+          choice(
+            $.task_session,
+            $.task_schedule,
+            $._task,
+            $.text_line,
+            $.list_item
+          )
+        ),
         choice($._dedent, $._eof)
       ),
     task_session: ($) =>
