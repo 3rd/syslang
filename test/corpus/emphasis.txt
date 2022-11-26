@@ -17,7 +17,11 @@ Italic
 /italic/, /italic/ and /italic/.
 ---
 (document
-  (text_line (italic) (italic) (italic))
+  (text_line
+    (italic (italic_start) (italic_content) (italic_end))
+    (italic (italic_start) (italic_content) (italic_end))
+    (italic (italic_start) (italic_content) (italic_end))
+  )
 )
 
 ==================
@@ -26,7 +30,9 @@ Underline
 _underline_, _underline_ and _underline_.
 ---
 (document
-  (text_line (underline) (underline) (underline))
+  (text_line
+    (underline (underline_start) (underline_content) (underline_end))
+    (underline (underline_start) (underline_content) (underline_end))
+    (underline (underline_start) (underline_content) (underline_end))
+  )
 )
-
-

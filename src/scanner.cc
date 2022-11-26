@@ -20,6 +20,10 @@ enum TokenType {
   LIST_ITEM_MARKER,
   BOLD_START,
   BOLD_END,
+  ITALIC_START,
+  ITALIC_END,
+  UNDERLINE_START,
+  UNDERLINE_END,
   NONE
 };
 
@@ -186,11 +190,6 @@ struct Scanner {
       set_previous_indent("default", indent);
     }
 
-    // strip leading whitespace
-    while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
-      skip(lexer);
-    }
-
     // task markers
     if (scan_task_markers(lexer, valid_symbols)) {
       return true;
@@ -201,13 +200,18 @@ struct Scanner {
       return true;
     }
 
-    // bold
+    // strip leading whitespace
+    while (iswspace(lexer->lookahead)) {
+      skip(lexer);
+    }
+
     // printf("> loop col: %d char: %c\n", start_column, lexer->lookahead);
+
+    // bold
     if (lexer->lookahead == '*') {
       if (valid_symbols[BOLD_END]) {
         advance(lexer);
         lexer->mark_end(lexer);
-        // if (iswspace(lexer->lookahead) || lexer->eof(lexer)) {
         lexer->result_symbol = BOLD_END;
         if (debug)
           printf("-> BOLD_END\n");
@@ -221,6 +225,50 @@ struct Scanner {
           lexer->result_symbol = BOLD_START;
           if (debug)
             printf("-> BOLD_START\n");
+          return true;
+        }
+      }
+    }
+
+    // italic
+    if (lexer->lookahead == '/') {
+      if (valid_symbols[ITALIC_END]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = ITALIC_END;
+        if (debug)
+          printf("-> ITALIC_END\n");
+        return true;
+      }
+      if (valid_symbols[ITALIC_START]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        if (isalnum(lexer->lookahead)) {
+          lexer->result_symbol = ITALIC_START;
+          if (debug)
+            printf("-> ITALIC_START\n");
+          return true;
+        }
+      }
+    }
+
+    // underline
+    if (lexer->lookahead == '_') {
+      if (valid_symbols[UNDERLINE_END]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = UNDERLINE_END;
+        if (debug)
+          printf("-> UNDERLINE_END\n");
+        return true;
+      }
+      if (valid_symbols[UNDERLINE_START]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        if (isalnum(lexer->lookahead)) {
+          lexer->result_symbol = UNDERLINE_START;
+          if (debug)
+            printf("-> UNDERLINE_START\n");
           return true;
         }
       }

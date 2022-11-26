@@ -16,13 +16,17 @@
     )) @slang.document.meta
 
 ; emphasis
-(bold_content) @slang.bold
-(italic) @slang.italic
-(underline) @slang.underline
+(bold (bold_content) @slang.bold)
+(italic (italic_content) @slang.italic)
+(underline (underline_content) @slang.underline)
 (
  [
   (bold_start)
   (bold_end)
+  (italic_start)
+  (italic_end)
+  (underline_start)
+  (underline_end)
  ] @conceal
  (#set! conceal "")
 )
@@ -47,37 +51,37 @@
 (heading_1
   (heading_1_marker) @slang.heading_1.marker
   (text_to_eol) @slang.heading_1.text
-  ) @slang.heading_1
+) @slang.heading_1
 (heading_2
   (heading_2_marker) @slang.heading_2.marker
   (text_to_eol) @slang.heading_2.text
-  ) @slang.heading_2
+) @slang.heading_2
 (heading_3
   (heading_3_marker) @slang.heading_3.marker
   (text_to_eol) @slang.heading_3.text
-  ) @slang.heading_3
+) @slang.heading_3
 (heading_4
   (heading_4_marker) @slang.heading_4.marker
   (text_to_eol) @slang.heading_4.text
-  ) @slang.heading_4
+) @slang.heading_4
 (heading_5
   (heading_5_marker) @slang.heading_5.marker
   (text_to_eol) @slang.heading_5.text
-  ) @slang.heading_5
+) @slang.heading_5
 (heading_6
   (heading_6_marker) @slang.heading_6.marker
   (text_to_eol) @slang.heading_6.text
-  ) @slang.heading_6
+) @slang.heading_6
 (
- [
-  (heading_1_marker)
-  (heading_2_marker)
-  (heading_3_marker)
-  (heading_4_marker)
-  (heading_5_marker)
-  (heading_6_marker)
+  [
+    (heading_1_marker)
+    (heading_2_marker)
+    (heading_3_marker)
+    (heading_4_marker)
+    (heading_5_marker)
+    (heading_6_marker)
   ] @conceal
- (#set! conceal "◉")
+  (#set! conceal "◉")
  )
 
 ; sections

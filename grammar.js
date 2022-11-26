@@ -15,6 +15,10 @@ module.exports = grammar({
     $.list_item_marker,
     $.bold_start,
     $.bold_end,
+    $.italic_start,
+    $.italic_end,
+    $.underline_start,
+    $.underline_end,
   ],
   extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   rules: {
@@ -69,10 +73,13 @@ module.exports = grammar({
 
     // emphasis
     // bold: () => token(/\*[^*\n]+\*[\.,]?/),
-    italic: () => token(/\/[^/\n]+\/[\.,]?/),
-    underline: () => token(/_[^_\n]+_[\.,]?/),
-    bold_content: () => token(/[^\*]+/),
+    bold_content: () => token(/[^\*\n]+/),
     bold: ($) => seq($.bold_start, $.bold_content, $.bold_end),
+    italic_content: () => token(/[^\/\n]+/),
+    italic: ($) => seq($.italic_start, $.italic_content, $.italic_end),
+    underline_content: () => token(/[^_\n]+/),
+    underline: ($) =>
+      seq($.underline_start, $.underline_content, $.underline_end),
     _emphasis: ($) =>
       seq(
         choice($.bold, $.italic, $.underline),
