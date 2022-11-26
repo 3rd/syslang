@@ -13,6 +13,8 @@ module.exports = grammar({
     $.task_marker_done,
     $.task_marker_cancelled,
     $.list_item_marker,
+    $.bold_start,
+    $.bold_end,
   ],
   extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   rules: {
@@ -66,9 +68,16 @@ module.exports = grammar({
     comment: ($) => seq($._comment_marker, /[^\n]+/),
 
     // emphasis
-    bold: () => token(/\*[^*\n]+\*[\.,]?/),
+    // bold: () => token(/\*[^*\n]+\*[\.,]?/),
     italic: () => token(/\/[^/\n]+\/[\.,]?/),
     underline: () => token(/_[^_\n]+_[\.,]?/),
+    bold_content: () => token(/[^\*]+/),
+    bold: ($) => seq($.bold_start, $.bold_content, $.bold_end),
+    _emphasis: ($) =>
+      seq(
+        choice($.bold, $.italic, $.underline),
+        optional(token.immediate(/[.,]/))
+      ),
 
     // basic types
     string: () => token(prec(1, /"[^"]*"/)),
@@ -102,12 +111,12 @@ module.exports = grammar({
     tag_identifier: () => token(prec(1, /\$[^\$\s][^\s]+/)), // $tag
 
     // headings
-    heading_1_marker: () => token(/\*/),
-    heading_2_marker: () => token(/\*\*/),
-    heading_3_marker: () => token(/\*\*\*/),
-    heading_4_marker: () => token(/\*\*\*\*/),
-    heading_5_marker: () => token(/\*\*\*\*\*/),
-    heading_6_marker: () => token(/\*\*\*\*\*\*/),
+    heading_1_marker: () => token("* "),
+    heading_2_marker: () => token("** "),
+    heading_3_marker: () => token("*** "),
+    heading_4_marker: () => token("**** "),
+    heading_5_marker: () => token("***** "),
+    heading_6_marker: () => token("****** "),
     heading_1: ($) =>
       prec.right(
         seq(
@@ -331,9 +340,7 @@ module.exports = grammar({
     _inline: ($) =>
       choice(
         // emphasis
-        $.bold,
-        $.italic,
-        $.underline,
+        $._emphasis,
         // basic types
         $.string,
         $.number,

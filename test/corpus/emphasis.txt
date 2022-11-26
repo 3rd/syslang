@@ -3,8 +3,12 @@ Bold
 ==================
 *bold*, *bold* and *bold*.
 ---
-(document 
-  (text_line (bold) (bold) (bold))
+(document
+  (text_line
+    (bold (bold_start) (bold_content) (bold_end))
+    (bold (bold_start) (bold_content) (bold_end))
+    (bold (bold_start) (bold_content) (bold_end))
+  )
 )
 
 ==================
@@ -12,7 +16,7 @@ Italic
 ==================
 /italic/, /italic/ and /italic/.
 ---
-(document 
+(document
   (text_line (italic) (italic) (italic))
 )
 
@@ -21,7 +25,7 @@ Underline
 ==================
 _underline_, _underline_ and _underline_.
 ---
-(document 
+(document
   (text_line (underline) (underline) (underline))
 )
 

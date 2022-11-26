@@ -1,11 +1,13 @@
 (ERROR) @slang.error
 
+; document title
 (document_title_basic) @slang.document.title
 (
  (document_title_basic_marker) @conceal
  (#set! conceal "⚑")
 )
 
+; document meta
 (document_meta
   (document_meta_field
     (document_meta_field_key) @slang.document.meta.field.key
@@ -13,13 +15,24 @@
     @slang.document.meta.field
     )) @slang.document.meta
 
-(comment) @slang.comment
-(bold) @slang.bold
+; emphasis
+(bold_content) @slang.bold
 (italic) @slang.italic
 (underline) @slang.underline
+(
+ [
+  (bold_start)
+  (bold_end)
+ ] @conceal
+ (#set! conceal "")
+)
+
+; basic types
 (string) @slang.string
 (number) @slang.number
 (ticket) @slang.ticket
+
+; datetime
 (time) @slang.time
 (timerange) @slang.timerange
 (date) @slang.date
@@ -27,6 +40,10 @@
 (datetime) @slang.datetime
 (datetimerange) @slang.datetimerange
 
+; comments
+(comment) @slang.comment
+
+; headings
 (heading_1
   (heading_1_marker) @slang.heading_1.marker
   (text_to_eol) @slang.heading_1.text
@@ -63,6 +80,7 @@
  (#set! conceal "◉")
  )
 
+; sections
 (section (text_to_eol) @slang.section)
 (
  (section_marker) @conceal
@@ -75,6 +93,7 @@
 ;  (#set! conceal "❙")
 ; )
 
+; tasks
 (task_default (text_line) @slang.task_default)
 (task_active (text_line) @slang.task_active)
 (task_cancelled (text_to_eol) @slang.task_cancelled)
@@ -98,6 +117,7 @@
 (task_session) @slang.task_session
 (task_schedule) @slang.task_schedule
 
+; tags
 (tag_hash) @slang.tag.hash
 (tag_positive) @slang.tag.positive
 (tag_negative) @slang.tag.negative
@@ -105,17 +125,19 @@
 (tag_danger) @slang.tag.danger
 (tag_identifier) @slang.tag.identifier
 
+; links
 (external_link) @slang.external_link
 ; (link_plain) @slang.link_plain
 
+; code
 (inline_code) @slang.inline_code
-
 (code_block) @slang.code_block
 (code_block_start) @slang.code_block_start
 (code_block_language) @slang.code_block_language
 (code_block_end) @slang.code_block_end
 (code_block (code_block_content) @slang.code_block_content)
 
+; list items
 (list_item) @slang.list_item
 (list_item_marker) @slang.list_item_marker
 (

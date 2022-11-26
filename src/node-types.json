@@ -1,5 +1,28 @@
 [
   {
+    "type": "bold",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bold_content",
+          "named": true
+        },
+        {
+          "type": "bold_end",
+          "named": true
+        },
+        {
+          "type": "bold_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "code_block",
     "named": true,
     "fields": {},
@@ -1098,7 +1121,15 @@
     "named": false
   },
   {
-    "type": "bold",
+    "type": "bold_content",
+    "named": true
+  },
+  {
+    "type": "bold_end",
+    "named": true
+  },
+  {
+    "type": "bold_start",
     "named": true
   },
   {

@@ -18,6 +18,8 @@ enum TokenType {
   TASK_MARKER_DONE,
   TASK_MARKER_CANCELLED,
   LIST_ITEM_MARKER,
+  BOLD_START,
+  BOLD_END,
   NONE
 };
 
@@ -133,8 +135,9 @@ struct Scanner {
     if (valid_symbols[END_OF_FILE] &&
         (lexer->eof(lexer) || !lexer->lookahead)) {
       lexer->result_symbol = END_OF_FILE;
-      if (debug)
+      if (debug) {
         printf("-> END_OF_FILE\n");
+      }
       return true;
     }
 
@@ -183,6 +186,11 @@ struct Scanner {
       set_previous_indent("default", indent);
     }
 
+    // strip leading whitespace
+    while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
+      skip(lexer);
+    }
+
     // task markers
     if (scan_task_markers(lexer, valid_symbols)) {
       return true;
@@ -191,6 +199,31 @@ struct Scanner {
     // list item markers
     if (scan_list_item_markers(lexer, valid_symbols)) {
       return true;
+    }
+
+    // bold
+    // printf("> loop col: %d char: %c\n", start_column, lexer->lookahead);
+    if (lexer->lookahead == '*') {
+      if (valid_symbols[BOLD_END]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        // if (iswspace(lexer->lookahead) || lexer->eof(lexer)) {
+        lexer->result_symbol = BOLD_END;
+        if (debug)
+          printf("-> BOLD_END\n");
+        return true;
+        // }
+      }
+      if (valid_symbols[BOLD_START]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        if (isalnum(lexer->lookahead)) {
+          lexer->result_symbol = BOLD_START;
+          if (debug)
+            printf("-> BOLD_START\n");
+          return true;
+        }
+      }
     }
 
     return false;
