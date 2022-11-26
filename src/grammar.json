@@ -603,42 +603,42 @@
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "* "
+        "value": "*"
       }
     },
     "heading_2_marker": {
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "** "
+        "value": "**"
       }
     },
     "heading_3_marker": {
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "*** "
+        "value": "***"
       }
     },
     "heading_4_marker": {
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "**** "
+        "value": "****"
       }
     },
     "heading_5_marker": {
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "***** "
+        "value": "*****"
       }
     },
     "heading_6_marker": {
       "type": "TOKEN",
       "content": {
         "type": "STRING",
-        "value": "****** "
+        "value": "******"
       }
     },
     "heading_1": {
@@ -656,6 +656,13 @@
                 "content": {
                   "type": "SYMBOL",
                   "name": "heading_1_marker"
+                }
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
                 }
               },
               {
@@ -751,6 +758,13 @@
                 }
               },
               {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
+                }
+              },
+              {
                 "type": "SYMBOL",
                 "name": "text_to_eol"
               },
@@ -839,6 +853,13 @@
                 }
               },
               {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
+                }
+              },
+              {
                 "type": "SYMBOL",
                 "name": "text_to_eol"
               },
@@ -923,6 +944,13 @@
                 }
               },
               {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
+                }
+              },
+              {
                 "type": "SYMBOL",
                 "name": "text_to_eol"
               },
@@ -998,6 +1026,13 @@
                 }
               },
               {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
+                }
+              },
+              {
                 "type": "SYMBOL",
                 "name": "text_to_eol"
               },
@@ -1066,6 +1101,13 @@
                 "content": {
                   "type": "SYMBOL",
                   "name": "heading_6_marker"
+                }
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": " "
                 }
               },
               {

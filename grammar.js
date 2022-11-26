@@ -118,17 +118,18 @@ module.exports = grammar({
     tag_identifier: () => token(prec(1, /\$[^\$\s][^\s]+/)), // $tag
 
     // headings
-    heading_1_marker: () => token("* "),
-    heading_2_marker: () => token("** "),
-    heading_3_marker: () => token("*** "),
-    heading_4_marker: () => token("**** "),
-    heading_5_marker: () => token("***** "),
-    heading_6_marker: () => token("****** "),
+    heading_1_marker: () => token("*"),
+    heading_2_marker: () => token("**"),
+    heading_3_marker: () => token("***"),
+    heading_4_marker: () => token("****"),
+    heading_5_marker: () => token("*****"),
+    heading_6_marker: () => token("******"),
     heading_1: ($) =>
       prec.right(
         seq(
           seq(
             field("marker", $.heading_1_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
@@ -155,6 +156,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.heading_2_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
@@ -180,6 +182,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.heading_3_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
@@ -204,6 +207,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.heading_4_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
@@ -225,6 +229,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.heading_5_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
@@ -245,6 +250,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.heading_6_marker),
+            token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
