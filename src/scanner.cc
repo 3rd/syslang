@@ -222,10 +222,16 @@ struct Scanner {
         advance(lexer);
         lexer->mark_end(lexer);
         if (isalnum(lexer->lookahead)) {
-          lexer->result_symbol = BOLD_START;
-          if (debug)
-            printf("-> BOLD_START\n");
-          return true;
+          while (lexer->lookahead && lexer->lookahead != '\n' &&
+                 lexer->lookahead != '*') {
+            advance(lexer);
+          }
+          if (lexer->lookahead == '*') {
+            lexer->result_symbol = BOLD_START;
+            if (debug)
+              printf("-> BOLD_START\n");
+            return true;
+          }
         }
       }
     }
@@ -244,10 +250,16 @@ struct Scanner {
         advance(lexer);
         lexer->mark_end(lexer);
         if (isalnum(lexer->lookahead)) {
-          lexer->result_symbol = ITALIC_START;
-          if (debug)
-            printf("-> ITALIC_START\n");
-          return true;
+          while (lexer->lookahead && lexer->lookahead != '\n' &&
+                 lexer->lookahead != '/') {
+            advance(lexer);
+          }
+          if (lexer->lookahead == '/') {
+            lexer->result_symbol = ITALIC_START;
+            if (debug)
+              printf("-> ITALIC_START\n");
+            return true;
+          }
         }
       }
     }
@@ -266,10 +278,16 @@ struct Scanner {
         advance(lexer);
         lexer->mark_end(lexer);
         if (isalnum(lexer->lookahead)) {
-          lexer->result_symbol = UNDERLINE_START;
-          if (debug)
-            printf("-> UNDERLINE_START\n");
-          return true;
+          while (lexer->lookahead && lexer->lookahead != '\n' &&
+                 lexer->lookahead != '_') {
+            advance(lexer);
+          }
+          if (lexer->lookahead == '_') {
+            lexer->result_symbol = UNDERLINE_START;
+            if (debug)
+              printf("-> UNDERLINE_START\n");
+            return true;
+          }
         }
       }
     }
