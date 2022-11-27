@@ -132,6 +132,37 @@ struct Scanner {
     return false;
   }
 
+  bool scan_inline_modifier(TSLexer *lexer, const bool *valid_symbols, char c,
+                            TokenType start, TokenType end) {
+    if (lexer->lookahead == c) {
+      if (valid_symbols[end]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = end;
+        if (debug)
+          printf("-> INLINE MODIFIER END %c\n", c);
+        return true;
+      }
+      if (valid_symbols[BOLD_START]) {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        if (isalnum(lexer->lookahead)) {
+          while (lexer->lookahead && lexer->lookahead != '\n' &&
+                 lexer->lookahead != c) {
+            advance(lexer);
+          }
+          if (lexer->lookahead == c) {
+            lexer->result_symbol = start;
+            if (debug)
+              printf("-> INLINE MODIFIER START %c\n", c);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     if (debug)
       printf("\n\n");
@@ -207,89 +238,17 @@ struct Scanner {
 
     // printf("> loop col: %d char: %c\n", start_column, lexer->lookahead);
 
-    // bold
-    if (lexer->lookahead == '*') {
-      if (valid_symbols[BOLD_END]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        lexer->result_symbol = BOLD_END;
-        if (debug)
-          printf("-> BOLD_END\n");
-        return true;
-        // }
-      }
-      if (valid_symbols[BOLD_START]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        if (isalnum(lexer->lookahead)) {
-          while (lexer->lookahead && lexer->lookahead != '\n' &&
-                 lexer->lookahead != '*') {
-            advance(lexer);
-          }
-          if (lexer->lookahead == '*') {
-            lexer->result_symbol = BOLD_START;
-            if (debug)
-              printf("-> BOLD_START\n");
-            return true;
-          }
-        }
-      }
+    // emphasis
+    if (scan_inline_modifier(lexer, valid_symbols, '*', BOLD_START, BOLD_END)) {
+      return true;
     }
-
-    // italic
-    if (lexer->lookahead == '/') {
-      if (valid_symbols[ITALIC_END]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        lexer->result_symbol = ITALIC_END;
-        if (debug)
-          printf("-> ITALIC_END\n");
-        return true;
-      }
-      if (valid_symbols[ITALIC_START]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        if (isalnum(lexer->lookahead)) {
-          while (lexer->lookahead && lexer->lookahead != '\n' &&
-                 lexer->lookahead != '/') {
-            advance(lexer);
-          }
-          if (lexer->lookahead == '/') {
-            lexer->result_symbol = ITALIC_START;
-            if (debug)
-              printf("-> ITALIC_START\n");
-            return true;
-          }
-        }
-      }
+    if (scan_inline_modifier(lexer, valid_symbols, '/', ITALIC_START,
+                             ITALIC_END)) {
+      return true;
     }
-
-    // underline
-    if (lexer->lookahead == '_') {
-      if (valid_symbols[UNDERLINE_END]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        lexer->result_symbol = UNDERLINE_END;
-        if (debug)
-          printf("-> UNDERLINE_END\n");
-        return true;
-      }
-      if (valid_symbols[UNDERLINE_START]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        if (isalnum(lexer->lookahead)) {
-          while (lexer->lookahead && lexer->lookahead != '\n' &&
-                 lexer->lookahead != '_') {
-            advance(lexer);
-          }
-          if (lexer->lookahead == '_') {
-            lexer->result_symbol = UNDERLINE_START;
-            if (debug)
-              printf("-> UNDERLINE_START\n");
-            return true;
-          }
-        }
-      }
+    if (scan_inline_modifier(lexer, valid_symbols, '_', UNDERLINE_START,
+                             UNDERLINE_END)) {
+      return true;
     }
 
     return false;
