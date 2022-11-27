@@ -1,10 +1,20 @@
 ==================
-Basic types
+String
 ==================
-"String" 123
+"String", "string" and "string".
 ---
-(document (text_line
-  (string) (number)))
+(document
+  (text_line
+    (string) (string) (string)))
+
+==================
+Number
+==================
+1, 2, -3.
+---
+(document
+  (text_line
+    (number) (number) (number)))
 
 ==================
 Ticket

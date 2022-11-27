@@ -351,7 +351,7 @@
         "value": 1,
         "content": {
           "type": "PATTERN",
-          "value": "\\d+"
+          "value": "-?\\d+"
         }
       }
     },
@@ -536,67 +536,43 @@
     "tag_positive": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "\\+[^+\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "\\+[^+\\s]+"
       }
     },
     "tag_negative": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "-[^-\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "-[^-\\s]+"
       }
     },
     "tag_hash": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "#[^#\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "#[^#\\s]+"
       }
     },
     "tag_context": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "@[^@\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "@[^@\\s]+"
       }
     },
     "tag_danger": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "![^!\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "![^!\\s]+"
       }
     },
     "tag_identifier": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "\\$[^\\$\\s][^\\s]+"
-        }
+        "type": "PATTERN",
+        "value": "\\$[^\\$\\s]+"
       }
     },
     "heading_1_marker": {

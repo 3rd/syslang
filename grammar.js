@@ -88,7 +88,7 @@ module.exports = grammar({
 
     // basic types
     string: () => token(prec(1, /"[^"]*"/)),
-    number: () => token(prec(1, /\d+/)),
+    number: () => token(prec(1, /-?\d+/)),
     ticket: () => token(prec(1, /[A-Z]+-\d+:?/)),
 
     // datetime types
@@ -110,12 +110,12 @@ module.exports = grammar({
       ),
 
     // tags
-    tag_positive: () => token(prec(1, /\+[^+\s][^\s]+/)), // +tag
-    tag_negative: () => token(prec(1, /-[^-\s][^\s]+/)), // -tag
-    tag_hash: () => token(prec(1, /#[^#\s][^\s]+/)), // #tag
-    tag_context: () => token(prec(1, /@[^@\s][^\s]+/)), // @tag
-    tag_danger: () => token(prec(1, /![^!\s][^\s]+/)), // !tag
-    tag_identifier: () => token(prec(1, /\$[^\$\s][^\s]+/)), // $tag
+    tag_positive: () => token(/\+[^+\s]+/), // +tag
+    tag_negative: () => token(/-[^-\s]+/), // -tag
+    tag_hash: () => token(/#[^#\s]+/), // #tag
+    tag_context: () => token(/@[^@\s]+/), // @tag
+    tag_danger: () => token(/![^!\s]+/), // !tag
+    tag_identifier: () => token(/\$[^\$\s]+/), // $tag
 
     // headings
     heading_1_marker: () => token("*"),

@@ -2,8 +2,17 @@
 Tags
 ==================
 +positive -negative @context #hash !danger $identifier
++p -n @c #h !d $i
 ---
 (document
+  (text_line
+    (tag_positive)
+    (tag_negative)
+    (tag_context)
+    (tag_hash)
+    (tag_danger)
+    (tag_identifier)
+  )
   (text_line
     (tag_positive)
     (tag_negative)
