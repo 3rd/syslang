@@ -20,7 +20,7 @@ module.exports = grammar({
     $.underline_start,
     $.underline_end,
   ],
-  extras: () => [/ /, /\t/, /\n/, /\./, /,/],
+  extras: () => [/ /, /\t/, /\n/, /\./, /,/, /\(/, /\)/, /:/],
   rules: {
     // document root
     document: ($) =>
