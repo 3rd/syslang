@@ -677,6 +677,29 @@
     }
   },
   {
+    "type": "inline_code",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_code_content",
+          "named": true
+        },
+        {
+          "type": "inline_code_end",
+          "named": true
+        },
+        {
+          "type": "inline_code_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "italic",
     "named": true,
     "fields": {},
@@ -1227,7 +1250,15 @@
     "named": true
   },
   {
-    "type": "inline_code",
+    "type": "inline_code_content",
+    "named": true
+  },
+  {
+    "type": "inline_code_end",
+    "named": true
+  },
+  {
+    "type": "inline_code_start",
     "named": true
   },
   {

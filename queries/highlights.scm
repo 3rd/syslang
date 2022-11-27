@@ -19,6 +19,7 @@
 (bold (bold_content) @slang.bold)
 (italic (italic_content) @slang.italic)
 (underline (underline_content) @slang.underline)
+(inline_code (inline_code_content) @slang.inline_code)
 (
  [
   (bold_start)
@@ -27,6 +28,8 @@
   (italic_end)
   (underline_start)
   (underline_end)
+  (inline_code_start)
+  (inline_code_end)
  ] @conceal
  (#set! conceal "")
 )
@@ -104,19 +107,19 @@
 (task_done (_) @slang.task_done)
 (
  (task_marker_default) @conceal
- (#set! conceal "")
+ (#set! conceal "")
 )
 (
  (task_marker_active) @conceal
- (#set! conceal "🞆")
+ (#set! conceal "")
 )
 (
  (task_marker_done) @conceal
- (#set! conceal "")
+ (#set! conceal "")
 )
 (
  (task_marker_cancelled) @conceal
- (#set! conceal "✘")
+ (#set! conceal "")
 )
 (task_session) @slang.task_session
 (task_schedule) @slang.task_schedule

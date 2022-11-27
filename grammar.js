@@ -19,8 +19,10 @@ module.exports = grammar({
     $.italic_end,
     $.underline_start,
     $.underline_end,
+    $.inline_code_start,
+    $.inline_code_end,
   ],
-  extras: () => [/ /, /\t/, /\n/, /\./, /,/, /\(/, /\)/, /:/],
+  extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   rules: {
     // document root
     document: ($) =>
@@ -72,7 +74,6 @@ module.exports = grammar({
     comment: ($) => seq($._comment_marker, /[^\n]+/),
 
     // emphasis
-    // bold: () => token(/\*[^*\n]+\*[\.,]?/),
     bold_content: () => token(/[^\*\n]+/),
     bold: ($) => seq($.bold_start, $.bold_content, $.bold_end),
     italic_content: () => token(/[^\/\n]+/),
@@ -326,7 +327,10 @@ module.exports = grammar({
       ),
 
     // inline code
-    inline_code: () => token(prec(1, /`[^`]+`/)),
+    // inline_code: () => token(prec(1, /`[^`]+`/)),
+    inline_code_content: () => token(/[^`\n]+/),
+    inline_code: ($) =>
+      seq($.inline_code_start, $.inline_code_content, $.inline_code_end),
 
     // code blocks
     code_block_language: () => token.immediate(/[a-z]+/),

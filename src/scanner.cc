@@ -24,6 +24,8 @@ enum TokenType {
   ITALIC_END,
   UNDERLINE_START,
   UNDERLINE_END,
+  INLINE_CODE_START,
+  INLINE_CODE_END,
   NONE
 };
 
@@ -248,6 +250,10 @@ struct Scanner {
     }
     if (scan_inline_modifier(lexer, valid_symbols, '_', UNDERLINE_START,
                              UNDERLINE_END)) {
+      return true;
+    }
+    if (scan_inline_modifier(lexer, valid_symbols, '`', INLINE_CODE_START,
+                             INLINE_CODE_END)) {
       return true;
     }
 

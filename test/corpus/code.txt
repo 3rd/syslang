@@ -4,7 +4,11 @@ Inline code
 `inline code`
 ---
 (document (text_line
-  (inline_code)
+  (inline_code
+    (inline_code_start)
+    (inline_code_content)
+    (inline_code_end)
+  )
 ))
 
 ==================
