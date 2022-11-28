@@ -560,7 +560,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "-\\pL[^-\\s]*"
+        "value": "-\\pL[^\\s]*"
       }
     },
     "tag_hash": {
@@ -1618,8 +1618,8 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "\n"
+          "type": "SYMBOL",
+          "name": "_eol"
         }
       ]
     },
@@ -1657,8 +1657,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "PATTERN",
-              "value": "\\n"
+              "type": "SYMBOL",
+              "name": "_eol"
             },
             {
               "type": "SYMBOL",

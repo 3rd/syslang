@@ -112,7 +112,7 @@ module.exports = grammar({
 
     // tags
     tag_positive: () => token(/\+\pL[^+\s]*/), // +tag
-    tag_negative: () => token(/-\pL[^-\s]*/), // -tag
+    tag_negative: () => token(/-\pL[^\s]*/), // -tag
     tag_hash: () => token(/#\pL[^#\s]*/), // #tag
     tag_context: () => token(/@\pL[^@\s]*/), // @tag
     tag_danger: () => token(/!\pL[^!\s]*/), // !tag
@@ -339,7 +339,7 @@ module.exports = grammar({
       seq(
         token(prec(1, "@code")),
         optional(seq(token.immediate(/\s/), $.code_block_language)),
-        "\n"
+        $._eol
       ),
     code_block_end: () => token("@end"),
     code_block: ($) =>
@@ -347,7 +347,7 @@ module.exports = grammar({
         $.code_block_start,
         optional($.code_block_content),
         $.code_block_end,
-        choice(/\n/, $._eof)
+        choice($._eol, $._eof)
       ),
 
     // links
