@@ -111,12 +111,12 @@ module.exports = grammar({
       ),
 
     // tags
-    tag_positive: () => token(/\+[^+\s]+/), // +tag
-    tag_negative: () => token(/-[^-\s]+/), // -tag
-    tag_hash: () => token(/#[^#\s]+/), // #tag
-    tag_context: () => token(/@[^@\s]+/), // @tag
-    tag_danger: () => token(/![^!\s]+/), // !tag
-    tag_identifier: () => token(/\$[^\$\s]+/), // $tag
+    tag_positive: () => token(/\+\pL[^+\s]*/), // +tag
+    tag_negative: () => token(/-\pL[^-\s]*/), // -tag
+    tag_hash: () => token(/#\pL[^#\s]*/), // #tag
+    tag_context: () => token(/@\pL[^@\s]*/), // @tag
+    tag_danger: () => token(/!\pL[^!\s]*/), // !tag
+    tag_identifier: () => token(/\$\pL[^\$\s]*/), // $tag
 
     // headings
     heading_1_marker: () => token("*"),

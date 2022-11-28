@@ -537,42 +537,42 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\+[^+\\s]+"
+        "value": "\\+\\pL[^+\\s]*"
       }
     },
     "tag_negative": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "-[^-\\s]+"
+        "value": "-\\pL[^-\\s]*"
       }
     },
     "tag_hash": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "#[^#\\s]+"
+        "value": "#\\pL[^#\\s]*"
       }
     },
     "tag_context": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "@[^@\\s]+"
+        "value": "@\\pL[^@\\s]*"
       }
     },
     "tag_danger": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "![^!\\s]+"
+        "value": "!\\pL[^!\\s]*"
       }
     },
     "tag_identifier": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\$[^\\$\\s]+"
+        "value": "\\$\\pL[^\\$\\s]*"
       }
     },
     "heading_1_marker": {
