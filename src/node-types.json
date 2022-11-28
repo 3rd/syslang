@@ -793,6 +793,11 @@
     }
   },
   {
+    "type": "string",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "task_active",
     "named": true,
     "fields": {},
@@ -1283,10 +1288,6 @@
   },
   {
     "type": "section_marker",
-    "named": true
-  },
-  {
-    "type": "string",
     "named": true
   },
   {

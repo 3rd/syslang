@@ -88,7 +88,7 @@ module.exports = grammar({
       ),
 
     // basic types
-    string: () => token(prec(1, /"[^"]*"/)),
+    string: () => choice(token(prec(1, /"[^"]*"/)), token(prec(1, /'[^']*'/))),
     number: () => token(prec(1, /-?\d+/)),
     ticket: () => token(prec(1, /[A-Z]+-\d+:?/)),
 
