@@ -1084,6 +1084,10 @@
           "named": true
         },
         {
+          "type": "label",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -1195,6 +1199,14 @@
     "named": false
   },
   {
+    "type": "Schedule: ",
+    "named": false
+  },
+  {
+    "type": "Session: ",
+    "named": false
+  },
+  {
     "type": "bold_content",
     "named": true
   },
@@ -1272,6 +1284,10 @@
   },
   {
     "type": "italic_start",
+    "named": true
+  },
+  {
+    "type": "label",
     "named": true
   },
   {

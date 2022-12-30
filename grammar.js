@@ -300,13 +300,13 @@ module.exports = grammar({
       ),
     task_session: ($) =>
       seq(
-        token(/Session:/),
+        "Session: ",
         choice($.datetime, $.datetimerange),
         choice($._eol, $._eof)
       ),
     task_schedule: ($) =>
       seq(
-        token(/Schedule:/),
+        "Schedule: ",
         choice($.date, $.daterange, $.datetime, $.datetimerange),
         choice($._eol, $._eof)
       ),
@@ -353,6 +353,10 @@ module.exports = grammar({
     // links
     external_link: () => token(/https?:\/\/\S+/),
 
+    // labels
+    // FIXME: restrict to a single line
+    label: () => token(/[^\s:]+: /),
+
     // inline element & text line
     _inline: ($) =>
       choice(
@@ -387,7 +391,9 @@ module.exports = grammar({
       ),
     text_to_eol: () => token(/[^\n]+/),
     text_line: ($) =>
-      prec.left(seq(repeat1($._inline), choice(token(/\n/), $._eof))),
+      prec.left(
+        seq(optional($.label), repeat1($._inline), choice(token(/\n/), $._eof))
+      ),
     _text: () => prec.left(-100, repeat1(token(/[^\s]+/))),
     _raw_text_line: ($) =>
       prec.left(seq(repeat1($._text), choice($._eol, $._eof))),

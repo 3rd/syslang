@@ -1,0 +1,17 @@
+==================
+Label
+==================
+label: text
+
+not-label:
+  - not-label:
+  - label: text
+---
+(document
+  (text_line (label))
+  (text_line)
+  (list_item (list_item_marker) (text_line))
+  (list_item (list_item_marker)
+    (text_line (label))
+  )
+)

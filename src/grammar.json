@@ -1393,11 +1393,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "PATTERN",
-            "value": "Session:"
-          }
+          "type": "STRING",
+          "value": "Session: "
         },
         {
           "type": "CHOICE",
@@ -1431,11 +1428,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "PATTERN",
-            "value": "Schedule:"
-          }
+          "type": "STRING",
+          "value": "Schedule: "
         },
         {
           "type": "CHOICE",
@@ -1675,6 +1669,13 @@
         "value": "https?:\\/\\/\\S+"
       }
     },
+    "label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\s:]+: "
+      }
+    },
     "_inline": {
       "type": "CHOICE",
       "members": [
@@ -1773,6 +1774,18 @@
       "content": {
         "type": "SEQ",
         "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "label"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
           {
             "type": "REPEAT1",
             "content": {

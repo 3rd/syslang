@@ -1,11 +1,11 @@
 (ERROR) @slang.error
 
+; https://github.com/lmburns/dotfiles/blob/2d1d1bdb00fc01c995c87777b0db10e17a0e073c/.config/nvim/queries/rust/highlights.scm
+; https://www.reddit.com/r/neovim/comments/vdrnmf/is_it_possible_to_have_treesitter_syntax/
+
 ; document title
 (document_title_basic) @slang.document.title
-(
- (document_title_basic_marker) @conceal
- (#set! conceal "⚑")
-)
+((document_title_basic_marker) @slang.document.title (#set! conceal "⚑"))
 
 ; document meta
 (document_meta
@@ -52,47 +52,33 @@
 
 ; headings
 (heading_1
-  (heading_1_marker) @slang.heading_1.marker
   (text_to_eol) @slang.heading_1.text
 ) @slang.heading_1
+((heading_1_marker) @slang.heading_1.marker (#set! conceal "◉"))
 (heading_2
-  (heading_2_marker) @slang.heading_2.marker
   (text_to_eol) @slang.heading_2.text
 ) @slang.heading_2
+((heading_2_marker) @slang.heading_2.marker (#set! conceal "◉"))
 (heading_3
-  (heading_3_marker) @slang.heading_3.marker
   (text_to_eol) @slang.heading_3.text
 ) @slang.heading_3
+((heading_3_marker) @slang.heading_3.marker (#set! conceal "◉"))
 (heading_4
-  (heading_4_marker) @slang.heading_4.marker
   (text_to_eol) @slang.heading_4.text
 ) @slang.heading_4
+((heading_4_marker) @slang.heading_4.marker (#set! conceal "◉"))
 (heading_5
-  (heading_5_marker) @slang.heading_5.marker
   (text_to_eol) @slang.heading_5.text
 ) @slang.heading_5
+((heading_5_marker) @slang.heading_5.marker (#set! conceal "◉"))
 (heading_6
-  (heading_6_marker) @slang.heading_6.marker
   (text_to_eol) @slang.heading_6.text
 ) @slang.heading_6
-(
-  [
-    (heading_1_marker)
-    (heading_2_marker)
-    (heading_3_marker)
-    (heading_4_marker)
-    (heading_5_marker)
-    (heading_6_marker)
-  ] @conceal
-  (#set! conceal "◉")
- )
+((heading_6_marker) @slang.heading_6.marker (#set! conceal "◉"))
 
 ; sections
 (section (text_to_eol) @slang.section)
-(
- (section_marker) @conceal
- (#set! conceal "⮟")
-)
+((section_marker) @slang.section (#set! conceal "⮟"))
 
 ; (pipe (text_to_eol) @slang.pipe)
 ; (
@@ -102,25 +88,13 @@
 
 ; tasks
 (task_default (text_line) @slang.task_default)
+((task_marker_default) @slang.task_default (#set! conceal ""))
 (task_active (text_line) @slang.task_active)
+((task_marker_active) @slang.task_active (#set! conceal "➡"))
 (task_cancelled (text_to_eol) @slang.task_cancelled)
+((task_marker_cancelled) @slang.task_cancelled (#set! conceal ""))
 (task_done (_) @slang.task_done)
-(
- (task_marker_default) @conceal
- (#set! conceal "")
-)
-(
- (task_marker_active) @conceal
- (#set! conceal "")
-)
-(
- (task_marker_done) @conceal
- (#set! conceal "")
-)
-(
- (task_marker_cancelled) @conceal
- (#set! conceal "")
-)
+((task_marker_done) @slang.task_done (#set! conceal ""))
 (task_session) @slang.task_session
 (task_schedule) @slang.task_schedule
 
@@ -146,8 +120,7 @@
 
 ; list items
 (list_item) @slang.list_item
-(list_item_marker) @slang.list_item_marker
-(
- (list_item_marker) @conceal
- (#set! conceal "•")
-)
+((list_item_marker) @slang.list_item_marker (#set! conceal "•"))
+
+; labels
+(label) @slang.label
