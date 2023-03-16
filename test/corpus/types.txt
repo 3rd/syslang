@@ -14,11 +14,19 @@ String
 ==================
 Number
 ==================
-1, 2, -3.
+0 1, 2, -3, 4/s, time2market, 12.3, 6.
 ---
 (document
   (text_line
-    (number) (number) (number)))
+    (number)
+    (number)
+    (number)
+    (number)
+    (number)
+    (number)
+    (number)
+  )
+)
 
 ==================
 Ticket

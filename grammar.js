@@ -89,7 +89,7 @@ module.exports = grammar({
 
     // basic types
     string: () => choice(token(prec(1, /"[^"]*"/)), token(prec(1, /'[^']*'/))),
-    number: () => token(prec(1, /-?\d+/)),
+    number: () => token(prec(1, /-?\d+(\.\d+)?[,\.;\/]?/)),
     ticket: () => token(prec(1, /[A-Z]+-\d+:?/)),
 
     // datetime types
