@@ -136,31 +136,35 @@ struct Scanner {
 
   bool scan_inline_modifier(TSLexer *lexer, const bool *valid_symbols, char c,
                             TokenType start, TokenType end) {
-    if (lexer->lookahead == c) {
-      if (valid_symbols[end]) {
+    // start
+    if (lexer->lookahead == c && valid_symbols[start]) {
+      // printf(" - scan_inline_modifier start %c\n", c);
+      advance(lexer);
+      // printf(" - lookahead %c", lexer->lookahead);
+      if (lexer->lookahead == c || iswspace(lexer->lookahead)) {
+        return false;
+      }
+      lexer->mark_end(lexer);
+      while (lexer->lookahead && lexer->lookahead != '\n' &&
+             lexer->lookahead != c) {
         advance(lexer);
-        lexer->mark_end(lexer);
-        lexer->result_symbol = end;
+      }
+      if (lexer->lookahead == c) {
+        advance(lexer);
+        lexer->result_symbol = start;
         if (debug)
-          printf("-> INLINE MODIFIER END %c\n", c);
+          printf("-> INLINE MODIFIER START %c\n", c);
         return true;
       }
-      if (valid_symbols[BOLD_START]) {
-        advance(lexer);
-        lexer->mark_end(lexer);
-        if (isalnum(lexer->lookahead)) {
-          while (lexer->lookahead && lexer->lookahead != '\n' &&
-                 lexer->lookahead != c) {
-            advance(lexer);
-          }
-          if (lexer->lookahead == c) {
-            lexer->result_symbol = start;
-            if (debug)
-              printf("-> INLINE MODIFIER START %c\n", c);
-            return true;
-          }
-        }
-      }
+    }
+    // end
+    if (lexer->lookahead == c && valid_symbols[end]) {
+      advance(lexer);
+      lexer->mark_end(lexer);
+      lexer->result_symbol = end;
+      if (debug)
+        printf("-> INLINE MODIFIER END %c\n", c);
+      return true;
     }
     return false;
   }
