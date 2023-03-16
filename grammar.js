@@ -66,7 +66,7 @@ module.exports = grammar({
         field("value", $.document_meta_field_value),
         $._eol
       ),
-    document_meta_field_key: () => token(/[a-zA-Z0-9_]+/),
+    document_meta_field_key: () => token(/[\w]+/),
     document_meta_field_value: () => token(/[^\n]+/),
 
     // comments
@@ -312,19 +312,20 @@ module.exports = grammar({
       ),
 
     // list items
+    list_item_label: ($) => $._text,
     list_item: ($) =>
-      seq(
-        $.list_item_marker,
-        $.text_line,
-        // FIXME
-        optional($._list_item_children)
-      ),
-    _list_item_children: ($) =>
-      seq(
-        $._indent,
-        repeat1(choice($.list_item, $.text_line)),
-        choice($._dedent, $._eof)
-      ),
+      prec.left(choice(
+        seq(
+          $.list_item_marker,
+          $.list_item_label,
+          token.immediate(/ - /),
+          repeat1($._inline),
+          choice($._eol, $._eof),
+          optional($._list_item_children)
+        ),
+        seq($.list_item_marker, $.text_line, optional($._list_item_children))
+      )),
+    _list_item_children: ($) => seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
 
     // inline code
     // inline_code: () => token(prec(1, /`[^`]+`/)),
@@ -337,7 +338,7 @@ module.exports = grammar({
     code_block_content: ($) => seq(repeat1($._raw_text_line)),
     code_block_start: ($) =>
       seq(
-        token(prec(1, "@code")),
+        token("@code"),
         optional(seq(token.immediate(/\s/), $.code_block_language)),
         $._eol
       ),
@@ -355,7 +356,7 @@ module.exports = grammar({
 
     // labels
     // FIXME: restrict to a single line
-    label: () => token(/[^\s:]+: /),
+    label: () => (/\w+:/),
 
     // inline element & text line
     _inline: ($) =>
@@ -394,7 +395,7 @@ module.exports = grammar({
       prec.left(
         seq(optional($.label), repeat1($._inline), choice(token(/\n/), $._eof))
       ),
-    _text: () => prec.left(-100, repeat1(token(/[^\s]+/))),
+    _text: () => prec.left(repeat1(token(/[^\s]+/))),
     _raw_text_line: ($) =>
       prec.left(seq(repeat1($._text), choice($._eol, $._eof))),
   },

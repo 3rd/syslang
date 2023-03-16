@@ -121,6 +121,7 @@
 ; list items
 (list_item) @slang.list_item
 ((list_item_marker) @slang.list_item_marker (#set! conceal "•"))
+(list_item_label) @slang.list_item_label
 
 ; labels
 (label) @slang.label

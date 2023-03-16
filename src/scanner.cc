@@ -46,7 +46,7 @@ struct Scanner {
     size_t i = 0;
     buffer[i++] = previous_indent;
     if (debug)
-      printf("serialize: %d\n", previous_indent);
+      printf("serialize: %zu\n", previous_indent);
     return i;
   }
   void deserialize(const char *buffer, unsigned length) {
@@ -200,7 +200,7 @@ struct Scanner {
       }
 
       if (debug) {
-        printf("indent: %d previous: %d lookahead: %c\n", indent,
+        printf("indent: %zu previous: %zu lookahead: %c\n", indent,
                previous_indent, lexer->lookahead);
         printf("valid_symbols[INDENT]: %d valid_symbols[DEDENT]: %d\n",
                valid_symbols[INDENT], valid_symbols[DEDENT]);
