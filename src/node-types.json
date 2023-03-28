@@ -775,6 +775,10 @@
           "named": true
         },
         {
+          "type": "list_item_label_marker",
+          "named": true
+        },
+        {
           "type": "list_item_marker",
           "named": true
         },
@@ -835,6 +839,11 @@
   },
   {
     "type": "list_item_label",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "list_item_label_marker",
     "named": true,
     "fields": {}
   },

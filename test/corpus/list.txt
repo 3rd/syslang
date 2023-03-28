@@ -6,6 +6,8 @@ List items
   - List item
     Subtext
   - List item
+  - Labeled - list item
+  - Super labeled - list item
   - Labeled - list item - https://url.com
 
 ---
@@ -16,5 +18,7 @@ List items
     (list_item (list_item_marker) (text_line)
       (text_line))
     (list_item (list_item_marker) (text_line))
-    (list_item (list_item_marker) (list_item_label) (external_link)))
+    (list_item (list_item_marker) (list_item_label) (list_item_label_marker))
+    (list_item (list_item_marker) (list_item_label) (list_item_label_marker))
+    (list_item (list_item_marker) (list_item_label) (list_item_label_marker) (list_item_label_marker) (external_link)))
 )

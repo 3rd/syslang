@@ -47,15 +47,12 @@ module.exports = grammar({
 
     // document title (basic)
     document_title_basic_marker: () => token(/=/),
-    document_title_basic: ($) =>
-      prec.right(
-        seq($.document_title_basic_marker, $.text_to_eol, choice($._eol, $._eof))
-      ),
+    document_title_basic: ($) => seq($.document_title_basic_marker, $.text_to_eol, choice($._eol, $._eof)),
 
     // document meta
     document_meta: ($) =>
       seq(
-        token.immediate(prec(1, /@document/)),
+        token.immediate(/@document/),
         repeat($.document_meta_field),
         token(/@end/)
       ),
@@ -95,20 +92,20 @@ module.exports = grammar({
     // datetime types
     date: () =>
       choice(
-        token(prec(2, /\d{4}-\d{2}-\d{2}/)),
-        token(prec(2, /\d{4}.\d{2}.\d{2}/)),
-        token(prec(2, /\d{4}\/\d{2}\/\d{2}/))
+        token(prec(1, /\d{4}-\d{2}-\d{2}/)),
+        token(prec(1, /\d{4}.\d{2}.\d{2}/)),
+        token(prec(1, /\d{4}\/\d{2}\/\d{2}/))
       ),
-    daterange: ($) => seq($.date, token(/-/), $.date),
+    daterange: ($) => prec(1, seq($.date, token(/-/), $.date)),
     time: () =>
-      choice(token(prec(2, /\d{2}:\d{2}/)), token(prec(2, /\d{2}:\d{2}:\d{2}/))),
-    timerange: ($) => seq($.time, token(/-/), $.time),
-    datetime: ($) => prec.left(1, seq($.date, $.time)),
+      choice(token(prec(1, /\d{2}:\d{2}/)), token(prec(1, /\d{2}:\d{2}:\d{2}/))),
+    timerange: ($) => prec(1, seq($.time, token(/-/), $.time)),
+    datetime: ($) => prec(1, seq($.date, $.time)),
     datetimerange: ($) =>
-      choice(
+      prec(1, choice(
         seq($.datetime, token(/-/), $.datetime),
         seq($.datetime, token(/-/), $.time)
-      ),
+      )),
 
     // tags
     tag_positive: () => token(/\+\pL[^+\s]*/), // +tag
@@ -306,29 +303,31 @@ module.exports = grammar({
       ),
     task_schedule: ($) =>
       seq(
-        "Schedule: ",
+        token("Schedule: "),
         choice($.date, $.daterange, $.datetime, $.datetimerange),
         choice($._eol, $._eof)
       ),
 
     // list items
     list_item_label: ($) => $._text,
+    list_item_label_marker: () => /-/,
     list_item: ($) =>
-      prec.left(choice(
+      choice(
         seq(
           $.list_item_marker,
           $.list_item_label,
-          token.immediate(/ - /),
-          repeat1($._inline),
+          $.list_item_label_marker,
+          repeat1(
+            choice($._inline, $.list_item_label_marker)
+          ),
           choice($._eol, $._eof),
           optional($._list_item_children)
         ),
         seq($.list_item_marker, $.text_line, optional($._list_item_children))
-      )),
+      ),
     _list_item_children: ($) => seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
 
     // inline code
-    // inline_code: () => token(prec(1, /`[^`]+`/)),
     inline_code_content: () => token(/[^`\n]+/),
     inline_code: ($) =>
       seq($.inline_code_start, $.inline_code_content, $.inline_code_end),
@@ -355,8 +354,9 @@ module.exports = grammar({
     external_link: () => token(/https?:\/\/\S+/),
 
     // labels
-    // FIXME: restrict to a single line
-    label: () => (/\w+:/),
+    // TODO: allow for more words before : by fixing task schedule/session
+    // priority
+    label: () => (/[\w]+:/),
 
     // inline element & text line
     _inline: ($) =>
@@ -391,12 +391,8 @@ module.exports = grammar({
         $._text
       ),
     text_to_eol: () => token(/[^\n]+/),
-    text_line: ($) =>
-      prec.left(
-        seq(optional($.label), repeat1($._inline), choice(token(/\n/), $._eof))
-      ),
-    _text: () => prec.left(repeat1(token(/[^\s]+/))),
-    _raw_text_line: ($) =>
-      prec.left(seq(repeat1($._text), choice($._eol, $._eof))),
+    text_line: ($) => seq(optional($.label), repeat1($._inline), choice(token(/\n/), $._eof)),
+    _text: () => prec.right(repeat1(token(/[^\s]+/))),
+    _raw_text_line: ($) => seq(repeat1($._text), choice($._eol, $._eof)),
   },
 });
