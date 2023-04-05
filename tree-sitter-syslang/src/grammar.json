@@ -94,6 +94,10 @@
           "name": "document_title_basic_marker"
         },
         {
+          "type": "PATTERN",
+          "value": " "
+        },
+        {
           "type": "SYMBOL",
           "name": "text_to_eol"
         },
@@ -153,7 +157,7 @@
           "type": "IMMEDIATE_TOKEN",
           "content": {
             "type": "STRING",
-            "value": ":"
+            "value": ": "
           }
         },
         {
@@ -1251,6 +1255,10 @@
           "name": "task_marker_default"
         },
         {
+          "type": "PATTERN",
+          "value": " "
+        },
+        {
           "type": "SYMBOL",
           "name": "text_line"
         },
@@ -1274,6 +1282,10 @@
         {
           "type": "SYMBOL",
           "name": "task_marker_active"
+        },
+        {
+          "type": "PATTERN",
+          "value": " "
         },
         {
           "type": "SYMBOL",
@@ -1301,6 +1313,10 @@
           "name": "task_marker_done"
         },
         {
+          "type": "PATTERN",
+          "value": " "
+        },
+        {
           "type": "SYMBOL",
           "name": "text_to_eol"
         },
@@ -1324,6 +1340,10 @@
         {
           "type": "SYMBOL",
           "name": "task_marker_cancelled"
+        },
+        {
+          "type": "PATTERN",
+          "value": " "
         },
         {
           "type": "SYMBOL",
@@ -1476,7 +1496,7 @@
     },
     "list_item_label": {
       "type": "SYMBOL",
-      "name": "_text"
+      "name": "text"
     },
     "list_item_label_marker": {
       "type": "PATTERN",
@@ -1828,7 +1848,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_text"
+          "name": "text"
         }
       ]
     },
@@ -1879,7 +1899,7 @@
         }
       ]
     },
-    "_text": {
+    "text": {
       "type": "PREC_RIGHT",
       "value": 0,
       "content": {
@@ -1900,7 +1920,7 @@
           "type": "REPEAT1",
           "content": {
             "type": "SYMBOL",
-            "name": "_text"
+            "name": "text"
           }
         },
         {
@@ -1931,14 +1951,6 @@
     {
       "type": "PATTERN",
       "value": "\\n"
-    },
-    {
-      "type": "PATTERN",
-      "value": "\\."
-    },
-    {
-      "type": "PATTERN",
-      "value": ","
     }
   ],
   "conflicts": [],

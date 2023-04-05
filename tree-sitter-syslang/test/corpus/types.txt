@@ -6,9 +6,21 @@ String
 ---
 (document
   (text_line
-    (string) (string) (string))
+    (string)
+    (text)
+    (string)
+    (text)
+    (string)
+    (text)
+  )
   (text_line
-    (string) (string) (string))
+    (string)
+    (text)
+    (string)
+    (text)
+    (string)
+    (text)
+  )
 )
 
 ==================
@@ -23,6 +35,7 @@ Number
     (number)
     (number)
     (number)
+    (text)
     (number)
     (number)
   )

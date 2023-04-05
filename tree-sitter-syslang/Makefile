@@ -28,7 +28,7 @@ test: ## run tests
 	@npm run test
 
 dev: ## watch for changes and run tests
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c "make test"
+	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make test"
 
 dev_filter: ## watch for development tests only
 	@watchexec -e ".cc,.js,.scm,.txt" -r -c "tree-sitter test -f Development"

@@ -6,6 +6,6 @@ A partially -- commented line.
 ---
 (document
   (text_line (comment))
-  (text_line (comment))
+  (text_line (text) (comment))
 )
 

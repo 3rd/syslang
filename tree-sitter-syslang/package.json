@@ -11,6 +11,9 @@
       ]
     }
   ],
+  "highlights": [
+    "queries/highlights.scm"
+  ],
   "scripts": {
     "generate": "tree-sitter generate",
     "test": "tree-sitter test",

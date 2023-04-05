@@ -9,10 +9,10 @@ not-label:
 
 ---
 (document
-  (text_line (label))
-  (text_line)
-  (list_item (list_item_marker) (text_line))
+  (text_line (label) (text))
+  (text_line (text))
+  (list_item (list_item_marker) (text_line (text)))
   (list_item
       (list_item_marker)
-      (text_line (label)))
+      (text_line (label) (text)))
 )

@@ -48,7 +48,17 @@
   {
     "type": "code_block_content",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "code_block_start",
@@ -815,6 +825,10 @@
           "named": true
         },
         {
+          "type": "text",
+          "named": true
+        },
+        {
           "type": "text_line",
           "named": true
         },
@@ -840,7 +854,17 @@
   {
     "type": "list_item_label",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "list_item_label_marker",
@@ -1142,12 +1166,17 @@
     }
   },
   {
+    "type": "text",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "text_line",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "bold",
@@ -1222,6 +1251,10 @@
           "named": true
         },
         {
+          "type": "text",
+          "named": true
+        },
+        {
           "type": "ticket",
           "named": true
         },
@@ -1293,7 +1326,7 @@
     "named": false
   },
   {
-    "type": ":",
+    "type": ": ",
     "named": false
   },
   {

@@ -7,6 +7,7 @@ Bold
   (text_line
     (bold (bold_start) (bold_content) (bold_end))
     (bold (bold_start) (bold_content) (bold_end))
+    (text)
     (bold (bold_start) (bold_content) (bold_end))
   )
 )
@@ -20,6 +21,7 @@ Italic
   (text_line
     (italic (italic_start) (italic_content) (italic_end))
     (italic (italic_start) (italic_content) (italic_end))
+    (text)
     (italic (italic_start) (italic_content) (italic_end))
   )
 )
@@ -33,6 +35,7 @@ _underline_, _underline_ and _underline_.
   (text_line
     (underline (underline_start) (underline_content) (underline_end))
     (underline (underline_start) (underline_content) (underline_end))
+    (text)
     (underline (underline_start) (underline_content) (underline_end))
   )
 )
