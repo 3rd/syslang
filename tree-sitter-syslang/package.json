@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "generate": "tree-sitter generate",
+    "build": "tree-sitter generate && node-gyp-configure && node-gyp build",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse",
     "highlight": "tree-sitter highlight",
@@ -23,8 +24,5 @@
   },
   "dependencies": {
     "nan": "^2.14.2"
-  },
-  "devDependencies": {
-    "tree-sitter-cli": "^0.20.0"
   }
 }

@@ -41,3 +41,8 @@ highlight-spec: ## generate parser and highlight the spec file
 	@make generate
 	@npm run highlight -- spec.syslang
 
+setup: ## setup
+	@tree-sitter init-config
+	@echo 'Warning: Remember to setup { "parser-directories": [] }'
+	@npm install
+	@npm run build
