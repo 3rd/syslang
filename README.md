@@ -1,6 +1,6 @@
 # Syslang
 
-Syslang (or _slang_), is my personal document syntax.
+Syslang (or _slang_) is my personal document syntax.
 
 This project was inspired by [Geir Isene's HyperList](https://isene.org/hyperlist/), Org, Markdown, AsciiDoc, and others.
 

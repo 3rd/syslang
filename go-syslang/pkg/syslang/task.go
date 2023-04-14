@@ -17,6 +17,21 @@ const (
 	TaskStatusCancelled
 )
 
+func (status TaskStatus) String() string {
+	switch status {
+	case TaskStatusDefault:
+		return "default"
+	case TaskStatusActive:
+		return "active"
+	case TaskStatusDone:
+		return "done"
+	case TaskStatusCancelled:
+		return "cancelled"
+	default:
+		panic("unknown task status")
+	}
+}
+
 type TaskSession struct {
 	Start time.Time
 	End   *time.Time
@@ -45,10 +60,6 @@ func NewTaskSessionFromStr(startDateStr, startTimeStr string, endDateStr, endTim
 	return session
 }
 
-func (session TaskSession) IsInProgress() bool {
-	return session.End == nil
-}
-
 func (session TaskSession) Duration() time.Duration {
 	if session.End == nil {
 		return time.Since(session.Start)
@@ -56,16 +67,19 @@ func (session TaskSession) Duration() time.Duration {
 	return session.End.Sub(session.Start)
 }
 
+func (session TaskSession) IsInProgress(atTime ...time.Time) bool {
+	if len(atTime) > 1 {
+		panic("IsInProgress takes at most one argument")
+	}
+	if len(atTime) == 1 {
+		return session.Start.Before(atTime[0]) && (session.End == nil || session.End.After(atTime[0]))
+	}
+	return session.End == nil
+}
+
 type TaskSchedule struct {
 	Start time.Time
 	End   *time.Time
-}
-
-func (schedule TaskSchedule) Duration() time.Duration {
-	if schedule.End == nil {
-		return 0
-	}
-	return schedule.End.Sub(schedule.Start)
 }
 
 func NewTaskScheduleFromStr(startDateStr string, startTimeStr, endDateStr, endTimeStr *string) TaskSchedule {
@@ -91,6 +105,28 @@ func NewTaskScheduleFromStr(startDateStr string, startTimeStr, endDateStr, endTi
 	return schedule
 }
 
+func (schedule TaskSchedule) Duration() time.Duration {
+	if schedule.End == nil {
+		return 0
+	}
+	return schedule.End.Sub(schedule.Start)
+}
+
+func (schedule TaskSchedule) IsInProgress(atTime ...time.Time) bool {
+	if len(atTime) != 1 {
+		panic("TaskSchedule.IsInProgress requires the atTime argument")
+	}
+	// between start and end
+	if schedule.End != nil && schedule.Start.Before(atTime[0]) && schedule.End.After(atTime[0]) {
+		return true
+	}
+	// same day, after start, no end
+	if schedule.Start.Day() == atTime[0].Day() && schedule.End == nil && schedule.Start.Before(atTime[0]) {
+		return true
+	}
+	return false
+}
+
 type Task struct {
 	Status   TaskStatus
 	Title    string
@@ -99,11 +135,19 @@ type Task struct {
 	Schedule *TaskSchedule
 }
 
-func (task Task) IsInProgress() bool {
+func (task Task) IsInProgress(atTime ...time.Time) bool {
+	if len(atTime) > 1 {
+		panic("IsInProgress takes at most one argument")
+	}
+	// sessions
 	for _, session := range task.Sessions {
-		if session.IsInProgress() {
+		if session.IsInProgress(atTime...) {
 			return true
 		}
+	}
+	// schedule
+	if len(atTime) == 1 && task.Schedule != nil {
+		return task.Schedule.IsInProgress(atTime...)
 	}
 	return false
 }
