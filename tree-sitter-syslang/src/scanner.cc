@@ -11,6 +11,7 @@ using std::string;
 enum TokenType {
   END_OF_FILE,
   END_OF_LINE,
+  // BREAKOUT,
   INDENT,
   DEDENT,
   TASK_MARKER_DEFAULT,
@@ -38,19 +39,20 @@ struct Scanner {
 
   Scanner() {
     if (debug) printf("Scanner::Scanner\n");
-    // deserialize(NULL, 0);
+    deserialize(NULL, 0);
   }
 
   unsigned serialize(char *buffer) {
     size_t i = 0;
     buffer[i++] = previous_indent;
-    if (debug) printf("serialize: %zu\n", previous_indent);
+    if (debug) printf("  ~~> serialize indent -> %zu\n", previous_indent);
     return i;
   }
+
   void deserialize(const char *buffer, unsigned length) {
     if (length == 0) return;
     size_t i = 0;
-    set_previous_indent(const_cast<char *>("deserialize restore"), buffer[i++]);
+    set_previous_indent(const_cast<char *>("deserialize()"), buffer[i++]);
   }
 
   void reset() {}
@@ -58,9 +60,7 @@ struct Scanner {
   void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
   void set_previous_indent(char *where, size_t indent) {
-    if (debug) {
-      printf("set_previous_indent: %s %zu", where, indent);
-    }
+    if (debug) printf("  ~~> set indent from '%s' with value: %zu\n", where, indent);
     previous_indent = indent;
   }
 
@@ -75,7 +75,7 @@ struct Scanner {
         advance(lexer);
         lexer->result_symbol = TASK_MARKER_DEFAULT;
         lexer->mark_end(lexer);
-        if (debug) printf("-> TASK_MARKER_DEFAULT\n");
+        if (debug) printf("  => TASK_MARKER_DEFAULT\n");
         return true;
       }
     }
@@ -85,7 +85,7 @@ struct Scanner {
         advance(lexer);
         lexer->result_symbol = TASK_MARKER_ACTIVE;
         lexer->mark_end(lexer);
-        if (debug) printf("-> TASK_MARKER_ACTIVE\n");
+        if (debug) printf("  => TASK_MARKER_ACTIVE\n");
         return true;
       }
     }
@@ -95,7 +95,7 @@ struct Scanner {
         advance(lexer);
         lexer->result_symbol = TASK_MARKER_DONE;
         lexer->mark_end(lexer);
-        if (debug) printf("-> TASK_MARKER_DONE\n");
+        if (debug) printf("  => TASK_MARKER_DONE\n");
         return true;
       }
     }
@@ -105,7 +105,7 @@ struct Scanner {
         advance(lexer);
         lexer->result_symbol = TASK_MARKER_CANCELLED;
         lexer->mark_end(lexer);
-        if (debug) printf("-> TASK_MARKER_CANCELLED\n");
+        if (debug) printf("  => TASK_MARKER_CANCELLED\n");
         return true;
       }
     }
@@ -121,7 +121,7 @@ struct Scanner {
       lexer->mark_end(lexer);
       advance(lexer);
       lexer->result_symbol = LIST_ITEM_MARKER;
-      if (debug) printf("-> LIST_ITEM_MARKER\n");
+      if (debug) printf("  => LIST_ITEM_MARKER\n");
       return true;
     }
     return false;
@@ -143,7 +143,7 @@ struct Scanner {
       if (lexer->lookahead == c) {
         advance(lexer);
         lexer->result_symbol = start;
-        if (debug) printf("-> INLINE MODIFIER START %c\n", c);
+        if (debug) printf("  => INLINE MODIFIER START %c\n", c);
         return true;
       }
     }
@@ -152,20 +152,20 @@ struct Scanner {
       advance(lexer);
       lexer->mark_end(lexer);
       lexer->result_symbol = end;
-      if (debug) printf("-> INLINE MODIFIER END %c\n", c);
+      if (debug) printf("  => INLINE MODIFIER END %c\n", c);
       return true;
     }
     return false;
   }
 
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
-    if (debug) printf("\n\n");
+    uint32_t start_column = lexer->get_column(lexer);
+    bool is_eof = (lexer->eof(lexer) || !lexer->lookahead);
+
     // end of file
-    if (valid_symbols[END_OF_FILE] && (lexer->eof(lexer) || !lexer->lookahead)) {
+    if (is_eof) {
       lexer->result_symbol = END_OF_FILE;
-      if (debug) {
-        printf("-> END_OF_FILE\n");
-      }
+      // if (debug) printf("  => END_OF_FILE\n");
       return true;
     }
 
@@ -174,39 +174,59 @@ struct Scanner {
       lexer->mark_end(lexer);
       advance(lexer);
       lexer->result_symbol = END_OF_LINE;
-      if (debug) printf("-> END_OF_LINE\n");
+      // if (debug) printf("  => END_OF_LINE\n");
       return true;
     }
 
+    if (debug) {
+      printf(
+          "* scan() -> start_column=%u lookahead='%c' "
+          "prev_indent=%zu\n",
+          start_column,
+          lexer->lookahead,
+          previous_indent
+      );
+    }
+
     // line start
-    uint32_t start_column = lexer->get_column(lexer);
     if (start_column == 0) {
       size_t indent = 0;
+      size_t prev_indent = previous_indent;
 
       lexer->mark_end(lexer);
+
       while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
         indent++;
         skip(lexer);
       }
 
       if (debug) {
-        printf("indent: %zu previous: %zu lookahead: %c\n", indent, previous_indent, lexer->lookahead);
-        printf("valid_symbols[INDENT]: %d valid_symbols[DEDENT]: %d\n", valid_symbols[INDENT], valid_symbols[DEDENT]);
+        printf("  indent: %zu previous_indent: %zu lookahead: '%c'\n", indent, previous_indent, lexer->lookahead);
+        // printf(
+        //     "  valid_symbols: INDENT=%d DEDENT=%d BREAKOUT=%d\n",
+        //     valid_symbols[INDENT],
+        //     valid_symbols[DEDENT],
+        //     valid_symbols[BREAKOUT]
+        // );
       }
 
+      set_previous_indent(const_cast<char *>("scan()"), indent);
+
       // indent / dedent
-      if (valid_symbols[INDENT] && indent > previous_indent) {
-        set_previous_indent(const_cast<char *>("INDENT"), indent);
+      // if (indent == 0 && prev_indent != 0) {
+      //   lexer->result_symbol = BREAKOUT;
+      //   if (debug) printf("    => BREAKOUT\n");
+      //   return true;
+      // } else
+      if (valid_symbols[INDENT] && indent > prev_indent) {
         lexer->result_symbol = INDENT;
-        if (debug) printf("-> INDENT\n");
+        if (debug) printf("    => INDENT\n");
         return true;
-      } else if (valid_symbols[DEDENT] && indent < previous_indent) {
-        set_previous_indent(const_cast<char *>("DEDENT"), indent);
+      } else if (valid_symbols[DEDENT] && indent < prev_indent) {
         lexer->result_symbol = DEDENT;
-        if (debug) printf("-> DEDENT\n");
+        if (debug) printf("    ==> DEDENT\n");
         return true;
       }
-      set_previous_indent(const_cast<char *>("DEFAULT"), indent);
     }
 
     // task markers
@@ -224,7 +244,8 @@ struct Scanner {
       skip(lexer);
     }
 
-    // printf("> loop col: %d char: %c\n", start_column, lexer->lookahead);
+    // printf("> loop col: %d char: %c\n", start_column,
+    // lexer->lookahead);
 
     // emphasis
     if (scan_inline_modifier(lexer, valid_symbols, '*', BOLD_START, BOLD_END)) {
@@ -250,6 +271,11 @@ extern "C" {
 
 void *tree_sitter_syslang_external_scanner_create() { return new Scanner(); }
 
+bool tree_sitter_syslang_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+  Scanner *scanner = static_cast<Scanner *>(payload);
+  return scanner->scan(lexer, valid_symbols);
+}
+
 unsigned tree_sitter_syslang_external_scanner_serialize(void *payload, char *buffer) {
   Scanner *scanner = static_cast<Scanner *>(payload);
   return scanner->serialize(buffer);
@@ -264,11 +290,4 @@ void tree_sitter_syslang_external_scanner_destroy(void *payload) {
   Scanner *scanner = static_cast<Scanner *>(payload);
   delete scanner;
 }
-
-bool tree_sitter_syslang_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
-  Scanner *scanner = static_cast<Scanner *>(payload);
-  return scanner->scan(lexer, valid_symbols);
-}
-
-void tree_sitter_syslang_external_scanner_reset(void *p) {}
 }

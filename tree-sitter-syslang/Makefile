@@ -28,10 +28,10 @@ test: ## run tests
 	@npm run test
 
 dev: ## watch for changes and run tests
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make test"
+	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make generate && make test"
 
 dev_filter: ## watch for development tests only
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "tree-sitter test -f Heading"
+	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make generate && tree-sitter test -f Heading"
 
 parse-spec: ## generate parser and parse the spec file
 	@make generate

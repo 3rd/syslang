@@ -76,6 +76,18 @@
               }
             ]
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_eof"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
