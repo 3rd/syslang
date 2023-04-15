@@ -888,6 +888,10 @@
           "named": true
         },
         {
+          "type": "section",
+          "named": true
+        },
+        {
           "type": "section_marker",
           "named": true
         },
@@ -905,6 +909,14 @@
         },
         {
           "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "task_schedule",
+          "named": true
+        },
+        {
+          "type": "task_session",
           "named": true
         },
         {
@@ -932,7 +944,15 @@
       "required": true,
       "types": [
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "section",
           "named": true
         },
         {
@@ -979,7 +999,15 @@
       "required": true,
       "types": [
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "section",
           "named": true
         },
         {
@@ -1030,7 +1058,15 @@
       "required": true,
       "types": [
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "section",
           "named": true
         },
         {
@@ -1077,7 +1113,15 @@
       "required": true,
       "types": [
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "section",
           "named": true
         },
         {

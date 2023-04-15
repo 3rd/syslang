@@ -191,15 +191,13 @@ module.exports = grammar({
 
     // section
     section_marker: () => token(/>/),
-    section: ($) =>
-      prec.right(
-        seq(
-          $.section_marker,
-          $.text_to_eol,
-          choice($._eol, $._eof),
-          repeat(seq(choice($.code_block, $.list_item, $._task, $.text_line)))
-        )
+    _section_children: ($) =>
+      seq(
+        $._indent,
+        repeat1(choice($.task_session, $.task_schedule, $._task, $.section, $.text_line, $.list_item, $.code_block)),
+        choice($._dedent, $._eof)
       ),
+    section: ($) => seq($.section_marker, / /, $.text_to_eol, choice($._eol, $._eof), optional($._section_children)),
 
     // tasks
     _task: ($) => choice($.task_default, $.task_active, $.task_done, $.task_cancelled),
@@ -210,7 +208,7 @@ module.exports = grammar({
     _task_children: ($) =>
       seq(
         $._indent,
-        repeat1(choice($.task_session, $.task_schedule, $._task, $.text_line, $.list_item)),
+        repeat1(choice($.task_session, $.task_schedule, $._task, $.section, $.text_line, $.list_item, $.code_block)),
         choice($._dedent, $._eof)
       ),
     task_session: ($) => seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
