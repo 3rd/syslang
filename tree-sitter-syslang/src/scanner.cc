@@ -11,7 +11,7 @@ using std::string;
 enum TokenType {
   END_OF_FILE,
   END_OF_LINE,
-  // BREAKOUT,
+  BREAKOUT,
   INDENT,
   DEDENT,
   TASK_MARKER_DEFAULT,
@@ -161,6 +161,7 @@ struct Scanner {
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     uint32_t start_column = lexer->get_column(lexer);
     bool is_eof = (lexer->eof(lexer) || !lexer->lookahead);
+    size_t prev_indent = previous_indent;
 
     // end of file
     if (is_eof) {
@@ -191,7 +192,6 @@ struct Scanner {
     // line start
     if (start_column == 0) {
       size_t indent = 0;
-      size_t prev_indent = previous_indent;
 
       lexer->mark_end(lexer);
 
@@ -202,23 +202,22 @@ struct Scanner {
 
       if (debug) {
         printf("  indent: %zu previous_indent: %zu lookahead: '%c'\n", indent, previous_indent, lexer->lookahead);
-        // printf(
-        //     "  valid_symbols: INDENT=%d DEDENT=%d BREAKOUT=%d\n",
-        //     valid_symbols[INDENT],
-        //     valid_symbols[DEDENT],
-        //     valid_symbols[BREAKOUT]
-        // );
+        printf(
+            "  valid_symbols: INDENT=%d DEDENT=%d BREAKOUT=%d\n",
+            valid_symbols[INDENT],
+            valid_symbols[DEDENT],
+            valid_symbols[BREAKOUT]
+        );
       }
 
       set_previous_indent(const_cast<char *>("scan()"), indent);
 
       // indent / dedent
-      // if (indent == 0 && prev_indent != 0) {
-      //   lexer->result_symbol = BREAKOUT;
-      //   if (debug) printf("    => BREAKOUT\n");
-      //   return true;
-      // } else
-      if (valid_symbols[INDENT] && indent > prev_indent) {
+      if (valid_symbols[BREAKOUT] && indent == 0 && lexer->lookahead != '\n') {
+        lexer->result_symbol = BREAKOUT;
+        if (debug) printf("    => BREAKOUT\n");
+        return true;
+      } else if (valid_symbols[INDENT] && indent > prev_indent) {
         lexer->result_symbol = INDENT;
         if (debug) printf("    => INDENT\n");
         return true;

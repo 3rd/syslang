@@ -6,6 +6,7 @@ module.exports = grammar({
   externals: ($) => [
     $._eof,
     $._eol,
+    $._breakout,
     $._indent,
     $._dedent,
     $.task_marker_default,
@@ -30,18 +31,21 @@ module.exports = grammar({
       seq(
         optional(choice($.document_title_basic, $.document_meta)),
         repeat(
-          choice(
-            $.heading_1,
-            $.heading_2,
-            $.heading_3,
-            $.heading_4,
-            $.heading_5,
-            $.heading_6,
-            $.section,
-            $.list_item,
-            $._task,
-            $.code_block,
-            $.text_line
+          seq(
+            choice(
+              $.heading_1,
+              $.heading_2,
+              $.heading_3,
+              $.heading_4,
+              $.heading_5,
+              $.heading_6,
+              $.section,
+              $.list_item,
+              $._task,
+              $.code_block,
+              $.text_line
+            ),
+            optional($._breakout)
           )
         ),
         optional($._eof)
