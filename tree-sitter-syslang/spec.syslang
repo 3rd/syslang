@@ -7,9 +7,9 @@
   - *bold*
   - /italic/
   - _underline_
-  - -strikethrough- -- TODO
-  - `inline code` -- TODO
-  - --inline comment-- -- TODO
+  - `inline code`
+  - label - asd
+  - label: asd
 * Detached modifiers
   ** Structure
     Comment -- to the end of line

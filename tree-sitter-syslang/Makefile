@@ -31,7 +31,7 @@ dev: ## watch for changes and run tests
 	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make test"
 
 dev_filter: ## watch for development tests only
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c "tree-sitter test -f Development"
+	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "tree-sitter test -f Heading"
 
 parse-spec: ## generate parser and parse the spec file
 	@make generate

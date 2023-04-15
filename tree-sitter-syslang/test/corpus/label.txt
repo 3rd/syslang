@@ -16,3 +16,23 @@ not-label:
       (list_item_marker)
       (text_line (label) (text)))
 )
+
+
+==================
+Label with list item children
+==================
+Parent:
+  - Item
+  - Item
+---
+(document
+  (text_line (label))
+  (list_item
+    (list_item_marker)
+    (text_line (text))
+  )
+  (list_item
+    (list_item_marker)
+    (text_line (text))
+  )
+)

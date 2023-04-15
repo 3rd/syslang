@@ -282,7 +282,14 @@ module.exports = grammar({
         $.text
       ),
     text_to_eol: () => token(/[^\n]+/),
-    text_line: ($) => seq(optional($.label), repeat1($._inline), choice(token(/\n/), $._eof)),
+    text_line: ($) => seq(
+      choice(
+        seq(
+          optional($.label), repeat1($._inline),
+        ),
+        $.label
+      ),
+      choice(token(/\n/), $._eof)),
     text: () => prec.right(repeat1(token(/[^\s]+/))),
     _raw_text_line: ($) => seq(repeat1($.text), choice($._eol, $._eof)),
   },

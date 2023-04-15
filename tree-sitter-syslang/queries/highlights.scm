@@ -13,7 +13,8 @@
     (document_meta_field_key) @slang.document.meta.field.key
     (document_meta_field_value) @slang.document.meta.field.value
     @slang.document.meta.field
-    )) @slang.document.meta
+  )
+) @slang.document.meta
 
 ; emphasis
 (bold (bold_content) @slang.bold)
