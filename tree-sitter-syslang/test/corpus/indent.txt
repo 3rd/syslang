@@ -1,0 +1,21 @@
+==================
+indent
+==================
+* heading
+  [ ] task
+    [-] task
+      [_] task
+    [x] task
+  [x] task
+[ ] task
+---
+(document
+  (heading_1 (heading_1_marker) (text_to_eol)
+    (task_default (task_marker_default) (text_line (text))
+      (task_active (task_marker_active) (text_line (text))
+        (task_cancelled (task_marker_cancelled) (text_to_eol)))
+      (task_done (task_marker_done) (text_to_eol)))
+    (task_done (task_marker_done) (text_to_eol))
+  )
+  (task_default (task_marker_default) (text_line (text)))
+)
