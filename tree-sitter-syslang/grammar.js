@@ -219,7 +219,7 @@ module.exports = grammar({
     list_item_label: ($) => $.text,
     list_item_label_marker: () => /-/,
     list_item: ($) =>
-      choice(
+      prec.right(choice(
         seq(
           $.list_item_marker,
           $.list_item_label,
@@ -228,8 +228,8 @@ module.exports = grammar({
           choice($._eol, $._eof),
           optional($._list_item_children)
         ),
-        seq($.list_item_marker, $.text_line, optional($._list_item_children))
-      ),
+        seq($.list_item_marker, optional($.text_line), optional($._list_item_children))
+      )),
     _list_item_children: ($) => seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
 
     // inline code
