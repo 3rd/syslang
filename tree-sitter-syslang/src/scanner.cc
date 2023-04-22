@@ -196,13 +196,15 @@ struct Scanner {
       return true;
     }
 
+    // reset dedent
+    set_dedent(const_cast<char *>("dedent (rep proc)"), 0);
+
     if (debug) {
       printf(
-          "* scan() -> start_column=%u lookahead='%c' "
-          "prev_indent=%zu\n",
+          "* scan() -> start_column=%u prev_indent=%zu lookahead='%c'\n",
           start_column,
-          lexer->lookahead,
-          previous_indent
+          previous_indent,
+          lexer->lookahead
       );
     }
 

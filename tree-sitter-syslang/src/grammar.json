@@ -1210,14 +1210,6 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "task_session"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "task_schedule"
-              },
-              {
-                "type": "SYMBOL",
                 "name": "_task"
               },
               {

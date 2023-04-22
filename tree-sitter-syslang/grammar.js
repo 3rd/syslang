@@ -194,7 +194,7 @@ module.exports = grammar({
     _section_children: ($) =>
       seq(
         $._indent,
-        repeat1(choice($.task_session, $.task_schedule, $._task, $.section, $.text_line, $.list_item, $.code_block)),
+        repeat1(choice($._task, $.section, $.text_line, $.list_item, $.code_block)),
         choice($._dedent, $._eof)
       ),
     section: ($) => seq($.section_marker, / /, $.text_to_eol, choice($._eol, $._eof), optional($._section_children)),
