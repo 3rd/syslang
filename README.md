@@ -10,8 +10,8 @@ integrate it into your editor (with highlights, folds, syntax injection), and bu
 - Tree-sitter grammar - [./tree-sitter-syslang](./tree-sitter-syslang)
 - Go library - [./go-syslang](./go-syslang)
 - [Neovim plugin](https://github.com/3rd/config/tree/master/home/dotfiles/nvim/plugins/syslang)
-- [nvim-treesitter config](https://github.com/3rd/config/blob/master/home/dotfiles/nvim/lua/modules/language-support/tree-sitter.lua#L5)
+- [nvim-treesitter config](https://github.com/3rd/config/blob/master/home/dotfiles/nvim/lua/modules/language-support/tree-sitter.lua#L76)
 
-## Images
+## Demo
 
-![Highlighting example](https://disk.b-cdn.net/slang/slang.png)
+https://user-images.githubusercontent.com/59587503/235466035-5c30a393-ac33-498f-9da9-4d3b1d87c415.mp4
