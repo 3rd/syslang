@@ -253,7 +253,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^\\*\\n]+"
+        "value": "[^\\*]+"
       }
     },
     "bold": {
@@ -277,7 +277,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^\\/\\n]+"
+        "value": "[^\\/]+"
       }
     },
     "italic": {
@@ -301,7 +301,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^_\\n]+"
+        "value": "[^_]+"
       }
     },
     "underline": {

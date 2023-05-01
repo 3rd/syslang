@@ -8,8 +8,8 @@
   - /italic/
   - _underline_
   - `inline code`
-  - label - asd
-  - label: asd
+  - list item label - asd
+  - prefix: asd
 * Detached modifiers
   ** Structure
     Comment -- to the end of line
@@ -17,6 +17,12 @@
       > Section
         Text after section *bold*.
         - List item
+    *** Deeply nested sections and tasks
+      > Section A
+        [ ] Task A
+          > Section A.1
+            [x] Task A.1.a
+            [ ] Task A.1.b
   ** Task items
     [ ] Sample task #asd
       Subtext with attached modifier *support*.
@@ -51,7 +57,8 @@
   - 2022-01-01 10:00 - 2022-01-02 10:30
   - 2022.01.01 10:00 - 2022-01-02 10:30
   - 2022/01/01 10:00 - 2022-01-02 10:30
-  - #hash @context $var +positive -negative !danger
+* Tags
+  #hash @context $var +positive -negative !danger
 * Code
   ** Code block
     @code bash

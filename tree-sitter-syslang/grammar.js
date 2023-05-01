@@ -72,11 +72,11 @@ module.exports = grammar({
     comment: ($) => seq($._comment_marker, /[^\n]+/),
 
     // emphasis
-    bold_content: () => token(/[^\*\n]+/),
+    bold_content: () => token(/[^\*]+/),
     bold: ($) => seq($.bold_start, $.bold_content, $.bold_end),
-    italic_content: () => token(/[^\/\n]+/),
+    italic_content: () => token(/[^\/]+/),
     italic: ($) => seq($.italic_start, $.italic_content, $.italic_end),
-    underline_content: () => token(/[^_\n]+/),
+    underline_content: () => token(/[^_]+/),
     underline: ($) => seq($.underline_start, $.underline_content, $.underline_end),
     _emphasis: ($) => seq(choice($.bold, $.italic, $.underline), optional(token.immediate(/[.,]/))),
 
@@ -219,17 +219,19 @@ module.exports = grammar({
     list_item_label: ($) => $.text,
     list_item_label_marker: () => /-/,
     list_item: ($) =>
-      prec.right(choice(
-        seq(
-          $.list_item_marker,
-          $.list_item_label,
-          $.list_item_label_marker,
-          repeat1(choice($._inline, $.list_item_label_marker)),
-          choice($._eol, $._eof),
-          optional($._list_item_children)
-        ),
-        seq($.list_item_marker, optional($.text_line), optional($._list_item_children))
-      )),
+      prec.right(
+        choice(
+          seq(
+            $.list_item_marker,
+            $.list_item_label,
+            $.list_item_label_marker,
+            repeat1(choice($._inline, $.list_item_label_marker)),
+            choice($._eol, $._eof),
+            optional($._list_item_children)
+          ),
+          seq($.list_item_marker, optional($.text_line), optional($._list_item_children))
+        )
+      ),
     _list_item_children: ($) => seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
 
     // inline code
