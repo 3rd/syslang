@@ -5,7 +5,12 @@
 
 ; document title
 (document_title_basic) @slang.document.title
-((document_title_basic_marker) @slang.document.title (#set! conceal "⚑"))
+; ((document_title_basic_marker) @slang.document.title)
+(
+  ((document_title_basic_marker) @slang.document.title)
+  (#match? @slang.document.title "=")
+  (#set! conceal "⚑")
+)
 
 ; document meta
 (document_meta
@@ -81,21 +86,22 @@
 (section (text_to_eol) @slang.section)
 ((section_marker) @slang.section (#set! conceal "⮟"))
 
-; (pipe (text_to_eol) @slang.pipe)
+; banner
+((banner) @slang.banner)
 ; (
-;  (pipe_marker) @conceal
+;  (banner_marker) @conceal
 ;  (#set! conceal "❙")
 ; )
 
 ; tasks
 (task_default (text_line) @slang.task_default)
-((task_marker_default) @slang.task_default (#set! conceal ""))
+((task_marker_default) @slang.task_default (#set! conceal ""))
 (task_active (text_line) @slang.task_active)
 ((task_marker_active) @slang.task_active (#set! conceal "➡"))
 (task_cancelled (text_to_eol) @slang.task_cancelled)
 ((task_marker_cancelled) @slang.task_cancelled (#set! conceal ""))
 (task_done (_) @slang.task_done)
-((task_marker_done) @slang.task_done (#set! conceal ""))
+((task_marker_done) @slang.task_done (#set! conceal ""))
 (task_session) @slang.task_session
 (task_schedule) @slang.task_schedule
 

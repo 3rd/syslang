@@ -63,6 +63,10 @@
                   },
                   {
                     "type": "SYMBOL",
+                    "name": "banner"
+                  },
+                  {
+                    "type": "SYMBOL",
                     "name": "list_item"
                   },
                   {
@@ -109,11 +113,23 @@
       ]
     },
     "document_title_basic_marker": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "="
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "="
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "\\p{Extended_Pictographic}"
+          }
+        }
+      ]
     },
     "document_title_basic": {
       "type": "SEQ",
@@ -747,6 +763,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "banner"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "code_block"
                     },
                     {
@@ -842,6 +862,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "banner"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "code_block"
                     },
                     {
@@ -933,6 +957,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "banner"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "code_block"
                     },
                     {
@@ -1017,6 +1045,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "banner"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "code_block"
                 },
                 {
@@ -1095,6 +1127,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "banner"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "code_block"
                 },
                 {
@@ -1166,6 +1202,10 @@
                 {
                   "type": "SYMBOL",
                   "name": "section"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "banner"
                 },
                 {
                   "type": "SYMBOL",
@@ -1283,6 +1323,43 @@
             },
             {
               "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "banner_marker": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\|"
+      }
+    },
+    "banner": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "banner_marker"
+        },
+        {
+          "type": "PATTERN",
+          "value": " "
+        },
+        {
+          "type": "SYMBOL",
+          "name": "text_to_eol"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_eol"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_eof"
             }
           ]
         }
@@ -1452,6 +1529,10 @@
               {
                 "type": "SYMBOL",
                 "name": "section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "banner"
               },
               {
                 "type": "SYMBOL",

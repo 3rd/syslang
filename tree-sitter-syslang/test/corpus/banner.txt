@@ -1,0 +1,8 @@
+==================
+Banner
+==================
+| Banner
+---
+(document
+  (banner (banner_marker) (text_to_eol)
+))

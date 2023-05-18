@@ -1,5 +1,24 @@
 [
   {
+    "type": "banner",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner_marker",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "bold",
     "named": true,
     "fields": {},
@@ -147,6 +166,10 @@
       "required": false,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -279,6 +302,11 @@
     }
   },
   {
+    "type": "document_title_basic_marker",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "heading_1",
     "named": true,
     "fields": {
@@ -297,6 +325,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
         {
           "type": "code_block",
           "named": true
@@ -376,6 +408,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -450,6 +486,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -520,6 +560,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -586,6 +630,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -647,6 +695,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
         {
           "type": "code_block",
           "named": true
@@ -936,6 +988,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -990,6 +1046,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
         {
           "type": "code_block",
           "named": true
@@ -1050,6 +1110,10 @@
       "required": true,
       "types": [
         {
+          "type": "banner",
+          "named": true
+        },
+        {
           "type": "code_block",
           "named": true
         },
@@ -1104,6 +1168,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
         {
           "type": "code_block",
           "named": true
@@ -1378,6 +1446,10 @@
     "named": false
   },
   {
+    "type": "banner_marker",
+    "named": true
+  },
+  {
     "type": "bold_content",
     "named": true
   },
@@ -1399,10 +1471,6 @@
   },
   {
     "type": "document_meta_field_key",
-    "named": true
-  },
-  {
-    "type": "document_title_basic_marker",
     "named": true
   },
   {
