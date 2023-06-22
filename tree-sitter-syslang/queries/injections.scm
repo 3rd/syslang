@@ -31,3 +31,8 @@
   (code_block_start (code_block_language) @_name)
   (#eq? @_name "jsx")
   (code_block_content) @javascriptreact)
+
+(code_block
+  (code_block_start (code_block_language) @_name)
+  (#eq? @_name "yml")
+  (code_block_content) @yaml)
