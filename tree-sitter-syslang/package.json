@@ -15,8 +15,8 @@
     "queries/highlights.scm"
   ],
   "scripts": {
-    "generate": "tree-sitter generate",
-    "build": "tree-sitter generate && node-gyp-configure && node-gyp build",
+    "generate": "tree-sitter generate --abi 13",
+    "build": "tree-sitter generate --abi 13 && node-gyp-configure && node-gyp build",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse",
     "highlight": "tree-sitter highlight",
