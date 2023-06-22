@@ -1,0 +1,47 @@
+{
+  "name": "syslang.js",
+  "version": "1.0.0",
+  "main": "./dist/lib.cjs",
+  "module": "./dist/lib.mjs",
+  "types": "./dist/lib.d.cts",
+  "exports": {
+    "require": {
+      "types": "./dist/lib.d.cts",
+      "default": "./dist/lib.cjs"
+    },
+    "import": {
+      "types": "./dist/lib.d.mts",
+      "default": "./dist/lib.mjs"
+    }
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    }
+  },
+  "scripts": {
+    "build": "yarn run clean && pkgroll --target=node16",
+    "dev": "NODE_OPTIONS='--loader=tsx --no-warnings' ava --watch",
+    "test": "NODE_OPTIONS='--loader=tsx --no-warnings' ava",
+    "tsc": "tsc",
+    "prepare": "yarn run build",
+    "prepublishOnly": "yarn run tsc && yarn run test",
+    "clean": "rm -rf dist",
+    "anki": "tsx ./src/scripts/anki.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.3",
+    "ava": "^5.2.0",
+    "pkgroll": "^1.10.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@steve2955/anki-apkg-export": "^5.0.0",
+    "axios": "^1.4.0",
+    "remark": "^14.0.3",
+    "remark-html": "^15.0.2",
+    "tree-sitter": "^0.20.1",
+    "tree-sitter-syslang": "../tree-sitter-syslang/"
+  }
+}
