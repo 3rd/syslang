@@ -167,10 +167,24 @@ struct Scanner {
     return false;
   }
 
+  // https://github.com/tree-sitter/tree-sitter/pull/1783
+  bool is_in_recovery(const bool *valid_symbols) {
+    return (
+        valid_symbols[END_OF_FILE] && valid_symbols[BREAKOUT] && valid_symbols[INDENT] && valid_symbols[DEDENT] &&
+        valid_symbols[TASK_MARKER_DEFAULT] && valid_symbols[TASK_MARKER_ACTIVE] && valid_symbols[TASK_MARKER_DONE] &&
+        valid_symbols[TASK_MARKER_CANCELLED] && valid_symbols[BOLD_END] && valid_symbols[ITALIC_END] &&
+        valid_symbols[UNDERLINE_END] && valid_symbols[INLINE_CODE_END]
+    );
+  }
+
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     uint32_t start_column = lexer->get_column(lexer);
     bool is_eof = (lexer->eof(lexer) || !lexer->lookahead);
     size_t prev_indent = previous_indent;
+
+    if (is_in_recovery(valid_symbols)) {
+      return false;
+    }
 
     // end of file
     if (is_eof) {
