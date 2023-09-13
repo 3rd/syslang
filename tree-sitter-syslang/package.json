@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "generate": "tree-sitter generate --abi 14",
-    "build": "tree-sitter generate --abi 14 && node-gyp-configure && node-gyp build",
+    "build": "tree-sitter generate --abi 14 && node-gyp configure && node-gyp build",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse",
     "highlight": "tree-sitter highlight",
