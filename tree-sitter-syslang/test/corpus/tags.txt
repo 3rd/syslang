@@ -23,3 +23,13 @@ Tags
   )
 )
 
+==================
+TODO: Tags with word boundary separation
+==================
+# -a-tag
+# 123-not-a-tag
+# ---
+# (document
+#   (text_line (tag_negative))
+#   (text_line (number))
+# )
