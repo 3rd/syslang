@@ -123,7 +123,7 @@
 (code_block_start) @slang.code_block_start
 (code_block_language) @slang.code_block_language
 (code_block_end) @slang.code_block_end
-(code_block (code_block_content) @slang.code_block_content)
+(code_block (code_block_content) @slang.code_block_content @text.literal @nospell)
 
 ; list items
 (list_item) @slang.list_item
