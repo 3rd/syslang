@@ -59,7 +59,7 @@ playground: ## run playground
 setup: ## setup
 	@tree-sitter init-config
 	@echo 'Warning: Remember to setup { "parser-directories": [] }'
-  @echo "tree-sitter init-config"
+	@echo "tree-sitter init-config"
 	@npm install
 	@npm run build
 .PHONY: setup
