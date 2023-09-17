@@ -11,7 +11,7 @@
   (task_done)
   (task_cancelled)
   (section)
-  (list_item)
+  ; (list_item)
   (document_meta)
   ] @fold
 )
