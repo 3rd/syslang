@@ -206,6 +206,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -354,6 +358,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -432,6 +440,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -506,6 +518,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -576,6 +592,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -642,6 +662,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -704,6 +728,10 @@
           "named": true
         },
         {
+          "type": "image",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -733,6 +761,37 @@
         },
         {
           "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "image",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "image_alt",
+          "named": true
+        },
+        {
+          "type": "image_end",
+          "named": true
+        },
+        {
+          "type": "image_separator",
+          "named": true
+        },
+        {
+          "type": "image_start",
+          "named": true
+        },
+        {
+          "type": "image_url",
           "named": true
         }
       ]
@@ -933,6 +992,10 @@
       "types": [
         {
           "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "image",
           "named": true
         },
         {
@@ -1499,6 +1562,26 @@
   },
   {
     "type": "heading_6_marker",
+    "named": true
+  },
+  {
+    "type": "image_alt",
+    "named": true
+  },
+  {
+    "type": "image_end",
+    "named": true
+  },
+  {
+    "type": "image_separator",
+    "named": true
+  },
+  {
+    "type": "image_start",
+    "named": true
+  },
+  {
+    "type": "image_url",
     "named": true
   },
   {

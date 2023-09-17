@@ -1,0 +1,10 @@
+==================
+Images
+==================
+![alt](http://example.com/image.png)
+![alt](./image.png)
+---
+(document
+  (image (image_start) (image_alt) (image_separator) (image_url) (image_end))
+  (image (image_start) (image_alt) (image_separator) (image_url) (image_end))
+)

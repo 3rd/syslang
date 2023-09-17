@@ -27,6 +27,11 @@ enum TokenType {
   UNDERLINE_END,
   INLINE_CODE_START,
   INLINE_CODE_END,
+  IMAGE_START,
+  IMAGE_ALT,
+  IMAGE_SEPARATOR,
+  IMAGE_URL,
+  IMAGE_END,
   NONE
 };
 
@@ -167,6 +172,85 @@ struct Scanner {
     return false;
   }
 
+  bool scan_image(TSLexer *lexer, const bool *valid_symbols) {
+    if (valid_symbols[IMAGE_START]) {
+      if (lexer->lookahead != '!') {
+        return false;
+      }
+      advance(lexer);
+      if (lexer->lookahead != '[') {
+        return false;
+      }
+      advance(lexer);
+      lexer->mark_end(lexer);
+      while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ']') {
+        advance(lexer);
+      }
+      if (lexer->lookahead != ']') {
+        return false;
+      }
+      advance(lexer);
+      if (lexer->lookahead != '(') {
+        return false;
+      }
+      advance(lexer);
+      while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ')') {
+        advance(lexer);
+      }
+      if (lexer->lookahead != ')') {
+        return false;
+      }
+      lexer->result_symbol = IMAGE_START;
+      return true;
+    }
+
+    if (valid_symbols[IMAGE_ALT]) {
+      while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ']') {
+        advance(lexer);
+      }
+      if (lexer->lookahead != ']') {
+        return false;
+      }
+      lexer->result_symbol = IMAGE_ALT;
+      return true;
+    }
+
+    if (valid_symbols[IMAGE_SEPARATOR]) {
+      if (lexer->lookahead != ']') {
+        return false;
+      }
+      advance(lexer);
+      if (lexer->lookahead != '(') {
+        return false;
+      }
+      advance(lexer);
+      lexer->result_symbol = IMAGE_SEPARATOR;
+      return true;
+    }
+
+    if (valid_symbols[IMAGE_URL]) {
+      while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ')') {
+        advance(lexer);
+      }
+      if (lexer->lookahead != ')') {
+        return false;
+      }
+      lexer->result_symbol = IMAGE_URL;
+      return true;
+    }
+
+    if (valid_symbols[IMAGE_END]) {
+      if (lexer->lookahead != ')') {
+        return false;
+      }
+      advance(lexer);
+      lexer->result_symbol = IMAGE_END;
+      return true;
+    }
+
+    return false;
+  }
+
   // https://github.com/tree-sitter/tree-sitter/pull/1783
   bool is_in_recovery(const bool *valid_symbols) {
     return (
@@ -183,6 +267,7 @@ struct Scanner {
     size_t prev_indent = previous_indent;
 
     if (is_in_recovery(valid_symbols)) {
+      if (debug) printf("  => in recovery\n");
       return false;
     }
 
@@ -211,7 +296,7 @@ struct Scanner {
     }
 
     // reset dedent
-    set_dedent(const_cast<char *>("dedent (rep proc)"), 0);
+    set_dedent(const_cast<char *>("dedent (reset)"), 0);
 
     if (debug) {
       printf(
@@ -280,6 +365,11 @@ struct Scanner {
 
     // list item markers
     if (scan_list_item_markers(lexer, valid_symbols)) {
+      return true;
+    }
+
+    // images
+    if (scan_image(lexer, valid_symbols)) {
       return true;
     }
 

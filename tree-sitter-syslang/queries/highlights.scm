@@ -133,3 +133,11 @@
 
 ; labels
 (label) @slang.label
+
+; images
+(image (image_start) @slang.image (#set! conceal ""))
+(image (image_alt) @slang.image)
+; hide
+(image (image_separator) @slang.image (#set! conceal ""))
+(image (image_url) @slang.image (#set! conceal ""))
+(image (image_end) @slang.image (#set! conceal ""))

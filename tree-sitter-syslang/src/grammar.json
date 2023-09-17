@@ -71,6 +71,10 @@
                   },
                   {
                     "type": "SYMBOL",
+                    "name": "image"
+                  },
+                  {
+                    "type": "SYMBOL",
                     "name": "_task"
                   },
                   {
@@ -775,6 +779,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "image"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "_task"
                     },
                     {
@@ -874,6 +882,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "image"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "_task"
                     },
                     {
@@ -969,6 +981,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "image"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "_task"
                     },
                     {
@@ -1057,6 +1073,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "image"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "_task"
                 },
                 {
@@ -1139,6 +1159,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "image"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "_task"
                 },
                 {
@@ -1217,6 +1241,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "image"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "_task"
                 },
                 {
@@ -1263,6 +1291,10 @@
               {
                 "type": "SYMBOL",
                 "name": "list_item"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "image"
               },
               {
                 "type": "SYMBOL",
@@ -1791,6 +1823,31 @@
         }
       ]
     },
+    "image": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "image_start"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "image_alt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "image_separator"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "image_url"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "image_end"
+        }
+      ]
+    },
     "inline_code_content": {
       "type": "TOKEN",
       "content": {
@@ -2204,6 +2261,26 @@
     {
       "type": "SYMBOL",
       "name": "inline_code_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "image_start"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "image_alt"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "image_separator"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "image_url"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "image_end"
     }
   ],
   "inline": [],
