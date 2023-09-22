@@ -95,7 +95,7 @@
 
 ; tasks
 (task_default (text_line) @slang.task_default)
-((task_marker_default) @slang.task_default (#set! conceal ""))
+((task_marker_default) @slang.task_marker_default (#set! conceal ""))
 (task_active (text_line) @slang.task_active)
 ((task_marker_active) @slang.task_active (#set! conceal "➡"))
 (task_cancelled (text_to_eol) @slang.task_cancelled)
