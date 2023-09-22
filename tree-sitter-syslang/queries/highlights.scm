@@ -137,6 +137,7 @@
 
 ; labels
 (label) @slang.label
+(label_line) @slang.label
 
 ; image
 (image (image_start) @slang.image (#set! conceal ""))

@@ -35,6 +35,7 @@ enum TokenType {
   INTERNAL_LINK_START,
   INTERNAL_LINK_TARGET,
   INTERNAL_LINK_END,
+  LABEL_LINE,
   NONE
 };
 
@@ -294,6 +295,32 @@ struct Scanner {
     return false;
   }
 
+  // label line:
+  bool scan_label_line(TSLexer *lexer, const bool *valid_symbols) {
+    if (!isalnum(lexer->lookahead)) {
+      return false;
+    }
+    if (!valid_symbols[LABEL_LINE]) {
+      return false;
+    }
+    while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ':') {
+      advance(lexer);
+    }
+
+    if (lexer->lookahead == ':') {
+      advance(lexer);
+      if (lexer->lookahead != '\n') {
+        return false;
+      }
+      lexer->mark_end(lexer);
+      advance(lexer);
+      lexer->result_symbol = LABEL_LINE;
+      return true;
+    }
+
+    return false;
+  }
+
   // https://github.com/tree-sitter/tree-sitter/pull/1783
   bool is_in_recovery(const bool *valid_symbols) {
     return (
@@ -419,6 +446,11 @@ struct Scanner {
 
     // images
     if (scan_image(lexer, valid_symbols)) {
+      return true;
+    }
+
+    // label line
+    if (scan_label_line(lexer, valid_symbols)) {
       return true;
     }
 

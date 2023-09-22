@@ -7,13 +7,16 @@ also-label:
   - not-label:
   - label: text
 
+also label:
+
 ---
 (document
   (text_line (label) (text))
-
-  (text_line (text))
-  (list_item (list_item_marker) (text_line (text)))
+  (label_line)
+  (list_item (list_item_marker))
+  (label_line)
   (list_item (list_item_marker) (text_line (label) (text)))
+  (label_line)
 )
 
 
@@ -25,13 +28,7 @@ Parent:
   - Item
 ---
 (document
-  (text_line (label))
-  (list_item
-    (list_item_marker)
-    (text_line (text))
-  )
-  (list_item
-    (list_item_marker)
-    (text_line (text))
-  )
+  (label_line)
+  (list_item (list_item_marker) (text_line (text)))
+  (list_item (list_item_marker) (text_line (text)))
 )

@@ -30,6 +30,7 @@ module.exports = grammar({
     $.internal_link_start,
     $.internal_link_target,
     $.internal_link_end,
+    $.label_line,
   ],
   // extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   extras: () => [/ /, /\t/, /\n/],
@@ -65,6 +66,7 @@ module.exports = grammar({
         $.internal_link,
         $.list_item,
         $.section,
+        $.label_line,
         $.text_line
       ),
 

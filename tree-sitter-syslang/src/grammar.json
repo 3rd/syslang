@@ -125,6 +125,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "label_line"
+        },
+        {
+          "type": "SYMBOL",
           "name": "text_line"
         }
       ]
@@ -2179,6 +2183,10 @@
     {
       "type": "SYMBOL",
       "name": "internal_link_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "label_line"
     }
   ],
   "inline": [],

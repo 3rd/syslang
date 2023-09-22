@@ -214,6 +214,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -370,6 +374,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -456,6 +464,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -538,6 +550,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -616,6 +632,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -690,6 +710,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -757,6 +781,10 @@
         },
         {
           "type": "internal_link",
+          "named": true
+        },
+        {
+          "type": "label_line",
           "named": true
         },
         {
@@ -1673,6 +1701,10 @@
   },
   {
     "type": "label",
+    "named": true
+  },
+  {
+    "type": "label_line",
     "named": true
   },
   {
