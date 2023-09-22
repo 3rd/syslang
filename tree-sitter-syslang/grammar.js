@@ -27,6 +27,9 @@ module.exports = grammar({
     $.image_separator,
     $.image_url,
     $.image_end,
+    $.internal_link_start,
+    $.internal_link_target,
+    $.internal_link_end,
   ],
   // extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   extras: () => [/ /, /\t/, /\n/],
@@ -44,18 +47,25 @@ module.exports = grammar({
               $.heading_4,
               $.heading_5,
               $.heading_6,
-              $.section,
-              $.banner,
-              $.list_item,
-              $.image,
-              $._task,
-              $.code_block,
-              $.text_line
+              $._non_heading_line_elements
             ),
             optional($._breakout)
           )
         ),
         optional($._eof)
+      ),
+
+    _non_heading_line_elements: ($) =>
+      choice(
+        //
+        $._task,
+        $.banner,
+        $.code_block,
+        $.image,
+        $.internal_link,
+        $.list_item,
+        $.section,
+        $.text_line
       ),
 
     // document title (basic)
@@ -125,22 +135,7 @@ module.exports = grammar({
         seq(
           seq(field("marker", $.heading_1_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
           repeat(
-            seq(
-              choice(
-                $.heading_2,
-                $.heading_3,
-                $.heading_4,
-                $.heading_5,
-                $.heading_6,
-                $.section,
-                $.banner,
-                $.code_block,
-                $.list_item,
-                $.image,
-                $._task,
-                $.text_line
-              )
-            )
+            seq(choice($.heading_2, $.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements))
           )
         )
       ),
@@ -148,64 +143,21 @@ module.exports = grammar({
       prec.right(
         seq(
           seq(field("marker", $.heading_2_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
-          repeat(
-            seq(
-              choice(
-                $.heading_3,
-                $.heading_4,
-                $.heading_5,
-                $.heading_6,
-                $.section,
-                $.banner,
-                $.code_block,
-                $.list_item,
-                $.image,
-                $._task,
-                $.text_line
-              )
-            )
-          )
+          repeat(seq(choice($.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements)))
         )
       ),
     heading_3: ($) =>
       prec.right(
         seq(
           seq(field("marker", $.heading_3_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
-          repeat(
-            seq(
-              choice(
-                $.heading_4,
-                $.heading_5,
-                $.heading_6,
-                $.section,
-                $.banner,
-                $.code_block,
-                $.list_item,
-                $.image,
-                $._task,
-                $.text_line
-              )
-            )
-          )
+          repeat(seq(choice($.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements)))
         )
       ),
     heading_4: ($) =>
       prec.right(
         seq(
           seq(field("marker", $.heading_4_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
-          repeat(
-            choice(
-              $.heading_5,
-              $.heading_6,
-              $.section,
-              $.banner,
-              $.code_block,
-              $.list_item,
-              $.image,
-              $._task,
-              $.text_line
-            )
-          )
+          repeat(choice($.heading_5, $.heading_6, $._non_heading_line_elements))
         )
       ),
     heading_5: ($) =>
@@ -216,13 +168,7 @@ module.exports = grammar({
             choice(
               //
               $.heading_6,
-              $.section,
-              $.banner,
-              $.code_block,
-              $.list_item,
-              $.image,
-              $._task,
-              $.text_line
+              $._non_heading_line_elements
             )
           )
         )
@@ -234,13 +180,7 @@ module.exports = grammar({
           repeat(
             choice(
               //
-              $.section,
-              $.banner,
-              $.code_block,
-              $.list_item,
-              $.image,
-              $._task,
-              $.text_line
+              $._non_heading_line_elements
             )
           )
         )
@@ -317,6 +257,9 @@ module.exports = grammar({
         $.image_url,
         $.image_end
       ),
+
+    // internal links
+    internal_link: ($) => seq($.internal_link_start, $.internal_link_target, $.internal_link_end),
 
     // inline code
     inline_code_content: () => token(/[^`\n]+/),

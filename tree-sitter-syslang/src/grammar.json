@@ -59,31 +59,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "section"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "banner"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "list_item"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "image"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_task"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "code_block"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "text_line"
+                    "name": "_non_heading_line_elements"
                   }
                 ]
               },
@@ -113,6 +89,43 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "_non_heading_line_elements": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_task"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "banner"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "code_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "image"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "internal_link"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "list_item"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "section"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "text_line"
         }
       ]
     },
@@ -763,31 +776,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "section"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "banner"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "code_block"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "list_item"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "image"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "_task"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "text_line"
+                      "name": "_non_heading_line_elements"
                     }
                   ]
                 }
@@ -866,31 +855,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "section"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "banner"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "code_block"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "list_item"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "image"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "_task"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "text_line"
+                      "name": "_non_heading_line_elements"
                     }
                   ]
                 }
@@ -965,31 +930,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "section"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "banner"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "code_block"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "list_item"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "image"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "_task"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "text_line"
+                      "name": "_non_heading_line_elements"
                     }
                   ]
                 }
@@ -1057,31 +998,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "section"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "banner"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "code_block"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "list_item"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "image"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_task"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "text_line"
+                  "name": "_non_heading_line_elements"
                 }
               ]
             }
@@ -1143,31 +1060,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "section"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "banner"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "code_block"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "list_item"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "image"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_task"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "text_line"
+                  "name": "_non_heading_line_elements"
                 }
               ]
             }
@@ -1225,31 +1118,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "section"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "banner"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "code_block"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "list_item"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "image"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_task"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "text_line"
+                  "name": "_non_heading_line_elements"
                 }
               ]
             }
@@ -1848,6 +1717,23 @@
         }
       ]
     },
+    "internal_link": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "internal_link_start"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "internal_link_target"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "internal_link_end"
+        }
+      ]
+    },
     "inline_code_content": {
       "type": "TOKEN",
       "content": {
@@ -2281,6 +2167,18 @@
     {
       "type": "SYMBOL",
       "name": "image_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "internal_link_start"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "internal_link_target"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "internal_link_end"
     }
   ],
   "inline": [],

@@ -113,9 +113,13 @@
 (tag_danger) @slang.tag.danger
 (tag_identifier) @slang.tag.identifier
 
-; links
+; external links
 (external_link) @slang.external_link
-; (link_plain) @slang.link_plain
+
+; internal links
+(internal_link) @slang.internal_link
+(internal_link (internal_link_start) @slang.internal_link (#set! conceal ""))
+(internal_link (internal_link_end) @slang.internal_link (#set! conceal ""))
 
 ; code
 (inline_code) @slang.inline_code
@@ -134,10 +138,9 @@
 ; labels
 (label) @slang.label
 
-; images
+; image
 (image (image_start) @slang.image (#set! conceal ""))
 (image (image_alt) @slang.image)
-; hide
 (image (image_separator) @slang.image (#set! conceal ""))
 (image (image_url) @slang.image (#set! conceal ""))
 (image (image_end) @slang.image (#set! conceal ""))

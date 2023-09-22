@@ -210,6 +210,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -362,6 +366,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -444,6 +452,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -522,6 +534,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -596,6 +612,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -666,6 +686,10 @@
           "named": true
         },
         {
+          "type": "internal_link",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -729,6 +753,10 @@
         },
         {
           "type": "image",
+          "named": true
+        },
+        {
+          "type": "internal_link",
           "named": true
         },
         {
@@ -815,6 +843,29 @@
         },
         {
           "type": "inline_code_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "internal_link",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "internal_link_end",
+          "named": true
+        },
+        {
+          "type": "internal_link_start",
+          "named": true
+        },
+        {
+          "type": "internal_link_target",
           "named": true
         }
       ]
@@ -1594,6 +1645,18 @@
   },
   {
     "type": "inline_code_start",
+    "named": true
+  },
+  {
+    "type": "internal_link_end",
+    "named": true
+  },
+  {
+    "type": "internal_link_start",
+    "named": true
+  },
+  {
+    "type": "internal_link_target",
     "named": true
   },
   {

@@ -14,14 +14,6 @@
 
 (code_block
   (code_block_start (code_block_language) @_name)
-  (#eq? @_name "go")
-  (code_block_content) @injection.content
-  (#set! injection.language "go")
-  (#set! injection.include-children t)
-)
-
-(code_block
-  (code_block_start (code_block_language) @_name)
   (#eq? @_name "rs")
   (code_block_content) @injection.content
   (#set! injection.language "rust")

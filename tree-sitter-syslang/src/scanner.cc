@@ -32,6 +32,9 @@ enum TokenType {
   IMAGE_SEPARATOR,
   IMAGE_URL,
   IMAGE_END,
+  INTERNAL_LINK_START,
+  INTERNAL_LINK_TARGET,
+  INTERNAL_LINK_END,
   NONE
 };
 
@@ -251,13 +254,54 @@ struct Scanner {
     return false;
   }
 
+  // [[internal link]]
+  bool scan_internal_links(TSLexer *lexer, const bool *valid_symbols) {
+
+    if (valid_symbols[INTERNAL_LINK_START]) {
+      if (lexer->lookahead == '[') {
+        advance(lexer);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = INTERNAL_LINK_START;
+        return true;
+      }
+    }
+
+    if (valid_symbols[INTERNAL_LINK_TARGET]) {
+      while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ']') {
+        advance(lexer);
+      }
+      if (lexer->lookahead == ']') {
+        lexer->mark_end(lexer);
+        lexer->result_symbol = INTERNAL_LINK_TARGET;
+        return true;
+      }
+      return false;
+    }
+
+    if (valid_symbols[INTERNAL_LINK_END]) {
+      if (lexer->lookahead == ']') {
+        advance(lexer);
+        if (lexer->lookahead == ']') {
+          advance(lexer);
+          lexer->mark_end(lexer);
+          lexer->result_symbol = INTERNAL_LINK_END;
+          return true;
+        }
+        return false;
+      }
+    }
+
+    return false;
+  }
+
   // https://github.com/tree-sitter/tree-sitter/pull/1783
   bool is_in_recovery(const bool *valid_symbols) {
     return (
         valid_symbols[END_OF_FILE] && valid_symbols[BREAKOUT] && valid_symbols[INDENT] && valid_symbols[DEDENT] &&
         valid_symbols[TASK_MARKER_DEFAULT] && valid_symbols[TASK_MARKER_ACTIVE] && valid_symbols[TASK_MARKER_DONE] &&
         valid_symbols[TASK_MARKER_CANCELLED] && valid_symbols[BOLD_END] && valid_symbols[ITALIC_END] &&
-        valid_symbols[UNDERLINE_END] && valid_symbols[INLINE_CODE_END]
+        valid_symbols[UNDERLINE_END] && valid_symbols[INLINE_CODE_END] && valid_symbols[IMAGE_END] &&
+        valid_symbols[INTERNAL_LINK_END]
     );
   }
 
@@ -360,6 +404,11 @@ struct Scanner {
 
     // task markers
     if (scan_task_markers(lexer, valid_symbols)) {
+      return true;
+    }
+
+    // internal links
+    if (scan_internal_links(lexer, valid_symbols)) {
       return true;
     }
 
