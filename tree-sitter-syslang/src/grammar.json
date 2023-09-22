@@ -1450,6 +1450,10 @@
               {
                 "type": "SYMBOL",
                 "name": "code_block"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "label_line"
               }
             ]
           }

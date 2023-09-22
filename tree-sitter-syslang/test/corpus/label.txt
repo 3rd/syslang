@@ -19,7 +19,6 @@ also label:
   (label_line)
 )
 
-
 ==================
 Label with list item children
 ==================
@@ -31,4 +30,18 @@ Parent:
   (label_line)
   (list_item (list_item_marker) (text_line (text)))
   (list_item (list_item_marker) (text_line (text)))
+)
+
+==================
+Label line inside task
+==================
+[ ] task
+  label line:
+    - child
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (label_line)
+    (list_item (list_item_marker) (text_line (text)))
+  )
 )

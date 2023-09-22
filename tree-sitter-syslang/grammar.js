@@ -222,7 +222,17 @@ module.exports = grammar({
       seq(
         $._indent,
         repeat1(
-          choice($.task_session, $.task_schedule, $._task, $.section, $.banner, $.text_line, $.list_item, $.code_block)
+          choice(
+            $.task_session,
+            $.task_schedule,
+            $._task,
+            $.section,
+            $.banner,
+            $.text_line,
+            $.list_item,
+            $.code_block,
+            $.label_line
+          )
         ),
         choice($._dedent, $._eof)
       ),

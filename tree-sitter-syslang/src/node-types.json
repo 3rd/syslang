@@ -1138,6 +1138,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -1194,6 +1198,10 @@
         },
         {
           "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "label_line",
           "named": true
         },
         {
@@ -1260,6 +1268,10 @@
           "named": true
         },
         {
+          "type": "label_line",
+          "named": true
+        },
+        {
           "type": "list_item",
           "named": true
         },
@@ -1316,6 +1328,10 @@
         },
         {
           "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "label_line",
           "named": true
         },
         {
