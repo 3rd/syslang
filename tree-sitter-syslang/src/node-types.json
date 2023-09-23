@@ -210,10 +210,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -370,10 +366,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -460,10 +452,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -546,10 +534,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -628,10 +612,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -706,10 +686,6 @@
           "named": true
         },
         {
-          "type": "internal_link",
-          "named": true
-        },
-        {
           "type": "label_line",
           "named": true
         },
@@ -777,10 +753,6 @@
         },
         {
           "type": "image",
-          "named": true
-        },
-        {
-          "type": "internal_link",
           "named": true
         },
         {
@@ -960,6 +932,10 @@
         },
         {
           "type": "inline_code",
+          "named": true
+        },
+        {
+          "type": "internal_link",
           "named": true
         },
         {
@@ -1470,6 +1446,10 @@
         },
         {
           "type": "inline_code",
+          "named": true
+        },
+        {
+          "type": "internal_link",
           "named": true
         },
         {

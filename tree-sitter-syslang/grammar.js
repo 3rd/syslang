@@ -63,7 +63,6 @@ module.exports = grammar({
         $.banner,
         $.code_block,
         $.image,
-        $.internal_link,
         $.list_item,
         $.section,
         $.label_line,
@@ -320,6 +319,7 @@ module.exports = grammar({
         $.inline_code,
         // links
         $.external_link,
+        $.internal_link,
         // comments
         $.comment,
         // text

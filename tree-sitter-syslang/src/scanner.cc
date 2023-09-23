@@ -429,7 +429,7 @@ struct Scanner {
       }
     }
 
-    // task markers
+    // task markers -- TODO: should also check for start_column == 0 but it's tied to the internal links
     if (scan_task_markers(lexer, valid_symbols)) {
       return true;
     }
@@ -440,7 +440,7 @@ struct Scanner {
     }
 
     // list item markers
-    if (scan_list_item_markers(lexer, valid_symbols)) {
+    if (start_column == 0 && scan_list_item_markers(lexer, valid_symbols)) {
       return true;
     }
 

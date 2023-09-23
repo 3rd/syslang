@@ -113,10 +113,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "internal_link"
-        },
-        {
-          "type": "SYMBOL",
           "name": "list_item"
         },
         {
@@ -1955,6 +1951,10 @@
         {
           "type": "SYMBOL",
           "name": "external_link"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "internal_link"
         },
         {
           "type": "SYMBOL",

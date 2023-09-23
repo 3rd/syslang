@@ -13,9 +13,11 @@ Internal link
 [[Test]]
 ---
 (document
-  (internal_link
-    (internal_link_start)
-    (internal_link_target)
-    (internal_link_end)
+  (text_line
+    (internal_link
+      (internal_link_start)
+      (internal_link_target)
+      (internal_link_end)
+    )
   )
 )

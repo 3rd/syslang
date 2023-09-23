@@ -9,6 +9,7 @@ List items
   - Labeled - list item
   - Super labeled - list item
   - Labeled - list item - https://url.com
+  - [[test]] - List item - https://url.com
 
 ---
 (document
@@ -39,6 +40,14 @@ List items
       (text)
       (list_item_label_marker)
       (external_link)
+    )
+    (list_item
+      (list_item_marker)
+      (text_line
+        (internal_link (internal_link_start) (internal_link_target) (internal_link_end))
+        (text)
+        (external_link)
+      )
     )
   )
 )
