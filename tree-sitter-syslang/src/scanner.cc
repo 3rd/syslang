@@ -444,13 +444,13 @@ struct Scanner {
       return true;
     }
 
-    // images
-    if (scan_image(lexer, valid_symbols)) {
+    // label line
+    if (start_column == 0 && scan_label_line(lexer, valid_symbols)) {
       return true;
     }
 
-    // label line
-    if (scan_label_line(lexer, valid_symbols)) {
+    // images
+    if (scan_image(lexer, valid_symbols)) {
       return true;
     }
 
