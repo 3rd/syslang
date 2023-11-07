@@ -60,31 +60,31 @@
 (heading_1
   (text_to_eol) @slang.heading_1.text
 ) @slang.heading_1
-((heading_1_marker) @slang.heading_1.marker (#set! conceal "◉"))
+((heading_1_marker) @slang.heading_1.marker (#set! conceal "◎"))
 (heading_2
   (text_to_eol) @slang.heading_2.text
 ) @slang.heading_2
-((heading_2_marker) @slang.heading_2.marker (#set! conceal "◉"))
+((heading_2_marker) @slang.heading_2.marker (#set! conceal "◎"))
 (heading_3
   (text_to_eol) @slang.heading_3.text
 ) @slang.heading_3
-((heading_3_marker) @slang.heading_3.marker (#set! conceal "◉"))
+((heading_3_marker) @slang.heading_3.marker (#set! conceal "◎"))
 (heading_4
   (text_to_eol) @slang.heading_4.text
 ) @slang.heading_4
-((heading_4_marker) @slang.heading_4.marker (#set! conceal "◉"))
+((heading_4_marker) @slang.heading_4.marker (#set! conceal "◎"))
 (heading_5
   (text_to_eol) @slang.heading_5.text
 ) @slang.heading_5
-((heading_5_marker) @slang.heading_5.marker (#set! conceal "◉"))
+((heading_5_marker) @slang.heading_5.marker (#set! conceal "◎"))
 (heading_6
   (text_to_eol) @slang.heading_6.text
 ) @slang.heading_6
-((heading_6_marker) @slang.heading_6.marker (#set! conceal "◉"))
+((heading_6_marker) @slang.heading_6.marker (#set! conceal "◎"))
 
 ; sections
 (section (text_to_eol) @slang.section)
-((section_marker) @slang.section (#set! conceal "⮟"))
+((section_marker) @slang.section (#set! conceal "▼"))
 
 ; banner
 ((banner) @slang.banner)

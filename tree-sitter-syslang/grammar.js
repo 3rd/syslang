@@ -99,7 +99,7 @@ module.exports = grammar({
     _emphasis: ($) => seq(choice($.bold, $.italic, $.underline), optional(token.immediate(/[.,]/))),
 
     // basic types
-    string: () => choice(token(prec(1, /"[^"]*"/)), token(prec(1, /'[^']*'/))),
+    string: () => choice(token(prec(1, /"[^"]*"/))),
     number: () => token(prec(1, /-?\d+(\.\d+)?[,\.;\/]?/)),
     ticket: () => token(prec(1, /[A-Z]+-\d+:?/)),
 

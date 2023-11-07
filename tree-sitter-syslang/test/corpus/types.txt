@@ -2,17 +2,8 @@
 String
 ==================
 "String", "string" and "string".
-'String', 'string' and 'string'.
 ---
 (document
-  (text_line
-    (string)
-    (text)
-    (string)
-    (text)
-    (string)
-    (text)
-  )
   (text_line
     (string)
     (text)
