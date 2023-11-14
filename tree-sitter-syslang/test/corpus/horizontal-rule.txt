@@ -1,0 +1,19 @@
+==================
+Horizontal rule
+==================
+---
+---
+(document
+  (horizontal_rule)
+)
+
+
+==================
+Double horizontal rule
+==================
+===
+---
+(document
+  (double_horizontal_rule)
+)
+

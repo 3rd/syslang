@@ -145,3 +145,7 @@
 (image (image_separator) @slang.image (#set! conceal ""))
 (image (image_url) @slang.image (#set! conceal ""))
 (image (image_end) @slang.image (#set! conceal ""))
+
+; dividers
+(horizontal_rule) @slang.horizontal_rule
+(double_horizontal_rule) @slang.double_horizontal_rule

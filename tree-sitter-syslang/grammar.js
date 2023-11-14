@@ -66,15 +66,19 @@ module.exports = grammar({
         $.list_item,
         $.section,
         $.label_line,
-        $.text_line
+        $.text_line,
+        $.horizontal_rule,
+        $.double_horizontal_rule
       ),
 
     // document title (basic)
     document_title_basic_marker: () => choice(token(/=/), token(/\p{Extended_Pictographic}/)),
-    document_title_basic: ($) => seq($.document_title_basic_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
+    document_title_basic: ($) =>
+      seq($.document_title_basic_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
 
     // document meta
-    document_meta: ($) => seq(token.immediate(/@document/), repeat($.document_meta_field), token(/@end/)),
+    document_meta: ($) =>
+      seq(token.immediate(/@document/), repeat($.document_meta_field), token(/@end/)),
     document_meta_field: ($) =>
       seq(
         field("key", $.document_meta_field_key),
@@ -114,7 +118,8 @@ module.exports = grammar({
     time: () => choice(token(prec(1, /\d{2}:\d{2}/)), token(prec(1, /\d{2}:\d{2}:\d{2}/))),
     timerange: ($) => prec(1, seq($.time, token(/-/), $.time)),
     datetime: ($) => prec(1, seq($.date, $.time)),
-    datetimerange: ($) => prec(1, choice(seq($.datetime, token(/-/), $.datetime), seq($.datetime, token(/-/), $.time))),
+    datetimerange: ($) =>
+      prec(1, choice(seq($.datetime, token(/-/), $.datetime), seq($.datetime, token(/-/), $.time))),
 
     // tags
     tag_positive: () => token(/\+\pL[^+\s]*/), // +tag
@@ -134,37 +139,81 @@ module.exports = grammar({
     heading_1: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_1_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
+          seq(
+            field("marker", $.heading_1_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
           repeat(
-            seq(choice($.heading_2, $.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements))
+            seq(
+              choice(
+                $.heading_2,
+                $.heading_3,
+                $.heading_4,
+                $.heading_5,
+                $.heading_6,
+                $._non_heading_line_elements
+              )
+            )
           )
         )
       ),
     heading_2: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_2_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
-          repeat(seq(choice($.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements)))
+          seq(
+            field("marker", $.heading_2_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
+          repeat(
+            seq(
+              choice(
+                $.heading_3,
+                $.heading_4,
+                $.heading_5,
+                $.heading_6,
+                $._non_heading_line_elements
+              )
+            )
+          )
         )
       ),
     heading_3: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_3_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
+          seq(
+            field("marker", $.heading_3_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
           repeat(seq(choice($.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements)))
         )
       ),
     heading_4: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_4_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
+          seq(
+            field("marker", $.heading_4_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
           repeat(choice($.heading_5, $.heading_6, $._non_heading_line_elements))
         )
       ),
     heading_5: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_5_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
+          seq(
+            field("marker", $.heading_5_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
           repeat(
             choice(
               //
@@ -177,7 +226,12 @@ module.exports = grammar({
     heading_6: ($) =>
       prec.right(
         seq(
-          seq(field("marker", $.heading_6_marker), token.immediate(" "), $.text_to_eol, choice($._eol, $._eof)),
+          seq(
+            field("marker", $.heading_6_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
           repeat(
             choice(
               //
@@ -205,18 +259,30 @@ module.exports = grammar({
         ),
         choice($._dedent, $._eof)
       ),
-    section: ($) => seq($.section_marker, / /, $.text_to_eol, choice($._eol, $._eof), optional($._section_children)),
+    section: ($) =>
+      seq(
+        $.section_marker,
+        / /,
+        $.text_to_eol,
+        choice($._eol, $._eof),
+        optional($._section_children)
+      ),
 
     // banner
     banner_marker: () => token(/\|/),
     banner: ($) => seq($.banner_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
+
+    // diviers
+    horizontal_rule: ($) => seq(token(/---/), choice($._eol, $._eof)),
+    double_horizontal_rule: ($) => seq(token(/===/), choice($._eol, $._eof)),
 
     // tasks
     _task: ($) => choice($.task_default, $.task_active, $.task_done, $.task_cancelled),
     task_default: ($) => seq($.task_marker_default, / /, $.text_line, optional($._task_children)),
     task_active: ($) => seq($.task_marker_active, / /, $.text_line, optional($._task_children)),
     task_done: ($) => seq($.task_marker_done, / /, $.text_to_eol, optional($._task_children)),
-    task_cancelled: ($) => seq($.task_marker_cancelled, / /, $.text_to_eol, optional($._task_children)),
+    task_cancelled: ($) =>
+      seq($.task_marker_cancelled, / /, $.text_to_eol, optional($._task_children)),
     _task_children: ($) =>
       seq(
         $._indent,
@@ -235,9 +301,14 @@ module.exports = grammar({
         ),
         choice($._dedent, $._eof)
       ),
-    task_session: ($) => seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
+    task_session: ($) =>
+      seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
     task_schedule: ($) =>
-      seq(token("Schedule: "), choice($.date, $.daterange, $.datetime, $.datetimerange), choice($._eol, $._eof)),
+      seq(
+        token("Schedule: "),
+        choice($.date, $.daterange, $.datetime, $.datetimerange),
+        choice($._eol, $._eof)
+      ),
 
     // list items
     list_item_label: ($) => $.text,
@@ -256,7 +327,8 @@ module.exports = grammar({
           seq($.list_item_marker, optional($.text_line), optional($._list_item_children))
         )
       ),
-    _list_item_children: ($) => seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
+    _list_item_children: ($) =>
+      seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
 
     // images
     image: ($) =>
@@ -279,10 +351,16 @@ module.exports = grammar({
     // code blocks
     code_block_language: () => token.immediate(/[a-z]+/),
     code_block_content: ($) => seq(repeat1($._raw_text_line)),
-    code_block_start: ($) => seq(token("@code"), optional(seq(token.immediate(/\s/), $.code_block_language)), $._eol),
+    code_block_start: ($) =>
+      seq(token("@code"), optional(seq(token.immediate(/\s/), $.code_block_language)), $._eol),
     code_block_end: () => token("@end"),
     code_block: ($) =>
-      seq($.code_block_start, optional($.code_block_content), $.code_block_end, choice($._eol, $._eof)),
+      seq(
+        $.code_block_start,
+        optional($.code_block_content),
+        $.code_block_end,
+        choice($._eol, $._eof)
+      ),
 
     // links
     external_link: () => token(/https?:\/\/\S+/),
@@ -326,7 +404,8 @@ module.exports = grammar({
         $.text
       ),
     text_to_eol: () => token(/[^\n]+/),
-    text_line: ($) => seq(choice(seq(optional($.label), repeat1($._inline)), $.label), choice(token(/\n/), $._eof)),
+    text_line: ($) =>
+      seq(choice(seq(optional($.label), repeat1($._inline)), $.label), choice(token(/\n/), $._eof)),
     text: () => prec.right(repeat1(token(/[^\s]+/))),
     _raw_text_line: ($) => seq(repeat1($.text), choice($._eol, $._eof)),
   },
