@@ -1088,11 +1088,99 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "bold",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "daterange",
+          "named": true
+        },
+        {
+          "type": "datetime",
+          "named": true
+        },
+        {
+          "type": "datetimerange",
+          "named": true
+        },
+        {
+          "type": "external_link",
+          "named": true
+        },
+        {
+          "type": "inline_code",
+          "named": true
+        },
+        {
+          "type": "internal_link",
+          "named": true
+        },
+        {
+          "type": "italic",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tag_context",
+          "named": true
+        },
+        {
+          "type": "tag_danger",
+          "named": true
+        },
+        {
+          "type": "tag_hash",
+          "named": true
+        },
+        {
+          "type": "tag_identifier",
+          "named": true
+        },
+        {
+          "type": "tag_negative",
+          "named": true
+        },
+        {
+          "type": "tag_positive",
+          "named": true
+        },
+        {
           "type": "text",
+          "named": true
+        },
+        {
+          "type": "ticket",
+          "named": true
+        },
+        {
+          "type": "time",
+          "named": true
+        },
+        {
+          "type": "timerange",
+          "named": true
+        },
+        {
+          "type": "underline",
           "named": true
         }
       ]

@@ -77,8 +77,7 @@ module.exports = grammar({
       seq($.document_title_basic_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
 
     // document meta
-    document_meta: ($) =>
-      seq(token.immediate(/@document/), repeat($.document_meta_field), token(/@end/)),
+    document_meta: ($) => seq(token.immediate(/@document/), repeat($.document_meta_field), token(/@end/)),
     document_meta_field: ($) =>
       seq(
         field("key", $.document_meta_field_key),
@@ -169,15 +168,7 @@ module.exports = grammar({
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(
-              choice(
-                $.heading_3,
-                $.heading_4,
-                $.heading_5,
-                $.heading_6,
-                $._non_heading_line_elements
-              )
-            )
+            seq(choice($.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements))
           )
         )
       ),
@@ -260,13 +251,7 @@ module.exports = grammar({
         choice($._dedent, $._eof)
       ),
     section: ($) =>
-      seq(
-        $.section_marker,
-        / /,
-        $.text_to_eol,
-        choice($._eol, $._eof),
-        optional($._section_children)
-      ),
+      seq($.section_marker, / /, $.text_to_eol, choice($._eol, $._eof), optional($._section_children)),
 
     // banner
     banner_marker: () => token(/\|/),
@@ -281,8 +266,7 @@ module.exports = grammar({
     task_default: ($) => seq($.task_marker_default, / /, $.text_line, optional($._task_children)),
     task_active: ($) => seq($.task_marker_active, / /, $.text_line, optional($._task_children)),
     task_done: ($) => seq($.task_marker_done, / /, $.text_to_eol, optional($._task_children)),
-    task_cancelled: ($) =>
-      seq($.task_marker_cancelled, / /, $.text_to_eol, optional($._task_children)),
+    task_cancelled: ($) => seq($.task_marker_cancelled, / /, $.text_to_eol, optional($._task_children)),
     _task_children: ($) =>
       seq(
         $._indent,
@@ -301,8 +285,7 @@ module.exports = grammar({
         ),
         choice($._dedent, $._eof)
       ),
-    task_session: ($) =>
-      seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
+    task_session: ($) => seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
     task_schedule: ($) =>
       seq(
         token("Schedule: "),
@@ -311,7 +294,7 @@ module.exports = grammar({
       ),
 
     // list items
-    list_item_label: ($) => $.text,
+    list_item_label: ($) => repeat1($._inline),
     list_item_label_marker: () => /-/,
     list_item: ($) =>
       prec.right(
@@ -355,12 +338,7 @@ module.exports = grammar({
       seq(token("@code"), optional(seq(token.immediate(/\s/), $.code_block_language)), $._eol),
     code_block_end: () => token("@end"),
     code_block: ($) =>
-      seq(
-        $.code_block_start,
-        optional($.code_block_content),
-        $.code_block_end,
-        choice($._eol, $._eof)
-      ),
+      seq($.code_block_start, optional($.code_block_content), $.code_block_end, choice($._eol, $._eof)),
 
     // links
     external_link: () => token(/https?:\/\/\S+/),

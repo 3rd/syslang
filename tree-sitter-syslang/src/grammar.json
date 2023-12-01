@@ -1598,8 +1598,11 @@
       ]
     },
     "list_item_label": {
-      "type": "SYMBOL",
-      "name": "text"
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_inline"
+      }
     },
     "list_item_label_marker": {
       "type": "PATTERN",
