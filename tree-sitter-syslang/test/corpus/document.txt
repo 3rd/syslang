@@ -1,7 +1,7 @@
 ==================
 Document meta
 ==================
-@document
+@meta
   title: Hello
 @end
 ---

@@ -1,0 +1,46 @@
+==================
+Outline
+==================
+* Outline 1
+  ** Outline 2
+* Outline 1
+  Plain text.
+  ** Outline 2
+    *** Outline 3
+      Text.
+---
+(document
+  (outline_1
+    (outline_1_marker) (text_to_eol)
+    (outline_2 (outline_2_marker) (text_to_eol)))
+
+  (outline_1
+    (outline_1_marker) (text_to_eol)
+    (text_line (text))
+    (outline_2
+      (outline_2_marker) (text_to_eol)
+      (outline_3
+        (outline_3_marker) (text_to_eol)
+        (text_line (text))
+      ))
+  )
+)
+
+==================
+Outline with spaced children and breakout
+==================
+* Outline 1
+  Outline child.
+
+    Also child.
+
+Not child.
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (text_line (text))
+    (text_line (text))
+  )
+  (text_line (text))
+)
+

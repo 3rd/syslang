@@ -1,11 +1,11 @@
 (
  [
-  (heading_1)
-  (heading_2)
-  (heading_3)
-  (heading_4)
-  (heading_5)
-  (heading_6)
+  (outline_1)
+  (outline_2)
+  (outline_3)
+  (outline_4)
+  (outline_5)
+  (outline_6)
   (task_default)
   (task_active)
   (task_done)

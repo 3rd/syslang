@@ -186,27 +186,7 @@
           "named": true
         },
         {
-          "type": "heading_1",
-          "named": true
-        },
-        {
-          "type": "heading_2",
-          "named": true
-        },
-        {
-          "type": "heading_3",
-          "named": true
-        },
-        {
-          "type": "heading_4",
-          "named": true
-        },
-        {
-          "type": "heading_5",
-          "named": true
-        },
-        {
-          "type": "heading_6",
+          "type": "heading",
           "named": true
         },
         {
@@ -223,6 +203,30 @@
         },
         {
           "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_1",
+          "named": true
+        },
+        {
+          "type": "outline_2",
+          "named": true
+        },
+        {
+          "type": "outline_3",
+          "named": true
+        },
+        {
+          "type": "outline_4",
+          "named": true
+        },
+        {
+          "type": "outline_5",
+          "named": true
+        },
+        {
+          "type": "outline_6",
           "named": true
         },
         {
@@ -328,34 +332,15 @@
     "fields": {}
   },
   {
-    "type": "heading_1",
+    "type": "heading",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_1_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
+          "type": "heading_1",
           "named": true
         },
         {
@@ -377,45 +362,20 @@
         {
           "type": "heading_6",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "heading_1",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
         {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_1_marker",
           "named": true
         },
         {
@@ -428,88 +388,13 @@
   {
     "type": "heading_2",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_2_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "heading_3",
-          "named": true
-        },
-        {
-          "type": "heading_4",
-          "named": true
-        },
-        {
-          "type": "heading_5",
-          "named": true
-        },
-        {
-          "type": "heading_6",
-          "named": true
-        },
-        {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_2_marker",
           "named": true
         },
         {
@@ -522,84 +407,13 @@
   {
     "type": "heading_3",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_3_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "heading_4",
-          "named": true
-        },
-        {
-          "type": "heading_5",
-          "named": true
-        },
-        {
-          "type": "heading_6",
-          "named": true
-        },
-        {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_3_marker",
           "named": true
         },
         {
@@ -612,80 +426,13 @@
   {
     "type": "heading_4",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_4_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "heading_5",
-          "named": true
-        },
-        {
-          "type": "heading_6",
-          "named": true
-        },
-        {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_4_marker",
           "named": true
         },
         {
@@ -698,76 +445,13 @@
   {
     "type": "heading_5",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_5_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "heading_6",
-          "named": true
-        },
-        {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_5_marker",
           "named": true
         },
         {
@@ -780,72 +464,13 @@
   {
     "type": "heading_6",
     "named": true,
-    "fields": {
-      "marker": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "heading_6_marker",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "banner",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "double_horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "horizontal_rule",
-          "named": true
-        },
-        {
-          "type": "image",
-          "named": true
-        },
-        {
-          "type": "label_line",
-          "named": true
-        },
-        {
-          "type": "list_item",
-          "named": true
-        },
-        {
-          "type": "section",
-          "named": true
-        },
-        {
-          "type": "task_active",
-          "named": true
-        },
-        {
-          "type": "task_cancelled",
-          "named": true
-        },
-        {
-          "type": "task_default",
-          "named": true
-        },
-        {
-          "type": "task_done",
-          "named": true
-        },
-        {
-          "type": "text_line",
+          "type": "heading_6_marker",
           "named": true
         },
         {
@@ -1190,6 +815,558 @@
     "type": "list_item_label_marker",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "outline_1",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_1_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_2",
+          "named": true
+        },
+        {
+          "type": "outline_3",
+          "named": true
+        },
+        {
+          "type": "outline_4",
+          "named": true
+        },
+        {
+          "type": "outline_5",
+          "named": true
+        },
+        {
+          "type": "outline_6",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "outline_2",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_2_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_3",
+          "named": true
+        },
+        {
+          "type": "outline_4",
+          "named": true
+        },
+        {
+          "type": "outline_5",
+          "named": true
+        },
+        {
+          "type": "outline_6",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "outline_3",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_3_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_4",
+          "named": true
+        },
+        {
+          "type": "outline_5",
+          "named": true
+        },
+        {
+          "type": "outline_6",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "outline_4",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_4_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_5",
+          "named": true
+        },
+        {
+          "type": "outline_6",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "outline_5",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_5_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "outline_6",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "outline_6",
+    "named": true,
+    "fields": {
+      "marker": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "outline_6_marker",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "banner",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "double_horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "heading",
+          "named": true
+        },
+        {
+          "type": "horizontal_rule",
+          "named": true
+        },
+        {
+          "type": "image",
+          "named": true
+        },
+        {
+          "type": "label_line",
+          "named": true
+        },
+        {
+          "type": "list_item",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "task_active",
+          "named": true
+        },
+        {
+          "type": "task_cancelled",
+          "named": true
+        },
+        {
+          "type": "task_default",
+          "named": true
+        },
+        {
+          "type": "task_done",
+          "named": true
+        },
+        {
+          "type": "text_line",
+          "named": true
+        },
+        {
+          "type": "text_to_eol",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "section",
@@ -1863,6 +2040,30 @@
   },
   {
     "type": "number",
+    "named": true
+  },
+  {
+    "type": "outline_1_marker",
+    "named": true
+  },
+  {
+    "type": "outline_2_marker",
+    "named": true
+  },
+  {
+    "type": "outline_3_marker",
+    "named": true
+  },
+  {
+    "type": "outline_4_marker",
+    "named": true
+  },
+  {
+    "type": "outline_5_marker",
+    "named": true
+  },
+  {
+    "type": "outline_6_marker",
     "named": true
   },
   {

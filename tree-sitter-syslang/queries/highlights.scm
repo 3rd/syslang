@@ -56,31 +56,39 @@
 ; comments
 (comment) @slang.comment
 
+; outlines
+(outline_1
+  (text_to_eol) @slang.outline_1.text
+) @slang.outline_1
+((outline_1_marker) @slang.outline_1.marker (#set! conceal "⊙"))
+(outline_2
+  (text_to_eol) @slang.outline_2.text
+) @slang.outline_2
+((outline_2_marker) @slang.outline_2.marker (#set! conceal "🞊"))
+(outline_3
+  (text_to_eol) @slang.outline_3.text
+) @slang.outline_3
+((outline_3_marker) @slang.outline_3.marker (#set! conceal "🞆"))
+(outline_4
+  (text_to_eol) @slang.outline_4.text
+) @slang.outline_4
+((outline_4_marker) @slang.outline_4.marker (#set! conceal "🞇"))
+(outline_5
+  (text_to_eol) @slang.outline_5.text
+) @slang.outline_5
+((outline_5_marker) @slang.outline_5.marker (#set! conceal "🞈"))
+(outline_6
+  (text_to_eol) @slang.outline_6.text
+) @slang.outline_6
+((outline_6_marker) @slang.outline_6.marker (#set! conceal "🞉"))
+
 ; headings
-(heading_1
-  (text_to_eol) @slang.heading_1.text
-) @slang.heading_1
-((heading_1_marker) @slang.heading_1.marker (#set! conceal "◎"))
-(heading_2
-  (text_to_eol) @slang.heading_2.text
-) @slang.heading_2
-((heading_2_marker) @slang.heading_2.marker (#set! conceal "◎"))
-(heading_3
-  (text_to_eol) @slang.heading_3.text
-) @slang.heading_3
-((heading_3_marker) @slang.heading_3.marker (#set! conceal "◎"))
-(heading_4
-  (text_to_eol) @slang.heading_4.text
-) @slang.heading_4
-((heading_4_marker) @slang.heading_4.marker (#set! conceal "◎"))
-(heading_5
-  (text_to_eol) @slang.heading_5.text
-) @slang.heading_5
-((heading_5_marker) @slang.heading_5.marker (#set! conceal "◎"))
-(heading_6
-  (text_to_eol) @slang.heading_6.text
-) @slang.heading_6
-((heading_6_marker) @slang.heading_6.marker (#set! conceal "◎"))
+(heading_1 (heading_1_marker) @slang.heading_1.marker (text_to_eol) @slang.heading_1.text) @slang.heading_1
+(heading_2 (heading_2_marker) @slang.heading_2.marker (text_to_eol) @slang.heading_2.text) @slang.heading_2
+(heading_3 (heading_3_marker) @slang.heading_3.marker (text_to_eol) @slang.heading_3.text) @slang.heading_3
+(heading_4 (heading_4_marker) @slang.heading_4.marker (text_to_eol) @slang.heading_4.text) @slang.heading_4
+(heading_5 (heading_5_marker) @slang.heading_5.marker (text_to_eol) @slang.heading_5.text) @slang.heading_5
+(heading_6 (heading_6_marker) @slang.heading_6.marker (text_to_eol) @slang.heading_6.text) @slang.heading_6
 
 ; sections
 (section (text_to_eol) @slang.section)
@@ -137,7 +145,7 @@
 
 ; labels
 (label) @slang.label
-(label_line) @slang.label
+(label_line) @slang.label_line
 
 ; image
 (image (image_start) @slang.image (#set! conceal ""))

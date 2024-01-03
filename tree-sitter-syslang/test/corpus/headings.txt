@@ -1,46 +1,18 @@
 ==================
-Heading
+Headings
 ==================
-* Heading 1
-  ** Heading 2
-* Heading 1
-  Plain text.
-  ** Heading 2
-    *** Heading 3
-      Text.
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
 ---
 (document
-  (heading_1
-    (heading_1_marker) (text_to_eol)
-    (heading_2 (heading_2_marker) (text_to_eol)))
-
-  (heading_1
-    (heading_1_marker) (text_to_eol)
-    (text_line (text))
-    (heading_2
-      (heading_2_marker) (text_to_eol)
-      (heading_3
-        (heading_3_marker) (text_to_eol)
-        (text_line (text))
-      ))
-  )
+  (heading (heading_1 (heading_1_marker) (text_to_eol)))
+  (heading (heading_2 (heading_2_marker) (text_to_eol)))
+  (heading (heading_3 (heading_3_marker) (text_to_eol)))
+  (heading (heading_4 (heading_4_marker) (text_to_eol)))
+  (heading (heading_5 (heading_5_marker) (text_to_eol)))
+  (heading (heading_6 (heading_6_marker) (text_to_eol)))
 )
-
-==================
-Heading with spaced children and breakout
-==================
-* Heading 1
-  Heading child.
-
-    Also child.
-
-Not child.
----
-(document
-  (heading_1 (heading_1_marker) (text_to_eol)
-    (text_line (text))
-    (text_line (text))
-  )
-  (text_line (text))
-)
-

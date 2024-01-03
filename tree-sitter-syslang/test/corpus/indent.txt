@@ -1,7 +1,7 @@
 ==================
 Indent
 ==================
-* heading
+* Outline
   [ ] task
     [-] task
       [_] task
@@ -10,7 +10,7 @@ Indent
 [ ] task
 ---
 (document
-  (heading_1 (heading_1_marker) (text_to_eol)
+  (outline_1 (outline_1_marker) (text_to_eol)
     (task_default (task_marker_default) (text_line (text))
       (task_active (task_marker_active) (text_line (text))
         (task_cancelled (task_marker_cancelled) (text_to_eol)))

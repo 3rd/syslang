@@ -13,7 +13,7 @@
 * Detached modifiers
   ** Structure
     Comment -- to the end of line
-    *** Heading
+    *** Outline
       > Section
         Text after section *bold*.
         - List item

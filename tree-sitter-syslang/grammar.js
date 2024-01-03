@@ -42,13 +42,13 @@ module.exports = grammar({
         repeat(
           seq(
             choice(
-              $.heading_1,
-              $.heading_2,
-              $.heading_3,
-              $.heading_4,
-              $.heading_5,
-              $.heading_6,
-              $._non_heading_line_elements
+              $.outline_1,
+              $.outline_2,
+              $.outline_3,
+              $.outline_4,
+              $.outline_5,
+              $.outline_6,
+              $._non_outline_line_elements
             ),
             optional($._breakout)
           )
@@ -56,7 +56,7 @@ module.exports = grammar({
         optional($._eof)
       ),
 
-    _non_heading_line_elements: ($) =>
+    _non_outline_line_elements: ($) =>
       choice(
         //
         $._task,
@@ -68,7 +68,8 @@ module.exports = grammar({
         $.label_line,
         $.text_line,
         $.horizontal_rule,
-        $.double_horizontal_rule
+        $.double_horizontal_rule,
+        $.heading
       ),
 
     // document title (basic)
@@ -77,7 +78,7 @@ module.exports = grammar({
       seq($.document_title_basic_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
 
     // document meta
-    document_meta: ($) => seq(token.immediate(/@document/), repeat($.document_meta_field), token(/@end/)),
+    document_meta: ($) => seq(token.immediate(/@meta/), repeat($.document_meta_field), token(/@end/)),
     document_meta_field: ($) =>
       seq(
         field("key", $.document_meta_field_key),
@@ -89,7 +90,7 @@ module.exports = grammar({
     document_meta_field_value: () => token(/[^\n]+/),
 
     // comments
-    _comment_marker: () => choice(token(/# /), token(/-- /)),
+    _comment_marker: () => token(/-- /),
     comment: ($) => seq($._comment_marker, /[^\n]+/),
 
     // emphasis
@@ -128,18 +129,18 @@ module.exports = grammar({
     tag_danger: () => token(/!\pL[^!\s]*/), // !tag
     tag_identifier: () => token(/\$\pL[^\$\s]*/), // $tag
 
-    // headings
-    heading_1_marker: () => token("*"),
-    heading_2_marker: () => token("**"),
-    heading_3_marker: () => token("***"),
-    heading_4_marker: () => token("****"),
-    heading_5_marker: () => token("*****"),
-    heading_6_marker: () => token("******"),
-    heading_1: ($) =>
+    // outlines
+    outline_1_marker: () => token("*"),
+    outline_2_marker: () => token("**"),
+    outline_3_marker: () => token("***"),
+    outline_4_marker: () => token("****"),
+    outline_5_marker: () => token("*****"),
+    outline_6_marker: () => token("******"),
+    outline_1: ($) =>
       prec.right(
         seq(
           seq(
-            field("marker", $.heading_1_marker),
+            field("marker", $.outline_1_marker),
             token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
@@ -147,78 +148,60 @@ module.exports = grammar({
           repeat(
             seq(
               choice(
-                $.heading_2,
-                $.heading_3,
-                $.heading_4,
-                $.heading_5,
-                $.heading_6,
-                $._non_heading_line_elements
+                $.outline_2,
+                $.outline_3,
+                $.outline_4,
+                $.outline_5,
+                $.outline_6,
+                $._non_outline_line_elements
               )
             )
           )
         )
       ),
-    heading_2: ($) =>
+    outline_2: ($) =>
       prec.right(
         seq(
           seq(
-            field("marker", $.heading_2_marker),
+            field("marker", $.outline_2_marker),
             token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(choice($.heading_3, $.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements))
+            seq(choice($.outline_3, $.outline_4, $.outline_5, $.outline_6, $._non_outline_line_elements))
           )
         )
       ),
-    heading_3: ($) =>
+    outline_3: ($) =>
       prec.right(
         seq(
           seq(
-            field("marker", $.heading_3_marker),
+            field("marker", $.outline_3_marker),
             token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
-          repeat(seq(choice($.heading_4, $.heading_5, $.heading_6, $._non_heading_line_elements)))
+          repeat(seq(choice($.outline_4, $.outline_5, $.outline_6, $._non_outline_line_elements)))
         )
       ),
-    heading_4: ($) =>
+    outline_4: ($) =>
       prec.right(
         seq(
           seq(
-            field("marker", $.heading_4_marker),
+            field("marker", $.outline_4_marker),
             token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
-          repeat(choice($.heading_5, $.heading_6, $._non_heading_line_elements))
+          repeat(choice($.outline_5, $.outline_6, $._non_outline_line_elements))
         )
       ),
-    heading_5: ($) =>
+    outline_5: ($) =>
       prec.right(
         seq(
           seq(
-            field("marker", $.heading_5_marker),
-            token.immediate(" "),
-            $.text_to_eol,
-            choice($._eol, $._eof)
-          ),
-          repeat(
-            choice(
-              //
-              $.heading_6,
-              $._non_heading_line_elements
-            )
-          )
-        )
-      ),
-    heading_6: ($) =>
-      prec.right(
-        seq(
-          seq(
-            field("marker", $.heading_6_marker),
+            field("marker", $.outline_5_marker),
             token.immediate(" "),
             $.text_to_eol,
             choice($._eol, $._eof)
@@ -226,11 +209,44 @@ module.exports = grammar({
           repeat(
             choice(
               //
-              $._non_heading_line_elements
+              $.outline_6,
+              $._non_outline_line_elements
             )
           )
         )
       ),
+    outline_6: ($) =>
+      prec.right(
+        seq(
+          seq(
+            field("marker", $.outline_6_marker),
+            token.immediate(" "),
+            $.text_to_eol,
+            choice($._eol, $._eof)
+          ),
+          repeat(
+            choice(
+              //
+              $._non_outline_line_elements
+            )
+          )
+        )
+      ),
+
+    // headings
+    heading_1_marker: () => token(/# /),
+    heading_1: ($) => seq($.heading_1_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading_2_marker: () => token(/## /),
+    heading_2: ($) => seq($.heading_2_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading_3_marker: () => token(/### /),
+    heading_3: ($) => seq($.heading_3_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading_4_marker: () => token(/#### /),
+    heading_4: ($) => seq($.heading_4_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading_5_marker: () => token(/##### /),
+    heading_5: ($) => seq($.heading_5_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading_6_marker: () => token(/###### /),
+    heading_6: ($) => seq($.heading_6_marker, $.text_to_eol, choice($._eol, $._eof)),
+    heading: ($) => choice($.heading_1, $.heading_2, $.heading_3, $.heading_4, $.heading_5, $.heading_6),
 
     // section
     section_marker: () => token(/>/),
