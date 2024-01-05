@@ -327,7 +327,7 @@ module.exports = grammar({
         )
       ),
     _list_item_children: ($) =>
-      seq($._indent, repeat1(choice($.list_item, $.text_line)), choice($._dedent, $._eof)),
+      seq($._indent, repeat1(choice($.list_item, $.text_line, $.code_block)), choice($._dedent, $._eof)),
 
     // images
     image: ($) =>

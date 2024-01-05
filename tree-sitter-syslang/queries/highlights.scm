@@ -60,11 +60,11 @@
 (outline_1
   (text_to_eol) @slang.outline_1.text
 ) @slang.outline_1
-((outline_1_marker) @slang.outline_1.marker (#set! conceal "⊙"))
+((outline_1_marker) @slang.outline_1.marker (#set! conceal "🞊"))
 (outline_2
   (text_to_eol) @slang.outline_2.text
 ) @slang.outline_2
-((outline_2_marker) @slang.outline_2.marker (#set! conceal "🞊"))
+((outline_2_marker) @slang.outline_2.marker (#set! conceal "🞅"))
 (outline_3
   (text_to_eol) @slang.outline_3.text
 ) @slang.outline_3

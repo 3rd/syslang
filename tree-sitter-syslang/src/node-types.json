@@ -598,6 +598,10 @@
           "named": true
         },
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "comment",
           "named": true
         },

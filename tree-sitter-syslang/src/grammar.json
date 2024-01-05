@@ -1946,6 +1946,10 @@
               {
                 "type": "SYMBOL",
                 "name": "text_line"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "code_block"
               }
             ]
           }

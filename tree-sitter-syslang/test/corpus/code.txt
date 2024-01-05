@@ -74,3 +74,26 @@ test
       (code_block_start)
       (code_block_content (text))
       (code_block_end)))
+
+==================
+Code blocks inside list items
+==================
+- List item
+  @code
+    content
+    here
+  @end
+---
+(document
+  (list_item
+    (list_item_marker)
+    (text_line (text))
+    (code_block
+      (code_block_start)
+      (code_block_content
+        (text)
+        (text))
+      (code_block_end)
+    )
+  )
+)
