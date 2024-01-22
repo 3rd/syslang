@@ -19,8 +19,6 @@ type Document struct {
 	tree   *sitter.Tree
 }
 
-const metaTitleKey = "title"
-
 func NewDocument(source string) (*Document, error) {
 	parser := treesitter.NewParser()
 
@@ -40,13 +38,11 @@ func NewDocument(source string) (*Document, error) {
 }
 
 func (d *Document) GetMeta() DocumentMeta {
-	meta := DocumentMeta{}
-
-	// case 1: document has a @meta block
-	// @document
+	// @meta
 	//   title: Document
 	//   custom: custom value
 	// @end
+	meta := DocumentMeta{}
 	cursor := treesitter.Query(d.tree.RootNode(), `
     (document_meta
       (document_meta_field
@@ -64,17 +60,6 @@ func (d *Document) GetMeta() DocumentMeta {
 		meta[key] = value
 	}
 
-	// case 2: document only has a basic title
-	// = Document
-	if len(meta) == 0 {
-		cursor = treesitter.Query(d.tree.RootNode(), `(document_title_basic (text_to_eol) @title)`)
-		match, _ := cursor.NextMatch()
-		if match != nil {
-			title := match.Captures[0].Node.Content([]byte(d.source))
-			meta[metaTitleKey] = title
-		}
-	}
-
 	return meta
 }
 
@@ -82,9 +67,30 @@ func (d *Document) GetTasks() []Task {
 	return QueryTasks(*d)
 }
 
-func (d *Document) GetTitle() string {
+func (d *Document) GetType() string {
 	meta := d.GetMeta()
-	return meta[metaTitleKey]
+
+	if t, ok := meta["type"]; ok {
+		return t
+	}
+
+	return "document"
+}
+
+func (d *Document) GetTitle() string {
+	t := d.GetType()
+	meta := d.GetMeta()
+
+	if t == "person" {
+		if name, ok := meta["name"]; ok {
+			return name
+		}
+	}
+
+	if title, ok := meta["title"]; ok {
+		return title
+	}
+	return ""
 }
 
 func (d *Document) PrintTree() {

@@ -30,17 +30,9 @@ func (s *DocumentTestSuite) TestNoTitle() {
 	assert.Equal(s.T(), "", title)
 }
 
-func (s *DocumentTestSuite) TestBasicTitle() {
-	source := `= Document`
-	doc, err := NewDocument(source)
-	assert.NoError(s.T(), err)
-
-	assert.Equal(s.T(), "Document", doc.GetTitle())
-}
-
-func (s *DocumentTestSuite) TestMeta() {
+func (s *DocumentTestSuite) TestDefaultMeta() {
 	source := `
-@document
+@meta
   title: Document
   custom: custom value
 @end`
@@ -48,7 +40,25 @@ func (s *DocumentTestSuite) TestMeta() {
 	assert.NoError(s.T(), err)
 
 	meta := doc.GetMeta()
+
+	assert.Equal(s.T(), "document", doc.GetType())
 	assert.Equal(s.T(), "Document", doc.GetTitle())
-	assert.Equal(s.T(), "Document", meta[metaTitleKey])
+	assert.Equal(s.T(), "Document", meta["title"])
 	assert.Equal(s.T(), "custom value", meta["custom"])
+}
+
+func (s *DocumentTestSuite) TestPersonMeta() {
+	source := `
+@meta
+  type: person
+  name: Alice
+@end`
+	doc, err := NewDocument(source)
+	assert.NoError(s.T(), err)
+
+	meta := doc.GetMeta()
+
+	assert.Equal(s.T(), doc.GetType(), "person")
+	assert.Equal(s.T(), doc.GetTitle(), "Alice")
+	assert.Equal(s.T(), meta["name"], "Alice")
 }

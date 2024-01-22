@@ -1,4 +1,3 @@
-// Package treesitter provides the tree-sitter-syslang bindings for Go.
 package treesitter
 
 // #include "parser.h"
