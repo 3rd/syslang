@@ -32,7 +32,6 @@ module.exports = grammar({
     $.internal_link_end,
     $.label_line,
   ],
-  // extras: () => [/ /, /\t/, /\n/, /\./, /,/],
   extras: () => [/ /, /\t/, /\n/],
   rules: {
     // document root
@@ -148,6 +147,7 @@ module.exports = grammar({
           repeat(
             seq(
               choice(
+                //
                 $.outline_2,
                 $.outline_3,
                 $.outline_4,
@@ -169,7 +169,16 @@ module.exports = grammar({
             choice($._eol, $._eof)
           ),
           repeat(
-            seq(choice($.outline_3, $.outline_4, $.outline_5, $.outline_6, $._non_outline_line_elements))
+            seq(
+              choice(
+                //
+                $.outline_3,
+                $.outline_4,
+                $.outline_5,
+                $.outline_6,
+                $._non_outline_line_elements
+              )
+            )
           )
         )
       ),
@@ -182,7 +191,17 @@ module.exports = grammar({
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
-          repeat(seq(choice($.outline_4, $.outline_5, $.outline_6, $._non_outline_line_elements)))
+          repeat(
+            seq(
+              choice(
+                //
+                $.outline_4,
+                $.outline_5,
+                $.outline_6,
+                $._non_outline_line_elements
+              )
+            )
+          )
         )
       ),
     outline_4: ($) =>
@@ -194,7 +213,14 @@ module.exports = grammar({
             $.text_to_eol,
             choice($._eol, $._eof)
           ),
-          repeat(choice($.outline_5, $.outline_6, $._non_outline_line_elements))
+          repeat(
+            choice(
+              //
+              $.outline_5,
+              $.outline_6,
+              $._non_outline_line_elements
+            )
+          )
         )
       ),
     outline_5: ($) =>

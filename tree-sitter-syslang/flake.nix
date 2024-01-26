@@ -23,10 +23,14 @@
         defaultPackage = defaultPackage pkgs;
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            nodejs
+            nodejs_latest
+            nodePackages.node-gyp-build
             nodePackages.node-gyp
-            tree-sitter
+            # tree-sitter
           ];
+          profile = ''
+            export npm_config_build_from_source=true
+          '';
         };
       })) // (let pkgs = import nixpkgs { };
       in { defaultPackage = defaultPackage pkgs; });
