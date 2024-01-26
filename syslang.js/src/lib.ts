@@ -1,3 +1,3 @@
-import { parser } from "./parser";
-
-export { parser };
+export * from "./parser";
+export * from "./Document";
+export * from "./Node";
