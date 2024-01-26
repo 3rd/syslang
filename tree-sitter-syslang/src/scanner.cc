@@ -72,12 +72,12 @@ struct Scanner {
   void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
   void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
-  void set_previous_indent(char *where, size_t indent) {
+  void set_previous_indent(const char *where, size_t indent) {
     if (debug) printf("  ~~> set indent from '%s' with value: %zu\n", where, indent);
     previous_indent = indent;
   }
 
-  void set_dedent(char *where, size_t value) {
+  void set_dedent(const char *where, size_t value) {
     if (debug) printf("  ~~> set dedent from '%s' with value: %zu\n", where, value);
     dedent = value;
   }

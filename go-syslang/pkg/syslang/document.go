@@ -19,9 +19,9 @@ type Document struct {
 	tree   *sitter.Tree
 }
 
-func NewDocument(source string) (*Document, error) {
-	parser := treesitter.NewParser()
+var parser = treesitter.NewParser()
 
+func NewDocument(source string) (*Document, error) {
 	tree, err := parser.ParseCtx(context.Background(), nil, []byte(source))
 	if err != nil {
 		return nil, err
