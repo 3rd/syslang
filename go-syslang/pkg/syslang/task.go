@@ -203,20 +203,20 @@ func QueryTasks(document Document) []Task {
 
 func parseDateTime(dateStr string, timeStr *string) time.Time {
 	dateLayout := "2006.01.02"
-	resultDate, err := time.Parse(dateLayout, dateStr)
+	resultDate, err := time.ParseInLocation(dateLayout, dateStr, time.Local)
 	if err != nil {
 		dateLayout = "2006/01/02"
-		resultDate, err = time.Parse(dateLayout, dateStr)
+		resultDate, err = time.ParseInLocation(dateLayout, dateStr, time.Local)
 		if err != nil {
 			dateLayout = "2006-01-02"
-			resultDate, err = time.Parse(dateLayout, dateStr)
+			resultDate, err = time.ParseInLocation(dateLayout, dateStr, time.Local)
 			if err != nil {
 				panic(err)
 			}
 		}
 	}
 	if timeStr != nil {
-		resultTime, err := time.Parse("15:04", *timeStr)
+		resultTime, err := time.ParseInLocation("15:04", *timeStr, time.Local)
 		if err != nil {
 			panic(err)
 		}
