@@ -80,6 +80,7 @@ func (session TaskSession) IsInProgress(atTime ...time.Time) bool {
 type TaskSchedule struct {
 	Start time.Time
 	End   *time.Time
+	Line  uint32
 }
 
 func NewTaskScheduleFromStr(startDateStr string, startTimeStr, endDateStr, endTimeStr *string) TaskSchedule {
@@ -159,6 +160,13 @@ func (task Task) TotalSessionDuration() time.Duration {
 		duration += session.Duration()
 	}
 	return duration
+}
+
+func (task Task) GetLastSession() *TaskSession {
+	if len(task.Sessions) == 0 {
+		return nil
+	}
+	return &task.Sessions[len(task.Sessions)-1]
 }
 
 func QueryTasks(document Document) []Task {
@@ -328,6 +336,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 					endTimeString := match.Captures[3].Node.Content([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, &endDateString, &endTimeString)
+					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
 					schedule = &parsedSchedule
 				}
 
@@ -349,6 +358,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 					// pp.Println("end time string", endTimeString)
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, nil, &endTimeString)
+					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
 					schedule = &parsedSchedule
 				}
 
@@ -368,6 +378,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 					startDateString := match.Captures[0].Node.Content([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, nil, nil, nil)
+					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
 					schedule = &parsedSchedule
 				}
 
