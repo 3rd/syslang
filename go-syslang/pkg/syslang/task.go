@@ -31,6 +31,16 @@ func (status TaskStatus) String() string {
 	}
 }
 
+// @daily -> daily
+// @[anything] -> anything
+func stripRecurrenceString(str string) string {
+	result := strings.TrimPrefix(str, "@")
+	if result[0] == '[' && result[len(result)-1] == ']' {
+		result = result[1 : len(result)-1]
+	}
+	return result
+}
+
 type TaskSession struct {
 	Start time.Time
 	End   *time.Time
@@ -78,9 +88,10 @@ func (session TaskSession) IsInProgress(atTime ...time.Time) bool {
 }
 
 type TaskSchedule struct {
-	Start time.Time
-	End   *time.Time
-	Line  uint32
+	Start  time.Time
+	End    *time.Time
+	Line   uint32
+	Repeat string
 }
 
 func NewTaskScheduleFromStr(startDateStr string, startTimeStr, endDateStr, endTimeStr *string) TaskSchedule {
@@ -128,13 +139,27 @@ func (schedule TaskSchedule) IsInProgress(atTime ...time.Time) bool {
 	return false
 }
 
+type TaskCompletion struct {
+	Start time.Time
+	End   *time.Time
+	Line  uint32
+}
+
+func NewTaskCompletionFromStr(startDateStr string, startTimeStr string) TaskCompletion {
+	completion := TaskCompletion{
+		Start: parseDateTime(startDateStr, &startTimeStr),
+	}
+	return completion
+}
+
 type Task struct {
-	Line     uint32
-	Status   TaskStatus
-	Title    string
-	Body     string
-	Sessions []TaskSession
-	Schedule *TaskSchedule
+	Line        uint32
+	Status      TaskStatus
+	Title       string
+	Body        string
+	Sessions    []TaskSession
+	Schedule    *TaskSchedule
+	Completions []TaskCompletion
 }
 
 func (task Task) IsInProgress(atTime ...time.Time) bool {
@@ -177,6 +202,7 @@ func QueryTasks(document Document) []Task {
       (text_line) @title
       (task_schedule)* @schedule
       (task_session)* @session
+      (task_completion)* @completion
     )`,
 		TaskStatusDefault)
 	activeTasks := queryTasksWithStatus(document, `
@@ -184,6 +210,7 @@ func QueryTasks(document Document) []Task {
       (text_line) @title
       (task_schedule)* @schedule
       (task_session)* @session
+      (task_completion)* @completion
     )`,
 		TaskStatusActive)
 	doneTasks := queryTasksWithStatus(document, `
@@ -191,6 +218,7 @@ func QueryTasks(document Document) []Task {
       (text_to_eol) @title
       (task_schedule)* @schedule
       (task_session)* @session
+      (task_completion)* @completion
     )`,
 		TaskStatusDone)
 	cancelledTasks := queryTasksWithStatus(document, `
@@ -198,6 +226,7 @@ func QueryTasks(document Document) []Task {
       (text_to_eol) @title
       (task_schedule)* @schedule
       (task_session)* @session
+      (task_completion)* @completion
     )`,
 		TaskStatusCancelled)
 
@@ -363,13 +392,23 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 				}
 
 				// Schedule: 2006.01.02 15:04
-				match = treesitter.QueryOne(capture.Node, `(task_schedule (datetime (date) @start_date (time) @start_time))`)
+				match = treesitter.QueryOne(capture.Node, `
+          (task_schedule
+            (datetime (date) @start_date (time) @start_time)
+            (task_recurrence)? @recurrence
+          )
+        `)
 				if schedule == nil && match != nil {
 					startDateString := match.Captures[0].Node.Content([]byte(document.source))
 					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, nil, nil)
 					schedule = &parsedSchedule
+
+					if len(match.Captures) > 2 {
+						recurrenceStr := match.Captures[2].Node.Content([]byte(document.source))
+						schedule.Repeat = stripRecurrenceString(recurrenceStr)
+					}
 				}
 
 				// Schedule: 2006.01.02
@@ -383,6 +422,26 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 				}
 
 				task.Schedule = schedule
+			}
+
+			if capture.Node.Type() == "task_completion" {
+				var completion *TaskCompletion
+
+				// Completion: 2006.01.02 15:04
+				match := treesitter.QueryOne(capture.Node, `
+          (task_completion
+            (datetime (date) @start_date (time) @start_time)
+          )
+        `)
+				if completion == nil && match != nil {
+					startDateString := match.Captures[0].Node.Content([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
+
+					parsedCompletion := NewTaskCompletionFromStr(startDateString, startTimeString)
+					completion = &parsedCompletion
+				}
+
+				task.Completions = append(task.Completions, *completion)
 			}
 		}
 

@@ -64,7 +64,7 @@ Task schedule
 [ ] Task
   Schedule: 2022-01-01
   Schedule: 2022-01-01 10:00
-  Schedule: 2022-01-01 10:00 - 10:30
+  Schedule: 2022-01-01 10:00-10:30
   Schedule: 2022-01-01 10:00 - 2022-01-01 11:00
 ---
 (document
@@ -73,3 +73,27 @@ Task schedule
     (task_schedule (datetime (date) (time)))
     (task_schedule (datetimerange (datetime (date) (time)) (time)))
     (task_schedule (datetimerange (datetime (date) (time)) (datetime (date) (time))))))
+
+==================
+Task recurrence and completion
+==================
+[ ] Task
+  Schedule: 2022-01-01 10:00 @[***]
+  Schedule: 2022-01-01 10:00 @daily
+  Done: 2022-01-01 10:00
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (task_schedule
+      (datetime (date) (time))
+      (task_recurrence)
+    )
+    (task_schedule
+      (datetime (date) (time))
+      (task_recurrence)
+    )
+    (task_completion
+      (datetime (date) (time))
+    )
+  )
+)

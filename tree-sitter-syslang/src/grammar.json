@@ -1691,6 +1691,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "task_completion"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "_task"
               },
               {
@@ -1770,6 +1774,13 @@
         }
       ]
     },
+    "task_recurrence": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "@[^\\s]+"
+      }
+    },
     "task_schedule": {
       "type": "SEQ",
       "members": [
@@ -1800,6 +1811,47 @@
               "name": "datetimerange"
             }
           ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "task_recurrence"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_eol"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_eof"
+            }
+          ]
+        }
+      ]
+    },
+    "task_completion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "Done: "
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "datetime"
         },
         {
           "type": "CHOICE",

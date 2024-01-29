@@ -23,6 +23,19 @@ func TestSyslangTestSuite(t *testing.T) {
 	suite.Run(t, new(SyslangTestSuite))
 }
 
+func (s *SyslangTestSuite) formatLocalRFC3339(date, timeStr string) string {
+	location, err := time.LoadLocation("Local") // Replace with appropriate time zone if needed
+	if err != nil {
+		s.T().Fatal(err)
+	}
+	layout := "2006-01-02T15:04:05"
+	t, err := time.ParseInLocation(layout, date+"T"+timeStr+":00", location)
+	if err != nil {
+		s.T().Fatal(err)
+	}
+	return t.In(location).Format(time.RFC3339)
+}
+
 func (s *SyslangTestSuite) TestQueryTasks() {
 	document, err := NewDocument(`
 * Tasks
@@ -102,31 +115,31 @@ func (s *SyslangTestSuite) TestQueryTasks() {
 func (s *SyslangTestSuite) TestNewTaskSessionFromStr() {
 	// start date, start time, end date, end time
 	session := NewTaskSessionFromStr(startDate, startTime, &endDate, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", session.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), session.End)
-	assert.Equal(s.T(), endDate+"T"+endTime+":00Z", session.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(endDate, endTime), session.End.Format(time.RFC3339))
 
 	// start date, start time, end date, nil
 	session = NewTaskSessionFromStr(startDate, startTime, nil, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", session.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), session.End)
-	assert.Equal(s.T(), startDate+"T"+endTime+":00Z", session.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 
 	// start date, start time, end date, nil
 	session = NewTaskSessionFromStr(startDate, startTime, &endDate, nil)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", session.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), session.End)
-	assert.Equal(s.T(), endDate+"T00:00:00Z", session.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 
 	// start date, start time, nil, end time
 	session = NewTaskSessionFromStr(startDate, startTime, nil, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", session.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), session.End)
-	assert.Equal(s.T(), startDate+"T"+endTime+":00Z", session.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 
 	// start date, start time, nil, nil
 	session = NewTaskSessionFromStr(startDate, startTime, nil, nil)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", session.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), session.Start.Format(time.RFC3339))
 	assert.Nil(s.T(), session.End)
 }
 
@@ -145,36 +158,36 @@ func (s *SyslangTestSuite) TestTaskSessionDuration() {
 func (s *SyslangTestSuite) TestNewTaskScheduleFromStr() {
 	// start date, start time, end date, end time
 	schedule := NewTaskScheduleFromStr(startDate, &startTime, &endDate, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), schedule.End)
-	assert.Equal(s.T(), endDate+"T"+endTime+":00Z", schedule.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 
 	// start date, start time, end date, nil
 	schedule = NewTaskScheduleFromStr(startDate, &startTime, nil, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), schedule.End)
-	assert.Equal(s.T(), startDate+"T"+endTime+":00Z", schedule.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 
 	// start date, start time, end date, nil
 	schedule = NewTaskScheduleFromStr(startDate, &startTime, &endDate, nil)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), schedule.End)
-	assert.Equal(s.T(), endDate+"T00:00:00Z", schedule.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 
 	// start date, start time, nil, end time
 	schedule = NewTaskScheduleFromStr(startDate, &startTime, nil, &endTime)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 	assert.NotNil(s.T(), schedule.End)
-	assert.Equal(s.T(), startDate+"T"+endTime+":00Z", schedule.End.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 
 	// start date, start time, nil, nil
 	schedule = NewTaskScheduleFromStr(startDate, &startTime, nil, nil)
-	assert.Equal(s.T(), startDate+"T"+startTime+":00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, startTime), schedule.Start.Format(time.RFC3339))
 	assert.Nil(s.T(), schedule.End)
 
 	// start date, nil, nil, nil
 	schedule = NewTaskScheduleFromStr(startDate, nil, nil, nil)
-	assert.Equal(s.T(), startDate+"T00:00:00Z", schedule.Start.Format(time.RFC3339))
+	assert.Equal(s.T(), s.formatLocalRFC3339(startDate, "00:00"), schedule.Start.Format(time.RFC3339))
 	assert.Nil(s.T(), schedule.End)
 }
 
@@ -198,4 +211,54 @@ func (s *SyslangTestSuite) TestTaskScheduleDuration() {
 	schedule = NewTaskScheduleFromStr(startDate, nil, nil, nil)
 	duration = schedule.Duration()
 	assert.Equal(s.T(), 0*time.Second, duration)
+}
+
+func (s *SyslangTestSuite) TestTaskScheduleRecurrence() {
+	cases := []struct {
+		notation string
+		expected string
+	}{
+		{"@daily", "daily"},
+		{"@[*/*/*]", "*/*/*"},
+	}
+
+	for _, c := range cases {
+		source := `
+[ ] task
+  Schedule: 2020-01-01 00:00` + c.notation
+		document, err := NewDocument(source)
+		assert.Nil(s.T(), err)
+
+		tasks := QueryTasks(*document)
+		assert.Equal(s.T(), 1, len(tasks))
+		assert.Equal(s.T(), c.expected, tasks[0].Schedule.Repeat)
+	}
+}
+
+func (s *SyslangTestSuite) TestTaskComplete() {
+	cases := []struct {
+		source      string
+		completions []TaskCompletion
+	}{
+		{
+			source: `
+[ ] task
+  Done: 2020-01-01 00:00
+  Done: 2020-01-01 02:00
+`,
+			completions: []TaskCompletion{
+				NewTaskCompletionFromStr("2020-01-01", "00:00"),
+				NewTaskCompletionFromStr("2020-01-01", "02:00"),
+			},
+		},
+	}
+
+	for _, c := range cases {
+		document, err := NewDocument(c.source)
+		assert.Nil(s.T(), err)
+
+		tasks := QueryTasks(*document)
+		assert.Equal(s.T(), 1, len(tasks))
+		assert.Equal(s.T(), c.completions, tasks[0].Completions)
+	}
 }

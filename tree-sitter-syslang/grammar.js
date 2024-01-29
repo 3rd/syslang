@@ -316,6 +316,7 @@ module.exports = grammar({
           choice(
             $.task_session,
             $.task_schedule,
+            $.task_completion,
             $._task,
             $.section,
             $.banner,
@@ -328,12 +329,15 @@ module.exports = grammar({
         choice($._dedent, $._eof)
       ),
     task_session: ($) => seq("Session: ", choice($.datetime, $.datetimerange), choice($._eol, $._eof)),
+    task_recurrence: () => token(/@[^\s]+/),
     task_schedule: ($) =>
       seq(
         token("Schedule: "),
         choice($.date, $.daterange, $.datetime, $.datetimerange),
+        optional($.task_recurrence),
         choice($._eol, $._eof)
       ),
+    task_completion: ($) => seq(token("Done: "), $.datetime, choice($._eol, $._eof)),
 
     // list items
     list_item_label: ($) => repeat1($._inline),
