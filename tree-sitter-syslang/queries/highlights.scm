@@ -112,6 +112,8 @@
 ((task_marker_done) @slang.task_done (#set! conceal ""))
 (task_session) @slang.task_session
 (task_schedule) @slang.task_schedule
+(task_completion) @slang.task_completion
+(task_recurrence) @slang.task_recurrence
 
 ; tags
 (tag_hash) @slang.tag.hash
