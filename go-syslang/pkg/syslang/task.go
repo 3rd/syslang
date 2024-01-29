@@ -141,7 +141,6 @@ func (schedule TaskSchedule) IsInProgress(atTime ...time.Time) bool {
 
 type TaskCompletion struct {
 	Start time.Time
-	End   *time.Time
 	Line  uint32
 }
 
@@ -192,6 +191,27 @@ func (task Task) GetLastSession() *TaskSession {
 		return nil
 	}
 	return &task.Sessions[len(task.Sessions)-1]
+}
+
+func (task Task) GetCompletionForDate(date time.Time) *TaskCompletion {
+	for _, completion := range task.Completions {
+		if completion.Start.Year() == date.Year() && completion.Start.Month() == date.Month() && completion.Start.Day() == date.Day() {
+			return &completion
+		}
+	}
+	return nil
+}
+
+func (task Task) HasCompletionForDate(date time.Time) bool {
+	completion := task.GetCompletionForDate(date)
+	return completion != nil
+}
+
+func (task Task) GetLastCompletion() *TaskCompletion {
+	if len(task.Completions) == 0 {
+		return nil
+	}
+	return &task.Completions[len(task.Completions)-1]
 }
 
 func QueryTasks(document Document) []Task {
@@ -403,6 +423,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, nil, nil)
+					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
 					schedule = &parsedSchedule
 
 					if len(match.Captures) > 2 {
@@ -438,6 +459,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
 
 					parsedCompletion := NewTaskCompletionFromStr(startDateString, startTimeString)
+					parsedCompletion.Line = match.Captures[0].Node.StartPoint().Row
 					completion = &parsedCompletion
 				}
 

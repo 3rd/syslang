@@ -236,29 +236,21 @@ func (s *SyslangTestSuite) TestTaskScheduleRecurrence() {
 }
 
 func (s *SyslangTestSuite) TestTaskComplete() {
-	cases := []struct {
-		source      string
-		completions []TaskCompletion
-	}{
-		{
-			source: `
+	source := `
 [ ] task
   Done: 2020-01-01 00:00
   Done: 2020-01-01 02:00
-`,
-			completions: []TaskCompletion{
-				NewTaskCompletionFromStr("2020-01-01", "00:00"),
-				NewTaskCompletionFromStr("2020-01-01", "02:00"),
-			},
-		},
-	}
+`
+	completionA := NewTaskCompletionFromStr("2020-01-01", "00:00")
+	completionA.Line = 2
+	completionB := NewTaskCompletionFromStr("2020-01-01", "02:00")
+	completionB.Line = 3
+	completions := []TaskCompletion{completionA, completionB}
 
-	for _, c := range cases {
-		document, err := NewDocument(c.source)
-		assert.Nil(s.T(), err)
+	document, err := NewDocument(source)
+	assert.Nil(s.T(), err)
 
-		tasks := QueryTasks(*document)
-		assert.Equal(s.T(), 1, len(tasks))
-		assert.Equal(s.T(), c.completions, tasks[0].Completions)
-	}
+	tasks := QueryTasks(*document)
+	assert.Equal(s.T(), 1, len(tasks))
+	assert.Equal(s.T(), completions, tasks[0].Completions)
 }
