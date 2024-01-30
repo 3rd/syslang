@@ -79,7 +79,7 @@ Task recurrence and completion
 ==================
 [ ] Task
   Schedule: 2022-01-01 10:00 @[***]
-  Schedule: 2022-01-01 10:00 @daily
+  Schedule: 2022-01-01 @daily
   Done: 2022-01-01 10:00
 ---
 (document
@@ -89,7 +89,7 @@ Task recurrence and completion
       (task_recurrence)
     )
     (task_schedule
-      (datetime (date) (time))
+      (date)
       (task_recurrence)
     )
     (task_completion
