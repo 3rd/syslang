@@ -178,10 +178,20 @@ func (task Task) IsInProgress(atTime ...time.Time) bool {
 	return false
 }
 
-func (task Task) TotalSessionDuration() time.Duration {
+func (task Task) GetTotalSessionDuration() time.Duration {
 	var duration time.Duration
 	for _, session := range task.Sessions {
 		duration += session.Duration()
+	}
+	return duration
+}
+
+func (task Task) GetSessionDurationForDate(date time.Time) time.Duration {
+	var duration time.Duration
+	for _, session := range task.Sessions {
+		if session.Start.Year() == date.Year() && session.Start.Month() == date.Month() && session.Start.Day() == date.Day() {
+			duration += session.Duration()
+		}
 	}
 	return duration
 }
