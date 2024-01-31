@@ -215,17 +215,17 @@ func (s *SyslangTestSuite) TestTaskScheduleDuration() {
 
 func (s *SyslangTestSuite) TestTaskScheduleRecurrence() {
 	cases := []struct {
-		notation string
+		schedule string
 		expected string
 	}{
-		{"@daily", "daily"},
-		{"@[*/*/*]", "*/*/*"},
+		{"Schedule: 2020-01-01 00:00 @daily", "daily"},
+		{"Schedule: 2020-01-01 @[*/*/*]", "*/*/*"},
 	}
 
 	for _, c := range cases {
 		source := `
 [ ] task
-  Schedule: 2020-01-01 00:00` + c.notation
+  ` + c.schedule
 		document, err := NewDocument(source)
 		assert.Nil(s.T(), err)
 

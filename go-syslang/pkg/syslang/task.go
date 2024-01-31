@@ -434,13 +434,18 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 				}
 
 				// Schedule: 2006.01.02
-				match = treesitter.QueryOne(capture.Node, `(task_schedule (date) @start_date)`)
+				match = treesitter.QueryOne(capture.Node, `(task_schedule (date) @start_date (task_recurrence)? @recurrence)`)
 				if match != nil {
 					startDateString := match.Captures[0].Node.Content([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, nil, nil, nil)
 					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
 					schedule = &parsedSchedule
+
+					if len(match.Captures) > 1 {
+						recurrenceStr := match.Captures[1].Node.Content([]byte(document.source))
+						schedule.Repeat = stripRecurrenceString(recurrenceStr)
+					}
 				}
 
 				task.Schedule = schedule
