@@ -275,9 +275,10 @@ func parseDateTime(dateStr string, timeStr *string) time.Time {
 	if timeStr != nil {
 		resultTime, err := time.ParseInLocation("15:04", *timeStr, time.Local)
 		if err != nil {
-			panic(err)
+			resultDate = time.Date(resultDate.Year(), resultDate.Month(), resultDate.Day(), 0, 0, 0, 0, resultDate.Location())
+		} else {
+			resultDate = time.Date(resultDate.Year(), resultDate.Month(), resultDate.Day(), resultTime.Hour(), resultTime.Minute(), 0, 0, resultDate.Location())
 		}
-		resultDate = time.Date(resultDate.Year(), resultDate.Month(), resultDate.Day(), resultTime.Hour(), resultTime.Minute(), 0, 0, resultDate.Location())
 	}
 	return resultDate
 }
