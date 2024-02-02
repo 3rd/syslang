@@ -15,13 +15,12 @@ type DocumentMeta map[string]string
 
 type Document struct {
 	source string
-	parser *sitter.Parser
-	tree   *sitter.Tree
+	parser sitter.Parser
+	tree   sitter.Tree
 }
 
-var parser = treesitter.NewParser()
-
 func NewDocument(source string) (*Document, error) {
+	var parser = treesitter.NewParser()
 	tree, err := parser.ParseCtx(context.Background(), nil, []byte(source))
 	if err != nil {
 		return nil, err
@@ -32,8 +31,8 @@ func NewDocument(source string) (*Document, error) {
 
 	return &Document{
 		source,
-		parser,
-		tree,
+		*parser,
+		*tree,
 	}, nil
 }
 

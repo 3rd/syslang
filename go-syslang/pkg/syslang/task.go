@@ -229,7 +229,8 @@ func QueryTasks(document Document) []Task {
 
 	defaultTasks := queryTasksWithStatus(document, `
     (task_default
-      (text_line) @title
+      (task_marker_default)
+      . (text_line) @title
       (task_schedule)* @schedule
       (task_session)* @session
       (task_completion)* @completion
@@ -237,7 +238,8 @@ func QueryTasks(document Document) []Task {
 		TaskStatusDefault)
 	activeTasks := queryTasksWithStatus(document, `
     (task_active
-      (text_line) @title
+      (task_marker_active)
+      . (text_line) @title
       (task_schedule)* @schedule
       (task_session)* @session
       (task_completion)* @completion
@@ -245,7 +247,8 @@ func QueryTasks(document Document) []Task {
 		TaskStatusActive)
 	doneTasks := queryTasksWithStatus(document, `
     (task_done
-      (text_to_eol) @title
+      (task_marker_done)
+      . (text_to_eol) @title
       (task_schedule)* @schedule
       (task_session)* @session
       (task_completion)* @completion
@@ -253,7 +256,8 @@ func QueryTasks(document Document) []Task {
 		TaskStatusDone)
 	cancelledTasks := queryTasksWithStatus(document, `
     (task_cancelled
-      (text_to_eol) @title
+      (task_marker_cancelled)
+      .(text_to_eol) @title
       (task_schedule)* @schedule
       (task_session)* @session
       (task_completion)* @completion
