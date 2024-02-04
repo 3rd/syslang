@@ -2200,7 +2200,7 @@
     },
     "label": {
       "type": "PATTERN",
-      "value": "[\\w]+:"
+      "value": "[\\w-]+:"
     },
     "_inline": {
       "type": "CHOICE",

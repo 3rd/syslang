@@ -297,12 +297,13 @@ struct Scanner {
 
   // label line:
   bool scan_label_line(TSLexer *lexer, const bool *valid_symbols) {
-    if (!isalnum(lexer->lookahead)) {
-      return false;
-    }
     if (!valid_symbols[LABEL_LINE]) {
       return false;
     }
+    if (!isalnum(lexer->lookahead)) {
+      return false;
+    }
+
     while (lexer->lookahead && lexer->lookahead != '\n' && lexer->lookahead != ':') {
       advance(lexer);
     }

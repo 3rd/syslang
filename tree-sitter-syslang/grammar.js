@@ -392,7 +392,7 @@ module.exports = grammar({
     // labels
     // TODO: allow for more words before : by fixing task schedule/session
     // priority
-    label: () => /[\w]+:/,
+    label: () => /[\w-]+:/,
 
     // inline element & text line
     _inline: ($) =>

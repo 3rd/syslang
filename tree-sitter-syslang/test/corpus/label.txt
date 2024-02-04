@@ -5,17 +5,19 @@ label: text
 
 also label:
   - label: text
-  - not-label:
+  - also-label:
 
 also-label:
+also-label: here
 
 ---
 (document
   (text_line (label) (text))
   (label_line)
   (list_item (list_item_marker) (text_line (label) (text)))
-  (list_item (list_item_marker) (text_line (text)))
+  (list_item (list_item_marker) (text_line (label)))
   (label_line)
+  (text_line (label) (text))
 )
 
 ==================
