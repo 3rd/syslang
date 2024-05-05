@@ -59,3 +59,12 @@
   (#set! injection.language "yaml")
   (#set! injection.include-children t)
 )
+
+(code_block
+  (code_block_start (code_block_language) @_name)
+  (#eq? @_name "svg")
+  (code_block_content) @injection.content
+  (#set! injection.language "xml")
+  (#set! injection.include-children t)
+)
+
