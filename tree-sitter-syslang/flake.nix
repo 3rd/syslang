@@ -2,10 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = true;
-    };
   };
   outputs = { nixpkgs, flake-utils, ... }@inputs:
     let
@@ -26,7 +22,7 @@
             nodejs_latest
             nodePackages.node-gyp-build
             nodePackages.node-gyp
-            # tree-sitter
+            tree-sitter
           ];
           profile = ''
             export npm_config_build_from_source=true
