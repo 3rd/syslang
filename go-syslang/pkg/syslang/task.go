@@ -227,6 +227,10 @@ func (task Task) GetLastCompletion() *TaskCompletion {
 func QueryTasks(document Document) []Task {
 	tasks := []Task{}
 
+	defer func() {
+		_ = recover()
+	}()
+
 	defaultTasks := queryTasksWithStatus(document, `
     (task_default
       (task_marker_default)
