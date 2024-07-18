@@ -1,6 +1,7 @@
 package syslang
 
 import (
+	"sort"
 	"strings"
 	"time"
 
@@ -153,6 +154,7 @@ func NewTaskCompletionFromStr(startDateStr string, startTimeStr string) TaskComp
 
 type Task struct {
 	Line        uint32
+	LineText    string
 	Status      TaskStatus
 	Title       string
 	Body        string
@@ -224,7 +226,7 @@ func (task Task) GetLastCompletion() *TaskCompletion {
 	return &task.Completions[len(task.Completions)-1]
 }
 
-func QueryTasks(document Document) []Task {
+func QueryTasks(document *Document) []Task {
 	tasks := []Task{}
 
 	defer func() {
@@ -273,6 +275,11 @@ func QueryTasks(document Document) []Task {
 	tasks = append(tasks, doneTasks...)
 	tasks = append(tasks, cancelledTasks...)
 
+	// sort by line number
+	sort.SliceStable(tasks, func(i, j int) bool {
+		return tasks[i].Line < tasks[j].Line
+	})
+
 	return tasks
 }
 
@@ -301,7 +308,7 @@ func parseDateTime(dateStr string, timeStr *string) time.Time {
 	return resultDate
 }
 
-func queryTasksWithStatus(document Document, queryString string, status TaskStatus) []Task {
+func queryTasksWithStatus(document *Document, queryString string, status TaskStatus) []Task {
 	tasks := []Task{}
 
 	cursor := treesitter.Query(document.tree.RootNode(), queryString)
@@ -323,6 +330,10 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
 		// position
 		line := taskMatch.Captures[0].Node.StartPoint().Row
 		task.Line = line
+
+		// line text
+		lines := strings.Split(document.source, "\n")
+		task.LineText = lines[line-1]
 
 		// content
 		for _, capture := range taskMatch.Captures[1:] {
@@ -397,7 +408,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
               (datetime (date) @end_date (time) @end_time)
             )
           )`)
-				if schedule == nil && match != nil {
+				if match != nil {
 					startDateString := match.Captures[0].Node.Content([]byte(document.source))
 					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
 					endDateString := match.Captures[2].Node.Content([]byte(document.source))
@@ -478,7 +489,7 @@ func queryTasksWithStatus(document Document, queryString string, status TaskStat
             (datetime (date) @start_date (time) @start_time)
           )
         `)
-				if completion == nil && match != nil {
+				if match != nil {
 					startDateString := match.Captures[0].Node.Content([]byte(document.source))
 					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
 

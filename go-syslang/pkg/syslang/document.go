@@ -63,7 +63,7 @@ func (d *Document) GetMeta() DocumentMeta {
 }
 
 func (d *Document) GetTasks() []Task {
-	return QueryTasks(*d)
+	return QueryTasks(d)
 }
 
 func (d *Document) GetType() string {
