@@ -6,9 +6,15 @@ import "C"
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"unsafe"
 
 	sitter "github.com/smacker/go-tree-sitter"
+)
+
+var (
+	queryCache      = make(map[string]*sitter.Query)
+	queryCacheMutex sync.RWMutex
 )
 
 func GetSyslangLanguage() *sitter.Language {
@@ -28,10 +34,22 @@ func NewQuery(query string) (*sitter.Query, error) {
 }
 
 func Query(node *sitter.Node, queryString string) *sitter.QueryCursor {
-	query, err := NewQuery(queryString)
-	if err != nil {
-		panic(err)
+	queryCacheMutex.RLock()
+	query := queryCache[queryString]
+	queryCacheMutex.RUnlock()
+
+	if query == nil {
+		var err error
+		query, err = sitter.NewQuery([]byte(queryString), GetSyslangLanguage())
+		if err != nil {
+			panic(fmt.Sprintf("error creating query: %s", err))
+		}
+
+		queryCacheMutex.Lock()
+		queryCache[queryString] = query
+		queryCacheMutex.Unlock()
 	}
+
 	cursor := sitter.NewQueryCursor()
 	cursor.Exec(query, node)
 	return cursor

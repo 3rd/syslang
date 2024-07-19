@@ -55,7 +55,7 @@ func (s *SyslangTestSuite) TestQueryTasks() {
 `)
 	assert.Nil(s.T(), err)
 
-	tasks := QueryTasks(*document)
+	tasks := QueryTasks(document)
 	assert.Equal(s.T(), 5, len(tasks))
 
 	// default
@@ -230,7 +230,7 @@ func (s *SyslangTestSuite) TestTaskScheduleRecurrence() {
 		document, err := NewDocument(source)
 		assert.Nil(s.T(), err)
 
-		tasks := QueryTasks(*document)
+		tasks := QueryTasks(document)
 		assert.Equal(s.T(), 1, len(tasks))
 		assert.Equal(s.T(), c.expected, tasks[0].Schedule.Repeat)
 	}
@@ -251,7 +251,7 @@ func (s *SyslangTestSuite) TestTaskComplete() {
 	document, err := NewDocument(source)
 	assert.Nil(s.T(), err)
 
-	tasks := QueryTasks(*document)
+	tasks := QueryTasks(document)
 	assert.Equal(s.T(), 1, len(tasks))
 	assert.Equal(s.T(), completions, tasks[0].Completions)
 }
