@@ -34,11 +34,11 @@ test: ## run tests
 .PHONY: test
 
 dev: ## watch for changes and run tests
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make generate && make test"
+	@watchexec -e ".c,.js,.scm,.txt" -r -c reset "make generate && make test"
 .PHONY: dev
 
 dev_filter: ## watch for development tests only
-	@watchexec -e ".cc,.js,.scm,.txt" -r -c reset "make generate && tree-sitter test -f dev"
+	@watchexec -e ".c,.js,.scm,.txt" -r -c reset "make generate && tree-sitter test -f dev"
 .PHONY: dev_filter
 
 parse-spec: ## generate parser and parse the spec file
