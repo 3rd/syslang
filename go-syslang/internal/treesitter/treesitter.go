@@ -1,7 +1,9 @@
 package treesitter
 
-// #include "parser.h"
-// TSLanguage *tree_sitter_syslang();
+// #cgo CFLAGS: -std=c11 -fPIC
+// #include "../../../tree-sitter-syslang/src/parser.c"
+// #include "../../../tree-sitter-syslang/src/scanner.c"
+// const TSLanguage *tree_sitter_syslang();
 import "C"
 import (
 	"fmt"

@@ -1,1 +1,0 @@
-../../../tree-sitter-syslang/src/parser.c

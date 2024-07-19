@@ -15,7 +15,7 @@ help: ## help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS=":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	
 dev: ## watch for changes and run tests
-	watchexec --restart --clear --exts go -- "go test ./..."
+	watchexec --restart --clear --exts go -- "go test -count=1 ./..."
 
 xxx: ## dev: temp dev
 	watchexec -e go -r -c "make build && ./go-syslang"
@@ -25,6 +25,9 @@ test: ## run tests
 
 build: ## build
 	go build .
+
+clean: ## clean
+	go clean -cache -testcache
 
 install: ## install
 	go install .
