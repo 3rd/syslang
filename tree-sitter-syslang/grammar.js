@@ -147,12 +147,12 @@ module.exports = grammar({
       ),
 
     // tags
-    tag_positive: () => token(/\+\pL[^+\s]*/), // +tag
-    tag_negative: () => token(/-\pL[^\s]*/), // -tag
-    tag_hash: () => token(/#\pL[^#\s]*/), // #tag
-    tag_context: () => token(/@\pL[^@\s]*/), // @tag
-    tag_danger: () => token(/!\pL[^!\s]*/), // !tag
-    tag_identifier: () => token(/\$\pL[^\$\s]*/), // $tag
+    tag_positive: () => token(/\+[\pL\pN][^+\s]*/), // +tag
+    tag_negative: () => token(/-[\pL\pN][^\s]*/), // -tag
+    tag_hash: () => token(/#[\pL\pN][^#\s]*/), // #tag
+    tag_context: () => token(/@[\pL\pN][^@\s]*/), // @tag
+    tag_danger: () => token(/![\pL\pN][^!\s]*/), // !tag
+    tag_identifier: () => token(/\$[\pL\pN][^\$\s]*/), // $tag
 
     // outlines
     outline_1_marker: () => token("*"),
