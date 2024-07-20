@@ -1,7 +1,9 @@
 package syslang
 
 import (
+	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -161,6 +163,7 @@ type Task struct {
 	Sessions    []TaskSession
 	Schedule    *TaskSchedule
 	Completions []TaskCompletion
+	Priority    uint32
 }
 
 func (task Task) IsInProgress(atTime ...time.Time) bool {
@@ -325,7 +328,20 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 
 		// title
 		title := taskMatch.Captures[0].Node.Content([]byte(document.source))
-		task.Title = strings.TrimRight(title, "\n")
+		title = strings.TrimRight(title, "\n")
+
+		// priority
+		re := regexp.MustCompile(`^(.+)!(\d+)$`)
+		matches := re.FindStringSubmatch(title)
+		if len(matches) > 0 {
+			task.Title = matches[1]
+			priority, err := strconv.Atoi(matches[2])
+			if err == nil {
+				task.Priority = uint32(priority)
+			}
+		} else {
+			task.Title = title
+		}
 
 		// position
 		line := taskMatch.Captures[0].Node.StartPoint().Row

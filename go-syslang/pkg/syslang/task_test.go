@@ -255,3 +255,19 @@ func (s *SyslangTestSuite) TestTaskComplete() {
 	assert.Equal(s.T(), 1, len(tasks))
 	assert.Equal(s.T(), completions, tasks[0].Completions)
 }
+
+func (s *SyslangTestSuite) TestTaskPriority() {
+	source := `
+[ ] task
+  [ ] task !1
+  [ ] task !100
+`
+	document, err := NewDocument(source)
+	assert.Nil(s.T(), err)
+
+	tasks := QueryTasks(document)
+	assert.Equal(s.T(), 3, len(tasks))
+	assert.Equal(s.T(), uint32(0), tasks[0].Priority)
+	assert.Equal(s.T(), uint32(1), tasks[1].Priority)
+	assert.Equal(s.T(), uint32(100), tasks[2].Priority)
+}
