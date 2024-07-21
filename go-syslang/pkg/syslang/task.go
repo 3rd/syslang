@@ -349,7 +349,7 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 
 		// line text
 		lines := strings.Split(document.source, "\n")
-		task.LineText = lines[line-1]
+		task.LineText = lines[line]
 
 		// content
 		for _, capture := range taskMatch.Captures[1:] {
