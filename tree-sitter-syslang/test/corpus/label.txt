@@ -2,6 +2,7 @@
 Label
 ==================
 label: text
+also/label: text
 
 also label:
   - label: text
@@ -12,6 +13,7 @@ also-label: here
 
 ---
 (document
+  (text_line (label) (text))
   (text_line (label) (text))
   (label_line)
   (list_item (list_item_marker) (text_line (label) (text)))
