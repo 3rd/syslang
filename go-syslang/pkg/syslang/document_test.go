@@ -30,6 +30,15 @@ func (s *DocumentTestSuite) TestNoTitle() {
 	assert.Equal(s.T(), "", title)
 }
 
+func (s *DocumentTestSuite) TestNoMeta() {
+	source := ``
+	doc, err := NewDocument(source)
+	assert.NoError(s.T(), err)
+
+	meta := doc.GetMeta()
+	assert.Equal(s.T(), "", meta["title"])
+}
+
 func (s *DocumentTestSuite) TestDefaultMeta() {
 	source := `
 @meta
