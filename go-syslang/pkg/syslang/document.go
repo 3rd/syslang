@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/3rd/syslang/go-syslang/internal/treesitter"
-	"github.com/k0kubun/pp/v3"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
@@ -161,72 +161,96 @@ func (d *Document) ToJSON() string {
 }
 
 func (d *Document) ToMarkdown() string {
-	result := ""
+	builder := strings.Builder{}
+	root := d.tree.RootNode()
+	convertNodeToMarkdown(&builder, root, d.source, 0, 0)
+	return builder.String()
+}
 
-	treeCursor := sitter.NewTreeCursor(d.tree.RootNode())
-	defer treeCursor.Close()
+func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source string, depth int, listDepth int) {
+	fmt.Printf("Node Type: %s, Content: %s\n", node.Type(), node.Content([]byte(source)))
 
-	// var previousSiblingNode *sitter.Node
-	rootCursorNode := treeCursor.CurrentNode()
-
-	for {
-		currentNode := treeCursor.CurrentNode()
-		currentType := currentNode.Type()
-		currentParent := currentNode.Parent()
-		currentEndPoint := currentNode.EndPoint()
-
-		isLastSibling := false
-		if currentParent != nil {
-			parentEndPoint := currentParent.EndPoint()
-			isLastSibling = currentEndPoint.Row == parentEndPoint.Row && currentEndPoint.Column == parentEndPoint.Column
+	switch node.Type() {
+	case "document":
+		for i := 0; i < int(node.ChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.Child(i), source, depth, listDepth)
 		}
-
-		pp.Printf("- node: %s last: %s\n", currentType, isLastSibling)
-
-		if currentNode.ChildCount() == 0 {
-			text := currentNode.Content([]byte(d.source))
-			pp.Printf("  text: %s\n", text)
-
-			switch currentType {
-			case "text":
-				result += text
-			case "bold_content":
-				result += "**" + text + "**"
-			default:
-				result += " "
-			}
+	case "document_title_basic":
+		builder.WriteString("# ")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("\n\n")
+	case "outline_1", "outline_2", "outline_3", "outline_4", "outline_5", "outline_6":
+		if depth > 0 && !strings.HasSuffix(builder.String(), "\n\n") {
+			builder.WriteString("\n\n")
 		}
-
-		if currentParent != nil {
-			currentParentType := currentParent.Type()
-			pp.Printf("  parent: %s\n", currentParentType)
-
-			if currentParentType == "text_line" && isLastSibling {
-				pp.Println("  -> add newline")
-				result += "\n"
-			}
+		headingLevel := int(node.Type()[8] - '0')
+		builder.WriteString(strings.Repeat("#", headingLevel) + " ")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("\n\n")
+		for i := 2; i < int(node.NamedChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, 0)
 		}
-
-		if treeCursor.GoToFirstChild() {
-			// previousSiblingNode = nil
-			continue
+	case "task_default", "task_active", "task_done", "task_cancelled":
+		prefix := map[string]string{
+			"task_default":   "- [ ] ",
+			"task_active":    "- [-] ",
+			"task_done":      "- [x] ",
+			"task_cancelled": "- [_] ",
+		}[node.Type()]
+		builder.WriteString(strings.Repeat("  ", listDepth) + prefix)
+		for i := 1; i < int(node.ChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.Child(i), source, depth+1, listDepth+1)
 		}
-
-		if treeCursor.GoToNextSibling() {
-			// previousSiblingNode = currentNode
-			continue
+		builder.WriteString("\n")
+	case "text_line":
+		builder.WriteString(strings.Repeat("  ", listDepth))
+		for i := 0; i < int(node.ChildCount()); i++ {
+			// TODO: figure out why unnamed children are missing
+			fmt.Printf("Child %d: %s\n", i, node.Child(i).Type())
+			convertNodeToMarkdown(builder, node.Child(i), source, depth, listDepth)
 		}
-
-		for {
-			treeCursor.GoToParent()
-
-			if treeCursor.GoToNextSibling() {
-				// previousSiblingNode = treeCursor.CurrentNode()
-				break
-			}
-
-			if treeCursor.CurrentNode() == rootCursorNode {
-				return result
+		builder.WriteString("\n")
+	case "list_item":
+		builder.WriteString(strings.Repeat("  ", listDepth) + "- ")
+		for i := 1; i < int(node.ChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.Child(i), source, depth+1, listDepth+1)
+		}
+		builder.WriteString("\n")
+	case "bold":
+		builder.WriteString("**")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("**")
+	case "italic":
+		builder.WriteString("*")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("*")
+	case "underline":
+		builder.WriteString("__")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("__")
+	case "inline_code":
+		builder.WriteString("`")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("`")
+	case "code_block":
+		builder.WriteString("```")
+		builder.WriteString(node.NamedChild(0).NamedChild(0).Content([]byte(source)))
+		builder.WriteString("\n")
+		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString("\n```\n")
+	case "text":
+		builder.WriteString(node.Content([]byte(source)))
+	default:
+		if node.ChildCount() == 0 {
+			builder.WriteString(node.Content([]byte(source)))
+		} else {
+			for i := 0; i < int(node.ChildCount()); i++ {
+				node := node.Child(i)
+				if node.IsNamed() {
+					convertNodeToMarkdown(builder, node, source, depth, listDepth)
+				} else {
+					builder.WriteString(node.Content([]byte(source)))
+				}
 			}
 		}
 	}
