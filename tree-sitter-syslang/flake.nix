@@ -28,6 +28,5 @@
             export npm_config_build_from_source=true
           '';
         };
-      })) // (let pkgs = import nixpkgs { };
-      in { defaultPackage = defaultPackage pkgs; });
+      }));
 }

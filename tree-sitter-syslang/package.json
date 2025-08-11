@@ -4,20 +4,20 @@
   "private": true,
   "main": "bindings/node",
   "types": "bindings/node",
-  "tree-sitter": [
-    {
-      "scope": "document.syslang",
-      "file-types": [
-        "syslang"
-      ]
-    }
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
   ],
   "highlights": [
     "queries/highlights.scm"
   ],
   "scripts": {
-    "generate": "tree-sitter generate --abi latest",
-    "build": "tree-sitter generate --abi latest && node-gyp configure && node-gyp build",
+    "generate": "tree-sitter generate --abi 14",
+    "build": "tree-sitter generate --abi 14 && node-gyp configure && node-gyp build",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse",
     "highlight": "tree-sitter highlight",
@@ -39,13 +39,6 @@
   },
   "devDependencies": {
     "prebuildify": "^6.0.0"
-  },
-  "files": [
-    "grammar.js",
-    "binding.gyp",
-    "prebuilds/**",
-    "bindings/node/*",
-    "queries/*",
-    "src/**"
-  ]
+  }
 }
+

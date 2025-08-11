@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "syslang grammar for tree-sitter",
+    "links": {
+      "repository": "https://github.com/3rd/syslang"
+    }
+  },
+  "grammars": [
+    {
+      "name": "syslang",
+      "camelcase": "Syslang",
+      "scope": "document.syslang",
+      "path": ".",
+      "file-types": ["syslang"]
+    }
+  ],
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}
