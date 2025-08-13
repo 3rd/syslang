@@ -170,6 +170,60 @@ static bool scan_inline_modifier(
   return false;
 }
 
+static bool scan_italic_modifier(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+  if (lexer->lookahead == '/' && valid_symbols[ITALIC_START]) {
+    uint32_t col = lexer->get_column(lexer);
+
+    advance(lexer);
+
+    if (lexer->lookahead == '/' || iswspace(lexer->lookahead)) {
+      return false;
+    }
+
+    lexer->mark_end(lexer);
+
+    int slash_count = 0;
+    bool found_non_slash = false;
+
+    while (lexer->lookahead && lexer->lookahead != '\n') {
+      if (lexer->lookahead == '/') {
+        slash_count++;
+        advance(lexer);
+
+        if (iswspace(lexer->lookahead) || lexer->lookahead == '\0' || lexer->lookahead == '\n' ||
+            lexer->lookahead == ',' || lexer->lookahead == '.' || lexer->lookahead == '!' || lexer->lookahead == '?' ||
+            lexer->lookahead == ';' || lexer->lookahead == ':' || lexer->lookahead == ')' || lexer->lookahead == ']' ||
+            lexer->lookahead == '}') {
+          if (found_non_slash) {
+            lexer->result_symbol = ITALIC_START;
+            debug("  => ITALIC START");
+            return true;
+          }
+        } else if (!iswspace(lexer->lookahead) && lexer->lookahead != '\0' && lexer->lookahead != '\n') {
+          if (slash_count > 0) {
+            return false;
+          }
+        }
+      } else {
+        found_non_slash = true;
+        advance(lexer);
+      }
+    }
+
+    return false;
+  }
+
+  if (lexer->lookahead == '/' && valid_symbols[ITALIC_END]) {
+    advance(lexer);
+    lexer->mark_end(lexer);
+    lexer->result_symbol = ITALIC_END;
+    debug("  => ITALIC END");
+    return true;
+  }
+
+  return false;
+}
+
 static bool scan_image(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   if (valid_symbols[IMAGE_START]) {
     if (lexer->lookahead != '!') {
@@ -428,7 +482,7 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   }
 
   if (scan_inline_modifier(scanner, lexer, valid_symbols, '*', BOLD_START, BOLD_END)) return true;
-  if (scan_inline_modifier(scanner, lexer, valid_symbols, '/', ITALIC_START, ITALIC_END)) return true;
+  if (scan_italic_modifier(scanner, lexer, valid_symbols)) return true;
   if (scan_inline_modifier(scanner, lexer, valid_symbols, '_', UNDERLINE_START, UNDERLINE_END)) return true;
   if (scan_inline_modifier(scanner, lexer, valid_symbols, '`', INLINE_CODE_START, INLINE_CODE_END)) return true;
 
