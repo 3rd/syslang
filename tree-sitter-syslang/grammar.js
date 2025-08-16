@@ -121,6 +121,7 @@ module.exports = grammar({
     string: () => token(prec(1, /"[^"]*"/)),
     number: () => token(prec(1, /-?\d+(\.\d+)?[,\.;\/]?/)),
     ticket: () => token(prec(1, /[A-Z]+-\d+:?/)),
+    compound_identifier: () => token(prec(2, /\d+-[a-zA-Z][\w-]*/)), // matches "42-tag" but not dates
 
     // datetime types
     date: () =>
@@ -485,6 +486,7 @@ module.exports = grammar({
         $.text,
         $.inline_code,
         $.string,
+        $.compound_identifier,
         $.number,
         $.ticket,
         $.datetimerange,

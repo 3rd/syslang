@@ -612,6 +612,10 @@
           "named": true
         },
         {
+          "type": "compound_identifier",
+          "named": true
+        },
+        {
           "type": "date",
           "named": true
         },
@@ -732,6 +736,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "compound_identifier",
           "named": true
         },
         {
@@ -1796,6 +1804,10 @@
           "named": true
         },
         {
+          "type": "compound_identifier",
+          "named": true
+        },
+        {
           "type": "date",
           "named": true
         },
@@ -1988,6 +2000,10 @@
   },
   {
     "type": "code_block_language",
+    "named": true
+  },
+  {
+    "type": "compound_identifier",
     "named": true
   },
   {

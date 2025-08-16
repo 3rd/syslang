@@ -33,12 +33,30 @@ Tags
 )
 
 ==================
-TODO: Tags with word boundary separation
+Compound identifiers vs tags
 ==================
-# -a-tag
-# 123-not-a-tag
-# ---
-# (document
-#   (text_line (tag_negative))
-#   (text_line (number))
-# )
+42-tag
+100-percent
+2023-update
+42 -tag
+100 -percent
+---
+(document
+  (text_line
+    (compound_identifier)
+  )
+  (text_line
+    (compound_identifier)
+  )
+  (text_line
+    (compound_identifier)
+  )
+  (text_line
+    (number)
+    (tag_negative)
+  )
+  (text_line
+    (number)
+    (tag_negative)
+  )
+)

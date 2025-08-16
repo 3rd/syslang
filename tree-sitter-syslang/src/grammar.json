@@ -425,6 +425,17 @@
         }
       }
     },
+    "compound_identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "\\d+-[a-zA-Z][\\w-]*"
+        }
+      }
+    },
     "date": {
       "type": "CHOICE",
       "members": [
@@ -2244,6 +2255,10 @@
         {
           "type": "SYMBOL",
           "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "compound_identifier"
         },
         {
           "type": "SYMBOL",
