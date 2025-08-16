@@ -39,3 +39,42 @@ APP-123
 ---
 (document 
   (text_line (ticket)))
+
+==================
+Parenthesized primitives
+==================
+("string") and (123) and (45.67)
+---
+(document
+  (text_line
+    (string)
+    (text)
+    (number)
+    (text)
+    (number)))
+
+==================
+Nested parenthesized primitives
+==================
+((("deeply nested"))) and (((456)))
+---
+(document
+  (text_line
+    (string)
+    (text)
+    (number)))
+
+==================
+Mixed parenthesized content
+==================
+("first" and "second") with (123 and 456)
+---
+(document
+  (text_line
+    (string)
+    (text)
+    (string)
+    (text)
+    (number)
+    (text)
+    (number)))

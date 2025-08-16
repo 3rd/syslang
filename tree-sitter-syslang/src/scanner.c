@@ -70,15 +70,17 @@ static void set_previous_indent(Scanner *scanner, const char *where, size_t inde
 }
 static void set_dedent(Scanner *scanner, const char *where, size_t value) { scanner->dedent = value; }
 
-static void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
-static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
-static bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
-  if (lexer->lookahead != '[') {
-    return false;
-  }
+static inline bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+  if (lexer->lookahead != '[') return false;
+
   advance(lexer);
-  if (valid_symbols[TASK_MARKER_DEFAULT] && lexer->lookahead == ' ') {
+  int32_t next = lexer->lookahead;
+
+  // early exit
+  if (next == ' ' && valid_symbols[TASK_MARKER_DEFAULT]) {
     advance(lexer);
     if (lexer->lookahead == ']') {
       advance(lexer);
@@ -87,8 +89,7 @@ static bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *vali
       debug("  => TASK_MARKER_DEFAULT");
       return true;
     }
-  }
-  if (valid_symbols[TASK_MARKER_ACTIVE] && lexer->lookahead == '-') {
+  } else if (next == '-' && valid_symbols[TASK_MARKER_ACTIVE]) {
     advance(lexer);
     if (lexer->lookahead == ']') {
       advance(lexer);
@@ -97,8 +98,7 @@ static bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *vali
       debug("  => TASK_MARKER_ACTIVE");
       return true;
     }
-  }
-  if (valid_symbols[TASK_MARKER_DONE] && lexer->lookahead == 'x') {
+  } else if (next == 'x' && valid_symbols[TASK_MARKER_DONE]) {
     advance(lexer);
     if (lexer->lookahead == ']') {
       advance(lexer);
@@ -107,8 +107,7 @@ static bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *vali
       debug("  => TASK_MARKER_DONE");
       return true;
     }
-  }
-  if (valid_symbols[TASK_MARKER_CANCELLED] && lexer->lookahead == '_') {
+  } else if (next == '_' && valid_symbols[TASK_MARKER_CANCELLED]) {
     advance(lexer);
     if (lexer->lookahead == ']') {
       advance(lexer);
@@ -121,7 +120,7 @@ static bool scan_task_markers(Scanner *scanner, TSLexer *lexer, const bool *vali
   return false;
 }
 
-static bool scan_list_item_markers(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static inline bool scan_list_item_markers(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   if (lexer->lookahead != '-') {
     return false;
   }
@@ -136,7 +135,7 @@ static bool scan_list_item_markers(Scanner *scanner, TSLexer *lexer, const bool 
   return false;
 }
 
-static bool scan_inline_modifier(
+static inline bool scan_inline_modifier(
     Scanner *scanner,
     TSLexer *lexer,
     const bool *valid_symbols,
@@ -170,7 +169,7 @@ static bool scan_inline_modifier(
   return false;
 }
 
-static bool scan_italic_modifier(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static inline bool scan_italic_modifier(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   if (lexer->lookahead == '/' && valid_symbols[ITALIC_START]) {
     uint32_t col = lexer->get_column(lexer);
 
@@ -224,7 +223,7 @@ static bool scan_italic_modifier(Scanner *scanner, TSLexer *lexer, const bool *v
   return false;
 }
 
-static bool scan_image(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static inline bool scan_image(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   if (valid_symbols[IMAGE_START]) {
     if (lexer->lookahead != '!') {
       return false;
@@ -303,7 +302,7 @@ static bool scan_image(Scanner *scanner, TSLexer *lexer, const bool *valid_symbo
   return false;
 }
 
-static bool scan_internal_links(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static inline bool scan_internal_links(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   if (valid_symbols[INTERNAL_LINK_START]) {
     if (lexer->lookahead == '[') {
       advance(lexer);
@@ -341,7 +340,7 @@ static bool scan_internal_links(Scanner *scanner, TSLexer *lexer, const bool *va
   return false;
 }
 
-static bool scan_label_line(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static inline bool scan_label_line(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   debug("fmm: %b %c", valid_symbols[LABEL_LINE], lexer->lookahead);
   debug("check: %b", IS_ALNUM(lexer->lookahead));
 
@@ -368,7 +367,7 @@ static bool scan_label_line(Scanner *scanner, TSLexer *lexer, const bool *valid_
   return false;
 }
 
-static bool is_in_recovery(const bool *valid_symbols) {
+static inline bool is_in_recovery(const bool *valid_symbols) {
   return (
       valid_symbols[END_OF_FILE] && valid_symbols[BREAKOUT] && valid_symbols[INDENT] && valid_symbols[DEDENT] &&
       valid_symbols[TASK_MARKER_DEFAULT] && valid_symbols[TASK_MARKER_ACTIVE] && valid_symbols[TASK_MARKER_DONE] &&
@@ -422,23 +421,22 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
 
   if (start_column == 0) {
     size_t indent = 0;
-
     lexer->mark_end(lexer);
 
-    size_t spaces = 0;
-    size_t tabs = 0;
-    while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
-      if (lexer->lookahead == ' ')
-        spaces++;
-      else
-        tabs++;
-      skip(lexer);
-    }
+    // indentation counting
+    int32_t ch = lexer->lookahead;
+    if (ch == ' ' || ch == '\t') {
+      size_t spaces = 0, tabs = 0;
+      do {
+        if (ch == ' ')
+          spaces++;
+        else
+          tabs++;
+        skip(lexer);
+        ch = lexer->lookahead;
+      } while (ch == ' ' || ch == '\t');
 
-    if (spaces > 0) {
-      indent = spaces / 2;
-    } else if (tabs > 0) {
-      indent = tabs;
+      indent = spaces > 0 ? spaces / 2 : tabs;
     }
 
     debug("  indent: %zu previous_indent: %zu lookahead: '%c'", indent, scanner->previous_indent, lexer->lookahead);

@@ -2090,17 +2090,37 @@
         "value": "[a-z]+"
       }
     },
+    "code_block_line": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\n]+"
+      }
+    },
     "code_block_content": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT1",
-          "content": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "SYMBOL",
-            "name": "_raw_text_line"
+            "name": "code_block_line"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_eol"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_eof"
+              }
+            ]
           }
-        }
-      ]
+        ]
+      }
     },
     "code_block_start": {
       "type": "SEQ",
@@ -2108,8 +2128,12 @@
         {
           "type": "TOKEN",
           "content": {
-            "type": "STRING",
-            "value": "@code"
+            "type": "PREC",
+            "value": 1,
+            "content": {
+              "type": "STRING",
+              "value": "@code"
+            }
           }
         },
         {
@@ -2145,8 +2169,12 @@
     "code_block_end": {
       "type": "TOKEN",
       "content": {
-        "type": "STRING",
-        "value": "@end"
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[ \\t]*@end"
+        }
       }
     },
     "code_block": {
@@ -2284,6 +2312,20 @@
         {
           "type": "SYMBOL",
           "name": "comment"
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "("
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": ")"
+          }
         }
       ]
     },
@@ -2357,7 +2399,7 @@
           "type": "TOKEN",
           "content": {
             "type": "PATTERN",
-            "value": "[^\\s]+"
+            "value": "[^\\s()]+"
           }
         }
       }

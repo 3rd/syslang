@@ -70,14 +70,19 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "text",
+          "type": "code_block_line",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "code_block_line",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "code_block_start",
@@ -719,7 +724,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "bold",
@@ -1780,7 +1785,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "bold",
@@ -1931,6 +1936,14 @@
   },
   {
     "type": " ",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
     "named": false
   },
   {

@@ -452,14 +452,16 @@ module.exports = grammar({
 
     // code blocks
     code_block_language: () => token.immediate(/[a-z]+/),
-    code_block_content: ($) => seq(repeat1($._raw_text_line)),
+    code_block_line: () => token(/[^\n]+/),
+    code_block_content: ($) =>
+      repeat1(seq($.code_block_line, choice($._eol, $._eof))),
     code_block_start: ($) =>
       seq(
-        token("@code"),
+        token(prec(1, "@code")),
         optional(seq(token.immediate(/\s/), $.code_block_language)),
         $._eol,
       ),
-    code_block_end: () => token("@end"),
+    code_block_end: () => token(prec(2, /[ \t]*@end/)),
     code_block: ($) =>
       seq(
         $.code_block_start,
@@ -500,6 +502,8 @@ module.exports = grammar({
         $.external_link,
         $.internal_link,
         $.comment,
+        token("("),
+        token(")"),
       ),
     text_to_eol: () => token(/[^\n]+/),
     text_line: ($) =>
@@ -507,7 +511,7 @@ module.exports = grammar({
         choice(seq(optional($.label), repeat1($._inline)), $.label),
         choice(token(/\n/), $._eof),
       ),
-    text: () => prec.right(repeat1(token(/[^\s]+/))),
+    text: () => prec.right(repeat1(token(/[^\s()]+/))),
     _raw_text_line: ($) => seq(repeat1($.text), choice($._eol, $._eof)),
   },
 });

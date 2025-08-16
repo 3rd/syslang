@@ -38,7 +38,7 @@ dev: ## watch for changes and run tests
 .PHONY: dev
 
 dev_filter: ## watch for development tests only
-	@watchexec -e ".c,.js,.scm,.txt" -r -c reset "make generate && tree-sitter test -f dev"
+	@watchexec -e ".c,.js,.scm,.txt" -r -c reset "make generate && tree-sitter test --include dev"
 .PHONY: dev_filter
 
 parse-spec: ## generate parser and parse the spec file

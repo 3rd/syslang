@@ -4,18 +4,17 @@ Inline code
 `inline code`
 `:`
 ---
-(document (text_line
-  (inline_code
-    (inline_code_start)
-    (inline_code_content)
-    (inline_code_end)
-  )
-  (inline_code
-    (inline_code_start)
-    (inline_code_content)
-    (inline_code_end)
-  )
-))
+
+(document
+  (text_line
+    (inline_code
+      (inline_code_start)
+      (inline_code_content)
+      (inline_code_end))
+    (inline_code
+      (inline_code_start)
+      (inline_code_content)
+      (inline_code_end))))
 
 ==================
 Code blocks
@@ -47,53 +46,225 @@ test
   content
 @end
 ---
+
 (document
-    (code_block
-      (code_block_start)
-      (code_block_content (text) (text))
-      (code_block_end))
-    (text_line (text))
-    (code_block
-      (code_block_start)
-      (code_block_content (text))
-      (code_block_end))
-    (code_block
-      (code_block_start)
-      (code_block_content (text))
-      (code_block_end))
-    (code_block
-      (code_block_start)
-      (code_block_content (text))
-      (code_block_end))
-    (code_block
-      (code_block_start
-        (code_block_language))
-      (code_block_content (text))
-      (code_block_end))
-    (code_block
-      (code_block_start)
-      (code_block_content (text))
-      (code_block_end)))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line)
+      (code_block_line))
+    (code_block_end))
+  (text_line
+    (text))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line))
+    (code_block_end))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line))
+    (code_block_end))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line))
+    (code_block_end))
+  (code_block
+    (code_block_start
+      (code_block_language))
+    (code_block_content
+      (code_block_line))
+    (code_block_end))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line))
+    (code_block_end)))
 
 ==================
-Code blocks inside list items
+Code blocks inside list items (parse as siblings)
 ==================
 - List item
-  @code
-    content
-    here
-  @end
+@code
+  content
+  here
+@end
 ---
+
 (document
   (list_item
     (list_item_marker)
-    (text_line (text))
+    (text_line
+      (text)))
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line)
+      (code_block_line))
+    (code_block_end)))
+
+==================
+Code blocks with language inside list items (parse as siblings)
+==================
+- Item with code
+@code javascript
+  console.log("test");
+@end
+---
+
+(document
+  (list_item
+    (list_item_marker)
+    (text_line
+      (text)))
+  (code_block
+    (code_block_start
+      (code_block_language))
+    (code_block_content
+      (code_block_line))
+    (code_block_end)))
+
+==================
+Code block inside nested outline
+==================
+* Main Section
+  ** Subsection
+    @code python
+      def process_data(items):
+          return [x * 2 for x in items]
+    @end
+---
+
+(document
+  (outline_1
+    (outline_1_marker)
+    (text_to_eol)
+    (outline_2
+      (outline_2_marker)
+      (text_to_eol)
+      (code_block
+        (code_block_start
+          (code_block_language))
+        (code_block_content
+          (code_block_line)
+          (code_block_line))
+        (code_block_end)))))
+
+==================
+Nested outlines with list items and code block
+==================
+* Documentation
+  ** API Reference
+    - Function signatures must be *clear* and documented
+    - The `process` method is the *entry point*
+    @code javascript
+      function process(data, options) {
+        // validate input
+        // transform data
+        return result;
+      }
+    @end
+---
+
+(document
+  (outline_1
+    (outline_1_marker)
+    (text_to_eol)
+    (outline_2
+      (outline_2_marker)
+      (text_to_eol)
+      (list_item
+        (list_item_marker)
+        (text_line
+          (text)
+          (bold
+            (bold_start)
+            (bold_content)
+            (bold_end))
+          (text)))
+      (list_item
+        (list_item_marker)
+        (text_line
+          (text)
+          (inline_code
+            (inline_code_start)
+            (inline_code_content)
+            (inline_code_end))
+          (text)
+          (bold
+            (bold_start)
+            (bold_content)
+            (bold_end))))
+      (code_block
+        (code_block_start
+          (code_block_language))
+        (code_block_content
+          (code_block_line)
+          (code_block_line)
+          (code_block_line)
+          (code_block_line)
+          (code_block_line))
+        (code_block_end)))))
+
+==================
+Code block nested as child of task
+==================
+[ ] Task with code block
+  @code javascript
+    function example() {
+      return true;
+    }
+  @end
+---
+
+(document
+  (task_default
+    (task_marker_default)
+    (text_line
+      (text))
     (code_block
-      (code_block_start)
+      (code_block_start
+        (code_block_language))
       (code_block_content
-        (text)
-        (text))
-      (code_block_end)
-    )
-  )
-)
+        (code_block_line)
+        (code_block_line)
+        (code_block_line))
+      (code_block_end))))
+
+==================
+Complex task with multiple children including code
+==================
+[-] Active task
+  Session: 2024-01-01 10:00
+  [ ] Subtask one
+  @code python
+    def hello():
+        print("world")
+  @end
+  Some text
+---
+
+(document
+  (task_active
+    (task_marker_active)
+    (text_line
+      (text))
+    (task_session
+      (datetime
+        (date)
+        (time)))
+    (task_default
+      (task_marker_default)
+      (text_line
+        (text)))
+    (code_block
+      (code_block_start
+        (code_block_language))
+      (code_block_content
+        (code_block_line)
+        (code_block_line))
+      (code_block_end))
+    (text_line
+      (text))))
