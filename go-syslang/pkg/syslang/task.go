@@ -67,7 +67,9 @@ func NewTaskSessionFromStr(startDateStr, startTimeStr string, endDateStr, endTim
 	}
 
 	if session.End != nil && session.End.Before(session.Start) {
-		panic("TaskSession end time is before start time " + session.Start.Format("2006.01.02 15:04") + " - " + session.End.Format("2006.01.02 15:04"))
+		// add 24 hours to end time, not great but i'll notice the weird duration
+		newEndTime := session.End.Add(24 * time.Hour)
+		session.End = &newEndTime
 	}
 
 	return &session
