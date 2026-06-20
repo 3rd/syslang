@@ -14,18 +14,13 @@
       "default": "./dist/lib.mjs"
     }
   },
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    }
-  },
   "scripts": {
-    "build": "yarn run clean && pkgroll --target=node20",
-    "dev": "NODE_OPTIONS='--loader=tsx --no-warnings' ava --watch",
-    "test": "NODE_OPTIONS='--loader=tsx --no-warnings' ava",
+    "build": "npm run clean && pkgroll --target=node20",
+    "dev": "tsx watch --test src/lib.test.ts",
+    "test": "tsx --test src/lib.test.ts",
     "tsc": "tsc",
-    "prepare": "yarn run build",
-    "prepublishOnly": "yarn run tsc && yarn run test",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run tsc && npm run test",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
@@ -35,7 +30,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "tree-sitter": "^0.20.6",
+    "tree-sitter": "^0.25.0",
     "tree-sitter-syslang": "link:../tree-sitter-syslang/"
   }
 }

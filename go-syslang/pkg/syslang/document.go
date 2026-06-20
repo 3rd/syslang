@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/3rd/syslang/go-syslang/internal/treesitter"
@@ -13,9 +14,24 @@ import (
 
 type DocumentMeta map[string]string
 
+const (
+	DocumentMetaKeyRoot     = "root"
+	DocumentMetaKeyArchived = "archived"
+)
+
+type DocumentMetaValidationIssue struct {
+	Key     string
+	Value   string
+	Message string
+}
+
+type DocumentFilterOptions struct {
+	RequireProjectRoot bool
+	ExcludeArchived    bool
+}
+
 type Document struct {
 	source string
-	parser sitter.Parser
 	tree   sitter.Tree
 }
 
@@ -31,12 +47,15 @@ func NewDocument(source string) (*Document, error) {
 
 	return &Document{
 		source,
-		*parser,
 		*tree,
 	}, nil
 }
 
 func (d *Document) GetMeta() DocumentMeta {
+	return d.queryMeta()
+}
+
+func (d *Document) queryMeta() DocumentMeta {
 	// @meta
 	//   title: Document
 	//   custom: custom value
@@ -60,6 +79,62 @@ func (d *Document) GetMeta() DocumentMeta {
 	}
 
 	return meta
+}
+
+func (d *Document) HasProjectRoot() bool {
+	return d.GetProjectRoot() != ""
+}
+
+func (d *Document) GetProjectRoot() string {
+	return strings.TrimSpace(d.GetMeta()[DocumentMetaKeyRoot])
+}
+
+func (d *Document) IsArchived() bool {
+	archived, ok := parseMetaBool(d.GetMeta()[DocumentMetaKeyArchived])
+	return ok && archived
+}
+
+func (d *Document) ValidateMeta() []DocumentMetaValidationIssue {
+	meta := d.GetMeta()
+	issues := []DocumentMetaValidationIssue{}
+
+	projectRoot := strings.TrimSpace(meta[DocumentMetaKeyRoot])
+	if projectRoot != "" && !filepath.IsAbs(projectRoot) {
+		issues = append(issues, DocumentMetaValidationIssue{
+			Key:     DocumentMetaKeyRoot,
+			Value:   projectRoot,
+			Message: "root must be an absolute path",
+		})
+	}
+
+	archivedValue := strings.TrimSpace(meta[DocumentMetaKeyArchived])
+	if archivedValue != "" {
+		if _, ok := parseMetaBool(archivedValue); !ok {
+			issues = append(issues, DocumentMetaValidationIssue{
+				Key:     DocumentMetaKeyArchived,
+				Value:   archivedValue,
+				Message: "archived must be true or false",
+			})
+		}
+	}
+
+	return issues
+}
+
+func FilterDocuments(documents []*Document, options DocumentFilterOptions) []*Document {
+	filtered := []*Document{}
+
+	for _, document := range documents {
+		if options.RequireProjectRoot && !document.HasProjectRoot() {
+			continue
+		}
+		if options.ExcludeArchived && document.IsArchived() {
+			continue
+		}
+		filtered = append(filtered, document)
+	}
+
+	return filtered
 }
 
 func (d *Document) GetTasks() []Task {
@@ -90,6 +165,17 @@ func (d *Document) GetTitle() string {
 		return title
 	}
 	return ""
+}
+
+func parseMetaBool(value string) (bool, bool) {
+	switch strings.ToLower(strings.TrimSpace(value)) {
+	case "true":
+		return true, true
+	case "false":
+		return false, true
+	default:
+		return false, false
+	}
 }
 
 func (d *Document) PrintTree() {
@@ -168,8 +254,6 @@ func (d *Document) ToMarkdown() string {
 }
 
 func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source string, depth int, listDepth int) {
-	fmt.Printf("Node Type: %s, Content: %s\n", node.Type(), node.Content([]byte(source)))
-
 	switch node.Type() {
 	case "document":
 		for i := 0; i < int(node.ChildCount()); i++ {
@@ -181,7 +265,7 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 		builder.WriteString("\n\n")
 	case "outline_1", "outline_2", "outline_3", "outline_4", "outline_5", "outline_6":
 		if depth > 0 && !strings.HasSuffix(builder.String(), "\n\n") {
-			builder.WriteString("\n\n")
+			builder.WriteString("\n")
 		}
 		headingLevel := int(node.Type()[8] - '0')
 		builder.WriteString(strings.Repeat("#", headingLevel) + " ")
@@ -197,49 +281,49 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 			"task_done":      "- [x] ",
 			"task_cancelled": "- [_] ",
 		}[node.Type()]
-		builder.WriteString(strings.Repeat("  ", listDepth) + prefix)
-		for i := 1; i < int(node.ChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.Child(i), source, depth+1, listDepth+1)
-		}
-		builder.WriteString("\n")
-	case "text_line":
 		builder.WriteString(strings.Repeat("  ", listDepth))
-		for i := 0; i < int(node.ChildCount()); i++ {
-			// TODO: figure out why unnamed children are missing
-			fmt.Printf("Child %d: %s\n", i, node.Child(i).Type())
-			convertNodeToMarkdown(builder, node.Child(i), source, depth, listDepth)
-		}
+		builder.WriteString(prefix)
+		builder.WriteString(strings.TrimRight(renderInlineMarkdown(node.NamedChild(1), source), "\n"))
 		builder.WriteString("\n")
+		for i := 2; i < int(node.NamedChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, listDepth+1)
+		}
 	case "list_item":
-		builder.WriteString(strings.Repeat("  ", listDepth) + "- ")
-		for i := 1; i < int(node.ChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.Child(i), source, depth+1, listDepth+1)
-		}
+		builder.WriteString(strings.Repeat("  ", listDepth))
+		builder.WriteString("- ")
+		inlineEnd := listItemInlineEnd(node)
+		builder.WriteString(strings.TrimRight(renderInlineChildRangeMarkdown(node, source, 1, inlineEnd), "\n"))
 		builder.WriteString("\n")
-	case "bold":
-		builder.WriteString("**")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
-		builder.WriteString("**")
-	case "italic":
-		builder.WriteString("*")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
-		builder.WriteString("*")
-	case "underline":
-		builder.WriteString("__")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
-		builder.WriteString("__")
-	case "inline_code":
-		builder.WriteString("`")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
-		builder.WriteString("`")
+		for i := inlineEnd; i < int(node.NamedChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, listDepth+1)
+		}
 	case "code_block":
 		builder.WriteString("```")
-		builder.WriteString(node.NamedChild(0).NamedChild(0).Content([]byte(source)))
+		if node.NamedChildCount() > 1 && node.NamedChild(0).Type() == "code_block_start" && node.NamedChild(0).NamedChildCount() > 0 {
+			builder.WriteString(node.NamedChild(0).NamedChild(0).Content([]byte(source)))
+		}
 		builder.WriteString("\n")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
-		builder.WriteString("\n```\n")
-	case "text":
-		builder.WriteString(node.Content([]byte(source)))
+		if node.NamedChildCount() > 1 {
+			builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		}
+		builder.WriteString("\n```\n\n")
+	case "text_line", "text_to_eol":
+		builder.WriteString(strings.TrimRight(renderInlineMarkdown(node, source), "\n"))
+		builder.WriteString("\n")
+		if depth == 0 && listDepth == 0 {
+			builder.WriteString("\n")
+		}
+	case "horizontal_rule":
+		builder.WriteString("---\n")
+	case "double_horizontal_rule":
+		builder.WriteString("***\n")
+	case "internal_link":
+		target := node.NamedChild(1).Content([]byte(source))
+		builder.WriteString("[")
+		builder.WriteString(target)
+		builder.WriteString("](")
+		builder.WriteString(target)
+		builder.WriteString(")")
 	default:
 		if node.ChildCount() == 0 {
 			builder.WriteString(node.Content([]byte(source)))
@@ -254,4 +338,100 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 			}
 		}
 	}
+}
+
+func listItemInlineEnd(node *sitter.Node) int {
+	for i := 1; i < int(node.NamedChildCount()); i++ {
+		child := node.NamedChild(i)
+		if child.Type() == "text_line" {
+			if i == 1 {
+				return 2
+			}
+			return i
+		}
+		if !isInlineListItemChild(child) {
+			return i
+		}
+	}
+
+	return int(node.NamedChildCount())
+}
+
+func isInlineListItemChild(node *sitter.Node) bool {
+	switch node.Type() {
+	case "list_item_label", "list_item_label_marker", "text", "number", "string", "ticket", "compound_identifier", "date", "daterange", "time", "timerange", "datetime", "datetimerange", "tag_positive", "tag_negative", "tag_hash", "tag_context", "tag_danger", "tag_identifier", "external_link", "comment", "bold", "italic", "underline", "inline_code", "internal_link":
+		return true
+	default:
+		return false
+	}
+}
+
+func renderInlineChildRangeMarkdown(node *sitter.Node, source string, start int, end int) string {
+	if start >= end {
+		return ""
+	}
+
+	builder := strings.Builder{}
+	cursor := int(node.NamedChild(start).StartByte())
+
+	for i := start; i < end; i++ {
+		child := node.NamedChild(i)
+		childStart := int(child.StartByte())
+		childEnd := int(child.EndByte())
+		if childStart > cursor {
+			builder.WriteString(source[cursor:childStart])
+		}
+		builder.WriteString(renderInlineMarkdown(child, source))
+		cursor = childEnd
+	}
+
+	return builder.String()
+}
+
+func renderInlineMarkdown(node *sitter.Node, source string) string {
+	switch node.Type() {
+	case "bold":
+		return "**" + renderInlineMarkdown(node.NamedChild(1), source) + "**"
+	case "italic":
+		return "*" + renderInlineMarkdown(node.NamedChild(1), source) + "*"
+	case "underline":
+		return "__" + renderInlineMarkdown(node.NamedChild(1), source) + "__"
+	case "inline_code":
+		return "`" + renderInlineMarkdown(node.NamedChild(1), source) + "`"
+	case "internal_link":
+		target := node.NamedChild(1).Content([]byte(source))
+		return "[" + target + "](" + target + ")"
+	case "text", "number", "string", "ticket", "compound_identifier", "date", "daterange", "time", "timerange", "datetime", "datetimerange", "tag_positive", "tag_negative", "tag_hash", "tag_context", "tag_danger", "tag_identifier", "external_link", "comment":
+		return node.Content([]byte(source))
+	}
+
+	if node.ChildCount() == 0 {
+		return node.Content([]byte(source))
+	}
+
+	builder := strings.Builder{}
+	start := int(node.StartByte())
+	end := int(node.EndByte())
+	cursor := start
+
+	for i := 0; i < int(node.ChildCount()); i++ {
+		child := node.Child(i)
+		childStart := int(child.StartByte())
+		childEnd := int(child.EndByte())
+		if childStart > cursor {
+			builder.WriteString(source[cursor:childStart])
+		}
+		if child.IsNamed() {
+			builder.WriteString(renderInlineMarkdown(child, source))
+		} else {
+			builder.WriteString(child.Content([]byte(source)))
+		}
+		cursor = childEnd
+	}
+
+	if cursor < end {
+		builder.WriteString(source[cursor:end])
+	}
+
+	return builder.String()
 }

@@ -7,7 +7,9 @@ let package = Package(
     products: [
         .library(name: "TreeSitterSyslang", targets: ["TreeSitterSyslang"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/tree-sitter/swift-tree-sitter", from: "0.25.0"),
+    ],
     targets: [
         .target(name: "TreeSitterSyslang",
                 path: ".",
@@ -36,13 +38,19 @@ let package = Package(
                 ],
                 sources: [
                     "src/parser.c",
-                    // NOTE: if your language has an external scanner, add it here.
+                    "src/scanner.c",
                 ],
                 resources: [
                     .copy("queries")
                 ],
                 publicHeadersPath: "bindings/swift",
-                cSettings: [.headerSearchPath("src")])
+                cSettings: [.headerSearchPath("src")]),
+        .testTarget(name: "TreeSitterSyslangTests",
+                    dependencies: [
+                        "TreeSitterSyslang",
+                        .product(name: "SwiftTreeSitter", package: "swift-tree-sitter"),
+                    ],
+                    path: "bindings/swift/TreeSitterSyslangTests")
     ],
     cLanguageStandard: .c11
 )

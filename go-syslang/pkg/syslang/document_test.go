@@ -74,6 +74,81 @@ func (s *DocumentTestSuite) TestPersonMeta() {
 	assert.Equal(s.T(), meta["name"], "Alice")
 }
 
+func (s *DocumentTestSuite) TestReservedMetaHelpers() {
+	source := `
+@meta
+  title: Code Project
+  root: /tmp/syslang
+  archived: TrUe
+@end`
+	doc, err := NewDocument(source)
+	assert.NoError(s.T(), err)
+
+	assert.Equal(s.T(), "/tmp/syslang", doc.GetProjectRoot())
+	assert.True(s.T(), doc.HasProjectRoot())
+	assert.True(s.T(), doc.IsArchived())
+	assert.Empty(s.T(), doc.ValidateMeta())
+}
+
+func (s *DocumentTestSuite) TestReservedMetaValidation() {
+	source := `
+@meta
+  root: projects/syslang
+  archived: maybe
+@end`
+	doc, err := NewDocument(source)
+	assert.NoError(s.T(), err)
+
+	issues := doc.ValidateMeta()
+	assert.Len(s.T(), issues, 2)
+	assert.Equal(s.T(), DocumentMetaKeyRoot, issues[0].Key)
+	assert.Equal(s.T(), "projects/syslang", issues[0].Value)
+	assert.Equal(s.T(), DocumentMetaKeyArchived, issues[1].Key)
+	assert.Equal(s.T(), "maybe", issues[1].Value)
+	assert.False(s.T(), doc.IsArchived())
+}
+
+func (s *DocumentTestSuite) TestFilterDocuments() {
+	documents := []*Document{
+		mustNewDocument(s.T(), `
+@meta
+  title: Life Project
+@end`),
+		mustNewDocument(s.T(), `
+@meta
+  title: Active Code Project
+  root: /tmp/active-project
+@end`),
+		mustNewDocument(s.T(), `
+@meta
+  title: Archived Code Project
+  root: /tmp/archived-project
+  archived: true
+@end`),
+	}
+
+	codeProjects := FilterDocuments(documents, DocumentFilterOptions{RequireProjectRoot: true})
+	assert.Len(s.T(), codeProjects, 2)
+	assert.Equal(s.T(), "Active Code Project", codeProjects[0].GetTitle())
+	assert.Equal(s.T(), "Archived Code Project", codeProjects[1].GetTitle())
+
+	activeProjects := FilterDocuments(documents, DocumentFilterOptions{
+		RequireProjectRoot: true,
+		ExcludeArchived:    true,
+	})
+	assert.Len(s.T(), activeProjects, 1)
+	assert.Equal(s.T(), "Active Code Project", activeProjects[0].GetTitle())
+}
+
+func mustNewDocument(t *testing.T, source string) *Document {
+	t.Helper()
+
+	doc, err := NewDocument(source)
+	assert.NoError(t, err)
+
+	return doc
+}
+
 func (s *DocumentTestSuite) TestToMarkdown() {
 	tests := []struct {
 		name     string
@@ -145,6 +220,19 @@ func (s *DocumentTestSuite) TestToMarkdown() {
 - List item 2
   - Nested item
 - List item 3
+`,
+		},
+		{
+			name: "Labeled List Items",
+			input: `- Labeled - list item
+- Super 2 labeled - list item
+- Labeled - list item - https://url.com
+- [[test]] - List item - https://url.com
+`,
+			expected: `- Labeled - list item
+- Super 2 labeled - list item
+- Labeled - list item - https://url.com
+- [test](test) - List item - https://url.com
 `,
 		},
 		{
