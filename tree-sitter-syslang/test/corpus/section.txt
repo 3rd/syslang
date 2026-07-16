@@ -40,3 +40,21 @@ Sections inside tasks and tasks inside sections
     (task_default (task_marker_default) (text_line (text)))
   )
 )
+
+==================
+Section marker without space degrades to text
+==================
+>nospace section
+---
+(document
+  (text_line (text)))
+
+==================
+Empty section marker is a valid empty section
+==================
+> 
+after
+---
+(document
+  (section (section_marker))
+  (text_line (text)))

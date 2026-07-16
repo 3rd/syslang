@@ -48,3 +48,51 @@ Label line inside task
     (list_item (list_item_marker) (text_line (text)))
   )
 )
+
+==================
+Label directly before bold keeps label node
+==================
+key:*b*
+---
+(document
+  (text_line (label) (bold (bold_start) (bold_content) (bold_end))))
+
+==================
+Label with space before bold is not dropped
+==================
+key: *b*
+---
+(document
+  (text_line (label) (bold (bold_start) (bold_content) (bold_end))))
+
+==================
+Label before internal link keeps label node
+==================
+key:[[t]]
+---
+(document
+  (text_line (label) (internal_link (internal_link_start) (internal_link_target) (internal_link_end))))
+
+==================
+Label directly before italic keeps both label and italic
+==================
+key:/italic/
+---
+(document
+  (text_line (label) (italic (italic_start) (italic_content) (italic_end))))
+
+==================
+Label directly before a path stays label plus text
+==================
+key:/usr/bin
+---
+(document
+  (text_line (label) (text)))
+
+==================
+Urls are unaffected by the label slash trigger
+==================
+see http://example.com ok
+---
+(document
+  (text_line (text) (external_link) (text)))

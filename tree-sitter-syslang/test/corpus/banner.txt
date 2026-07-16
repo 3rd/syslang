@@ -6,3 +6,13 @@ Banner
 (document
   (banner (banner_marker) (text_to_eol)
 ))
+
+==================
+Empty banner marker is a valid empty banner
+==================
+| 
+after
+---
+(document
+  (banner (banner_marker))
+  (text_line (text)))

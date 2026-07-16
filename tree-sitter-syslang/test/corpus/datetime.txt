@@ -68,3 +68,47 @@ Datetime range
   (text_line (datetimerange (datetime (date) (time)) (datetime (date) (time))))
 )
 
+
+==================
+Valid separators are dates
+==================
+2022-01-01
+2022.01.01
+2022/01/01
+---
+(document
+  (text_line (date))
+  (text_line (date))
+  (text_line (date)))
+
+==================
+Invalid separator is not a date
+==================
+2022x01y01
+---
+(document
+  (text_line (number) (text)))
+
+==================
+Date dash prose is text not a range error
+==================
+2024-03-01 - Initial release
+---
+(document
+  (text_line (date) (text)))
+
+==================
+Date dash word is text not a range error
+==================
+2022-01-01 - done
+---
+(document
+  (text_line (date) (text)))
+
+==================
+Datetime dash bare date does not fabricate an empty time
+==================
+from 2022-01-01 12:00 - 2022-01-02 onward
+---
+(document
+  (text_line (text) (datetime (date) (time)) (text) (date) (text)))

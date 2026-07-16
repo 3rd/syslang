@@ -37,3 +37,42 @@ Emoji document title
   )
 )
 
+
+==================
+Empty meta value does not swallow the next line
+==================
+@meta
+  title:
+  tags: x
+@end
+---
+(document
+  (document_meta
+    (document_meta_field (document_meta_field_key))
+    (document_meta_field (document_meta_field_key) (document_meta_field_value))))
+
+==================
+Form feed error does not swallow the next line
+==================
+ab
+clean line
+---
+(document
+  (text_line (text))
+  (text_line (text)))
+
+==================
+Emoji with skin tone modifier is a document title marker
+==================
+👍🏽 My title
+---
+(document
+  (document_title_basic (document_title_basic_marker) (text_to_eol)))
+
+==================
+Flag emoji is a document title marker
+==================
+🇷🇴 My title
+---
+(document
+  (document_title_basic (document_title_basic_marker) (text_to_eol)))

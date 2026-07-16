@@ -39,3 +39,26 @@ _underline_, _underline_ and _underline_.
     (underline (underline_start) (underline_content) (underline_end))
   )
 )
+
+==================
+Italic then underline
+==================
+x /a/_b_ y
+---
+(document
+  (text_line
+    (text)
+    (italic (italic_start) (italic_content) (italic_end))
+    (underline (underline_start) (underline_content) (underline_end))
+    (text)))
+
+==================
+Bold italic underline chain
+==================
+*a*/b/_c_
+---
+(document
+  (text_line
+    (bold (bold_start) (bold_content) (bold_end))
+    (italic (italic_start) (italic_content) (italic_end))
+    (underline (underline_start) (underline_content) (underline_end))))

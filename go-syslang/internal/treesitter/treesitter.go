@@ -11,7 +11,7 @@ import (
 	"sync"
 	"unsafe"
 
-	sitter "github.com/smacker/go-tree-sitter"
+	sitter "github.com/tree-sitter/go-tree-sitter"
 )
 
 var (
@@ -24,25 +24,46 @@ func GetSyslangLanguage() *sitter.Language {
 	return sitter.NewLanguage(ptr)
 }
 
-func NewParser() *sitter.Parser {
+func NewParser() (*sitter.Parser, error) {
 	parser := sitter.NewParser()
 	syslang := GetSyslangLanguage()
-	parser.SetLanguage(syslang)
-	return parser
+	if err := parser.SetLanguage(syslang); err != nil {
+		parser.Close()
+		return nil, err
+	}
+	return parser, nil
 }
 
 func NewQuery(query string) (*sitter.Query, error) {
-	return sitter.NewQuery([]byte(query), GetSyslangLanguage())
+	compiledQuery, err := sitter.NewQuery(GetSyslangLanguage(), query)
+	if err != nil {
+		return nil, err
+	}
+	return compiledQuery, nil
 }
 
-func Query(node *sitter.Node, queryString string) *sitter.QueryCursor {
+type QueryCursor struct {
+	cursor  *sitter.QueryCursor
+	matches sitter.QueryMatches
+}
+
+func (c *QueryCursor) NextMatch() (*sitter.QueryMatch, bool) {
+	match := c.matches.Next()
+	return match, match != nil
+}
+
+func (c *QueryCursor) Close() {
+	c.cursor.Close()
+}
+
+func Query(node *sitter.Node, queryString string) *QueryCursor {
 	queryCacheMutex.RLock()
 	query := queryCache[queryString]
 	queryCacheMutex.RUnlock()
 
 	if query == nil {
 		var err error
-		query, err = sitter.NewQuery([]byte(queryString), GetSyslangLanguage())
+		query, err = NewQuery(queryString)
 		if err != nil {
 			panic(fmt.Sprintf("error creating query: %s", err))
 		}
@@ -53,27 +74,36 @@ func Query(node *sitter.Node, queryString string) *sitter.QueryCursor {
 	}
 
 	cursor := sitter.NewQueryCursor()
-	cursor.Exec(query, node)
-	return cursor
+	return &QueryCursor{
+		cursor:  cursor,
+		matches: cursor.Matches(query, node, nil),
+	}
 }
 
 func QueryOne(node *sitter.Node, queryString string) *sitter.QueryMatch {
 	cursor := Query(node, queryString)
+	defer cursor.Close()
 	match, _ := cursor.NextMatch()
-	return match
+	if match == nil {
+		return nil
+	}
+
+	result := *match
+	result.Captures = append([]sitter.QueryCapture(nil), match.Captures...)
+	return &result
 }
 
 func PrintTree(node *sitter.Node) {
-	treeCursor := sitter.NewTreeCursor(node)
+	treeCursor := node.Walk()
 	defer treeCursor.Close()
 
-	rootNode := treeCursor.CurrentNode()
+	rootNode := treeCursor.Node()
 	level := 0
 
 	for {
-		currentNode := treeCursor.CurrentNode()
-		currentType := currentNode.Type()
-		currentFieldName := treeCursor.CurrentFieldName()
+		currentNode := treeCursor.Node()
+		currentType := currentNode.Kind()
+		currentFieldName := treeCursor.FieldName()
 
 		fieldInfo := ""
 		if currentFieldName != "" {
@@ -84,21 +114,21 @@ func PrintTree(node *sitter.Node) {
 			fmt.Printf("%s(%s%s)\n", strings.Repeat(" ", level*2), fieldInfo, currentType)
 		}
 
-		if treeCursor.GoToFirstChild() {
+		if treeCursor.GotoFirstChild() {
 			level++
 			continue
 		}
 
-		if treeCursor.GoToNextSibling() {
+		if treeCursor.GotoNextSibling() {
 			continue
 		}
 
 		for {
-			treeCursor.GoToParent()
-			if treeCursor.CurrentNode() == rootNode {
+			treeCursor.GotoParent()
+			if treeCursor.Node().Equals(*rootNode) {
 				return
 			}
-			if treeCursor.GoToNextSibling() {
+			if treeCursor.GotoNextSibling() {
 				level--
 				break
 			}

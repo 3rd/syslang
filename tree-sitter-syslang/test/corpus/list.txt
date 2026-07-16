@@ -54,3 +54,12 @@ List items
     )
   )
 )
+
+==================
+Inline label before emphasis works in a list item
+==================
+- key:*b*
+---
+(document
+  (list_item (list_item_marker)
+    (text_line (label) (bold (bold_start) (bold_content) (bold_end)))))

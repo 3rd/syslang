@@ -268,3 +268,29 @@ Complex task with multiple children including code
       (code_block_end))
     (text_line
       (text))))
+
+==================
+@end with trailing text stays content
+==================
+@code
+  content
+  @end fake
+@end
+---
+(document
+  (code_block
+    (code_block_start)
+    (code_block_content
+      (code_block_line)
+      (code_block_line))
+    (code_block_end)))
+
+==================
+Context tag starting with at-code does not open a code block
+==================
+@codebase is great
+[ ] real task after
+---
+(document
+  (text_line (tag_context) (text))
+  (task_default (task_marker_default) (text_line (text))))

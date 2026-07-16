@@ -9,3 +9,13 @@ A partially -- commented line.
   (text_line (text) (comment))
 )
 
+
+==================
+Empty comment is not an error
+==================
+-- 
+after
+---
+(document
+  (comment)
+  (text_line (text)))

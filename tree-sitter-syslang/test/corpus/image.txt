@@ -8,3 +8,23 @@ Images
   (image (image_start) (image_alt) (image_separator) (image_url) (image_end))
   (image (image_start) (image_alt) (image_separator) (image_url) (image_end))
 )
+
+==================
+Image indented under a task stays an image
+==================
+[ ] task
+  ![a](b.png)
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (image (image_start) (image_alt) (image_separator) (image_url) (image_end))))
+
+==================
+Image indented under a list item stays an image
+==================
+- item
+  ![a](b.png)
+---
+(document
+  (list_item (list_item_marker) (text_line (text))
+    (image (image_start) (image_alt) (image_separator) (image_url) (image_end))))

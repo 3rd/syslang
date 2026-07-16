@@ -17,3 +17,21 @@ Double horizontal rule
   (double_horizontal_rule)
 )
 
+
+==================
+Rule with trailing text at document start parses like elsewhere
+==================
+--- x
+---
+(document
+  (horizontal_rule)
+  (text_line (text)))
+
+==================
+Double rule with trailing text at document start parses like elsewhere
+==================
+=== x
+---
+(document
+  (double_horizontal_rule)
+  (text_line (text)))

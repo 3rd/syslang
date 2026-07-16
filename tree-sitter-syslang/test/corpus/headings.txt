@@ -16,3 +16,13 @@ Headings
   (heading (heading_5 (heading_5_marker) (text_to_eol)))
   (heading (heading_6 (heading_6_marker) (text_to_eol)))
 )
+
+==================
+Empty heading marker is a valid empty heading
+==================
+# 
+after
+---
+(document
+  (heading (heading_1 (heading_1_marker)))
+  (text_line (text)))

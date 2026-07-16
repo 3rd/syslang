@@ -2,14 +2,13 @@
 package syslang
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
 
 	"github.com/3rd/syslang/go-syslang/internal/treesitter"
-	sitter "github.com/smacker/go-tree-sitter"
+	sitter "github.com/tree-sitter/go-tree-sitter"
 )
 
 type DocumentMeta map[string]string
@@ -17,6 +16,7 @@ type DocumentMeta map[string]string
 const (
 	DocumentMetaKeyRoot     = "root"
 	DocumentMetaKeyArchived = "archived"
+	parserReadChunkSize     = 256
 )
 
 type DocumentMetaValidationIssue struct {
@@ -32,23 +32,43 @@ type DocumentFilterOptions struct {
 
 type Document struct {
 	source string
-	tree   sitter.Tree
+	tree   *sitter.Tree
 }
 
 func NewDocument(source string) (*Document, error) {
-	var parser = treesitter.NewParser()
-	tree, err := parser.ParseCtx(context.Background(), nil, []byte(source))
+	parser, err := treesitter.NewParser()
 	if err != nil {
 		return nil, err
 	}
+	defer parser.Close()
+
+	sourceBytes := []byte(source)
+	tree := parser.ParseWithOptions(func(offset int, _ sitter.Point) []byte {
+		if offset >= len(sourceBytes) {
+			return nil
+		}
+		return sourceBytes[offset:min(offset+parserReadChunkSize, len(sourceBytes))]
+	}, nil, nil)
+	if tree == nil {
+		return nil, fmt.Errorf("failed to parse source")
+	}
 	if tree.RootNode().HasError() {
+		tree.Close()
 		return nil, fmt.Errorf("failed to parse source")
 	}
 
 	return &Document{
 		source,
-		*tree,
+		tree,
 	}, nil
+}
+
+func (d *Document) Close() {
+	if d.tree == nil {
+		return
+	}
+	d.tree.Close()
+	d.tree = nil
 }
 
 func (d *Document) GetMeta() DocumentMeta {
@@ -63,18 +83,20 @@ func (d *Document) queryMeta() DocumentMeta {
 	meta := DocumentMeta{}
 	cursor := treesitter.Query(d.tree.RootNode(), `
     (document_meta
-      (document_meta_field
-        (document_meta_field_key) @key
-        (document_meta_field_value) @value
-      )
+      (document_meta_field) @field
     )`)
+	defer cursor.Close()
 	for {
 		match, _ := cursor.NextMatch()
 		if match == nil {
 			break
 		}
-		key := match.Captures[0].Node.Content([]byte(d.source))
-		value := match.Captures[1].Node.Content([]byte(d.source))
+		field := match.Captures[0].Node
+		key := field.ChildByFieldName("key").Utf8Text([]byte(d.source))
+		value := ""
+		if valueNode := field.ChildByFieldName("value"); valueNode != nil {
+			value = valueNode.Utf8Text([]byte(d.source))
+		}
 		meta[key] = value
 	}
 
@@ -190,15 +212,15 @@ type JSONNode struct {
 }
 
 func (d *Document) ToJSON() string {
-	treeCursor := sitter.NewTreeCursor(d.tree.RootNode())
+	treeCursor := d.tree.RootNode().Walk()
 	defer treeCursor.Close()
 
-	rootCursorNode := treeCursor.CurrentNode()
+	rootCursorNode := treeCursor.Node()
 	var parentJSONNode *JSONNode
 
 	for {
-		currentNode := treeCursor.CurrentNode()
-		currentType := currentNode.Type()
+		currentNode := treeCursor.Node()
+		currentType := currentNode.Kind()
 
 		node := &JSONNode{
 			Type:     currentType,
@@ -207,31 +229,31 @@ func (d *Document) ToJSON() string {
 		}
 
 		if currentNode.ChildCount() == 0 {
-			node.Text = currentNode.Content([]byte(d.source))
+			node.Text = currentNode.Utf8Text([]byte(d.source))
 		}
 
 		if parentJSONNode != nil {
 			parentJSONNode.Children = append(parentJSONNode.Children, node)
 		}
 
-		if treeCursor.GoToFirstChild() {
+		if treeCursor.GotoFirstChild() {
 			parentJSONNode = node
 			continue
 		}
 
-		if treeCursor.GoToNextSibling() {
+		if treeCursor.GotoNextSibling() {
 			continue
 		}
 
 		for {
-			treeCursor.GoToParent()
+			treeCursor.GotoParent()
 
-			if treeCursor.GoToNextSibling() {
+			if treeCursor.GotoNextSibling() {
 				parentJSONNode = parentJSONNode.Parent
 				break
 			}
 
-			if treeCursor.CurrentNode() == rootCursorNode {
+			if treeCursor.Node().Equals(*rootCursorNode) {
 				var root = parentJSONNode
 				for root.Parent != nil {
 					root = root.Parent
@@ -254,25 +276,30 @@ func (d *Document) ToMarkdown() string {
 }
 
 func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source string, depth int, listDepth int) {
-	switch node.Type() {
+	switch node.Kind() {
 	case "document":
 		for i := 0; i < int(node.ChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.Child(i), source, depth, listDepth)
+			convertNodeToMarkdown(builder, node.Child(uint(i)), source, depth, listDepth)
 		}
 	case "document_title_basic":
 		builder.WriteString("# ")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		builder.WriteString(node.NamedChild(1).Utf8Text([]byte(source)))
 		builder.WriteString("\n\n")
 	case "outline_1", "outline_2", "outline_3", "outline_4", "outline_5", "outline_6":
 		if depth > 0 && !strings.HasSuffix(builder.String(), "\n\n") {
 			builder.WriteString("\n")
 		}
-		headingLevel := int(node.Type()[8] - '0')
+		headingLevel := int(node.Kind()[8] - '0')
 		builder.WriteString(strings.Repeat("#", headingLevel) + " ")
-		builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+		childIndex := 1
+		title := node.NamedChild(uint(childIndex))
+		if title != nil && title.StartPosition().Row == node.StartPosition().Row && title.Kind() == "text_to_eol" {
+			builder.WriteString(title.Utf8Text([]byte(source)))
+			childIndex++
+		}
 		builder.WriteString("\n\n")
-		for i := 2; i < int(node.NamedChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, 0)
+		for i := childIndex; i < int(node.NamedChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.NamedChild(uint(i)), source, depth+1, 0)
 		}
 	case "task_default", "task_active", "task_done", "task_cancelled":
 		prefix := map[string]string{
@@ -280,13 +307,19 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 			"task_active":    "- [-] ",
 			"task_done":      "- [x] ",
 			"task_cancelled": "- [_] ",
-		}[node.Type()]
+		}[node.Kind()]
 		builder.WriteString(strings.Repeat("  ", listDepth))
 		builder.WriteString(prefix)
-		builder.WriteString(strings.TrimRight(renderInlineMarkdown(node.NamedChild(1), source), "\n"))
+		childIndex := 1
+		title := node.NamedChild(uint(childIndex))
+		if title != nil && title.StartPosition().Row == node.StartPosition().Row &&
+			(title.Kind() == "text_line" || title.Kind() == "text_to_eol") {
+			builder.WriteString(strings.TrimRight(renderInlineMarkdown(title, source), "\n"))
+			childIndex++
+		}
 		builder.WriteString("\n")
-		for i := 2; i < int(node.NamedChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, listDepth+1)
+		for i := childIndex; i < int(node.NamedChildCount()); i++ {
+			convertNodeToMarkdown(builder, node.NamedChild(uint(i)), source, depth+1, listDepth+1)
 		}
 	case "list_item":
 		builder.WriteString(strings.Repeat("  ", listDepth))
@@ -295,16 +328,16 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 		builder.WriteString(strings.TrimRight(renderInlineChildRangeMarkdown(node, source, 1, inlineEnd), "\n"))
 		builder.WriteString("\n")
 		for i := inlineEnd; i < int(node.NamedChildCount()); i++ {
-			convertNodeToMarkdown(builder, node.NamedChild(i), source, depth+1, listDepth+1)
+			convertNodeToMarkdown(builder, node.NamedChild(uint(i)), source, depth+1, listDepth+1)
 		}
 	case "code_block":
 		builder.WriteString("```")
-		if node.NamedChildCount() > 1 && node.NamedChild(0).Type() == "code_block_start" && node.NamedChild(0).NamedChildCount() > 0 {
-			builder.WriteString(node.NamedChild(0).NamedChild(0).Content([]byte(source)))
+		if node.NamedChildCount() > 1 && node.NamedChild(0).Kind() == "code_block_start" && node.NamedChild(0).NamedChildCount() > 0 {
+			builder.WriteString(node.NamedChild(0).NamedChild(0).Utf8Text([]byte(source)))
 		}
 		builder.WriteString("\n")
 		if node.NamedChildCount() > 1 {
-			builder.WriteString(node.NamedChild(1).Content([]byte(source)))
+			builder.WriteString(node.NamedChild(1).Utf8Text([]byte(source)))
 		}
 		builder.WriteString("\n```\n\n")
 	case "text_line", "text_to_eol":
@@ -318,7 +351,7 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 	case "double_horizontal_rule":
 		builder.WriteString("***\n")
 	case "internal_link":
-		target := node.NamedChild(1).Content([]byte(source))
+		target := node.NamedChild(1).Utf8Text([]byte(source))
 		builder.WriteString("[")
 		builder.WriteString(target)
 		builder.WriteString("](")
@@ -326,14 +359,14 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 		builder.WriteString(")")
 	default:
 		if node.ChildCount() == 0 {
-			builder.WriteString(node.Content([]byte(source)))
+			builder.WriteString(node.Utf8Text([]byte(source)))
 		} else {
 			for i := 0; i < int(node.ChildCount()); i++ {
-				node := node.Child(i)
+				node := node.Child(uint(i))
 				if node.IsNamed() {
 					convertNodeToMarkdown(builder, node, source, depth, listDepth)
 				} else {
-					builder.WriteString(node.Content([]byte(source)))
+					builder.WriteString(node.Utf8Text([]byte(source)))
 				}
 			}
 		}
@@ -342,8 +375,8 @@ func convertNodeToMarkdown(builder *strings.Builder, node *sitter.Node, source s
 
 func listItemInlineEnd(node *sitter.Node) int {
 	for i := 1; i < int(node.NamedChildCount()); i++ {
-		child := node.NamedChild(i)
-		if child.Type() == "text_line" {
+		child := node.NamedChild(uint(i))
+		if child.Kind() == "text_line" {
 			if i == 1 {
 				return 2
 			}
@@ -358,7 +391,7 @@ func listItemInlineEnd(node *sitter.Node) int {
 }
 
 func isInlineListItemChild(node *sitter.Node) bool {
-	switch node.Type() {
+	switch node.Kind() {
 	case "list_item_label", "list_item_label_marker", "text", "number", "string", "ticket", "compound_identifier", "date", "daterange", "time", "timerange", "datetime", "datetimerange", "tag_positive", "tag_negative", "tag_hash", "tag_context", "tag_danger", "tag_identifier", "external_link", "comment", "bold", "italic", "underline", "inline_code", "internal_link":
 		return true
 	default:
@@ -372,10 +405,10 @@ func renderInlineChildRangeMarkdown(node *sitter.Node, source string, start int,
 	}
 
 	builder := strings.Builder{}
-	cursor := int(node.NamedChild(start).StartByte())
+	cursor := int(node.NamedChild(uint(start)).StartByte())
 
 	for i := start; i < end; i++ {
-		child := node.NamedChild(i)
+		child := node.NamedChild(uint(i))
 		childStart := int(child.StartByte())
 		childEnd := int(child.EndByte())
 		if childStart > cursor {
@@ -389,7 +422,7 @@ func renderInlineChildRangeMarkdown(node *sitter.Node, source string, start int,
 }
 
 func renderInlineMarkdown(node *sitter.Node, source string) string {
-	switch node.Type() {
+	switch node.Kind() {
 	case "bold":
 		return "**" + renderInlineMarkdown(node.NamedChild(1), source) + "**"
 	case "italic":
@@ -399,14 +432,14 @@ func renderInlineMarkdown(node *sitter.Node, source string) string {
 	case "inline_code":
 		return "`" + renderInlineMarkdown(node.NamedChild(1), source) + "`"
 	case "internal_link":
-		target := node.NamedChild(1).Content([]byte(source))
+		target := node.NamedChild(1).Utf8Text([]byte(source))
 		return "[" + target + "](" + target + ")"
 	case "text", "number", "string", "ticket", "compound_identifier", "date", "daterange", "time", "timerange", "datetime", "datetimerange", "tag_positive", "tag_negative", "tag_hash", "tag_context", "tag_danger", "tag_identifier", "external_link", "comment":
-		return node.Content([]byte(source))
+		return node.Utf8Text([]byte(source))
 	}
 
 	if node.ChildCount() == 0 {
-		return node.Content([]byte(source))
+		return node.Utf8Text([]byte(source))
 	}
 
 	builder := strings.Builder{}
@@ -415,7 +448,7 @@ func renderInlineMarkdown(node *sitter.Node, source string) string {
 	cursor := start
 
 	for i := 0; i < int(node.ChildCount()); i++ {
-		child := node.Child(i)
+		child := node.Child(uint(i))
 		childStart := int(child.StartByte())
 		childEnd := int(child.EndByte())
 		if childStart > cursor {
@@ -424,7 +457,7 @@ func renderInlineMarkdown(node *sitter.Node, source string) string {
 		if child.IsNamed() {
 			builder.WriteString(renderInlineMarkdown(child, source))
 		} else {
-			builder.WriteString(child.Content([]byte(source)))
+			builder.WriteString(child.Utf8Text([]byte(source)))
 		}
 		cursor = childEnd
 	}

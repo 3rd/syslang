@@ -58,6 +58,22 @@ func (s *DocumentTestSuite) TestDefaultMeta() {
 	assert.Equal(s.T(), "custom value", meta["custom"])
 }
 
+func (s *DocumentTestSuite) TestEmptyMetaValue() {
+	doc, err := NewDocument(`
+@meta
+  title:
+  custom: custom value
+@end`)
+	s.Require().NoError(err)
+	defer doc.Close()
+
+	meta := doc.GetMeta()
+	value, ok := meta["title"]
+	s.True(ok)
+	s.Empty(value)
+	s.Equal("custom value", meta["custom"])
+}
+
 func (s *DocumentTestSuite) TestPersonMeta() {
 	source := `
 @meta
@@ -182,6 +198,11 @@ func (s *DocumentTestSuite) TestToMarkdown() {
 ###### Outline 6
 
 `,
+		},
+		{
+			name:     "Empty Outline",
+			input:    "* \nafter\n",
+			expected: "# \n\nafter\n",
 		},
 		{
 			name: "Tasks",

@@ -21,3 +21,19 @@ Internal link
     )
   )
 )
+
+==================
+Unclosed double bracket degrades to text
+==================
+a [[b
+---
+(document
+  (text_line (text)))
+
+==================
+Array literal prose degrades to text
+==================
+nums = [[1,2],[3,4]]
+---
+(document
+  (text_line (text)))

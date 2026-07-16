@@ -240,38 +240,46 @@ func QueryTasks(document *Document) []Task {
 
 	defaultTasks := queryTasksWithStatus(document, `
     (task_default
-      (task_marker_default)
-      . (text_line) @title
-      (task_schedule)* @schedule
-      (task_session)* @session
-      (task_completion)* @completion
+      (task_marker_default) @marker
+      . (text_line)? @title
+      [
+        (task_schedule) @schedule
+        (task_session) @session
+        (task_completion) @completion
+      ]*
     )`,
 		TaskStatusDefault)
 	activeTasks := queryTasksWithStatus(document, `
     (task_active
-      (task_marker_active)
-      . (text_line) @title
-      (task_schedule)* @schedule
-      (task_session)* @session
-      (task_completion)* @completion
+      (task_marker_active) @marker
+      . (text_line)? @title
+      [
+        (task_schedule) @schedule
+        (task_session) @session
+        (task_completion) @completion
+      ]*
     )`,
 		TaskStatusActive)
 	doneTasks := queryTasksWithStatus(document, `
     (task_done
-      (task_marker_done)
-      . (text_to_eol) @title
-      (task_schedule)* @schedule
-      (task_session)* @session
-      (task_completion)* @completion
+      (task_marker_done) @marker
+      . (text_to_eol)? @title
+      [
+        (task_schedule) @schedule
+        (task_session) @session
+        (task_completion) @completion
+      ]*
     )`,
 		TaskStatusDone)
 	cancelledTasks := queryTasksWithStatus(document, `
     (task_cancelled
-      (task_marker_cancelled)
-      .(text_to_eol) @title
-      (task_schedule)* @schedule
-      (task_session)* @session
-      (task_completion)* @completion
+      (task_marker_cancelled) @marker
+      . (text_to_eol)? @title
+      [
+        (task_schedule) @schedule
+        (task_session) @session
+        (task_completion) @completion
+      ]*
     )`,
 		TaskStatusCancelled)
 
@@ -317,6 +325,7 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 	tasks := []Task{}
 
 	cursor := treesitter.Query(document.tree.RootNode(), queryString)
+	defer cursor.Close()
 
 	for {
 		taskMatch, _ := cursor.NextMatch()
@@ -328,9 +337,17 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 			Status: status,
 		}
 
-		// title
-		title := taskMatch.Captures[0].Node.Content([]byte(document.source))
-		title = strings.TrimRight(title, "\n")
+		marker := taskMatch.Captures[0].Node
+		contentCaptureIndex := 1
+		title := ""
+		if len(taskMatch.Captures) > contentCaptureIndex {
+			titleCapture := taskMatch.Captures[contentCaptureIndex].Node
+			if titleCapture.StartPosition().Row == marker.StartPosition().Row &&
+				(titleCapture.Kind() == "text_line" || titleCapture.Kind() == "text_to_eol") {
+				title = strings.TrimRight(titleCapture.Utf8Text([]byte(document.source)), "\n")
+				contentCaptureIndex++
+			}
+		}
 
 		// priority
 		re := regexp.MustCompile(`^(.+)!(\d+)$`)
@@ -346,7 +363,7 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 		}
 
 		// position
-		line := taskMatch.Captures[0].Node.StartPoint().Row
+		line := uint32(marker.StartPosition().Row)
 		task.Line = line
 
 		// line text
@@ -354,58 +371,85 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 		task.LineText = lines[line]
 
 		// content
-		for _, capture := range taskMatch.Captures[1:] {
+		for _, capture := range taskMatch.Captures[contentCaptureIndex:] {
 
 			// sessions
-			if capture.Node.Type() == "task_session" {
+			if capture.Node.Kind() == "task_session" {
 				var session *TaskSession
 
 				// Session: 2006.01.02 15:04 - 2006.01.03 15:04 (task_session (datetimerange (datetime (date) (time)) (datetime (date) (time))))
-				match := treesitter.QueryOne(capture.Node, `
+				match := treesitter.QueryOne(&capture.Node, `
           (task_session
           (datetimerange
             (datetime (date) @start_date (time) @start_time)
             (datetime (date) @end_date (time) @end_time)
           ))`)
 				if match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
-					endDateString := match.Captures[2].Node.Content([]byte(document.source))
-					endTimeString := match.Captures[3].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+					endDateString := match.Captures[2].Node.Utf8Text([]byte(document.source))
+					endTimeString := match.Captures[3].Node.Utf8Text([]byte(document.source))
 
 					parsedSession := NewTaskSessionFromStr(startDateString, startTimeString, &endDateString, &endTimeString)
-					parsedSession.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSession.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					session = parsedSession
 				}
 
 				// Session: 2006.01.02 15:04 - 16:05 (task_session (datetimerange (datetime (date) (time)) (time)))
-				match = treesitter.QueryOne(capture.Node, `
+				match = treesitter.QueryOne(&capture.Node, `
           (task_session (datetimerange
             (datetime (date) @start_date (time) @start_time)
             (time) @end_time
           ))`)
 				if session == nil && match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
-					endTimeString := match.Captures[2].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+					endTimeString := match.Captures[2].Node.Utf8Text([]byte(document.source))
 
 					parsedSession := NewTaskSessionFromStr(startDateString, startTimeString, nil, &endTimeString)
-					parsedSession.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSession.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					session = parsedSession
 				}
 
 				// Session: 2006.01.02 15:04 (task_session (datetime (date) (time)))
-				match = treesitter.QueryOne(capture.Node, `
+				match = treesitter.QueryOne(&capture.Node, `
           (task_session (datetime
             (date) @start_date
             (time) @start_time
           ))`)
 				if session == nil && match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
 
 					parsedSession := NewTaskSessionFromStr(startDateString, startTimeString, nil, nil)
-					parsedSession.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSession.Line = uint32(match.Captures[0].Node.StartPosition().Row)
+					session = parsedSession
+				}
+
+				// Session: 2006.01.02 - 2006.01.03
+				match = treesitter.QueryOne(&capture.Node, `
+          (task_session
+            (daterange
+              (date) @start_date
+              (date) @end_date
+            )
+          )`)
+				if session == nil && match != nil {
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					endDateString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+
+					parsedSession := NewTaskSessionFromStr(startDateString, "00:00", &endDateString, nil)
+					parsedSession.Line = uint32(match.Captures[0].Node.StartPosition().Row)
+					session = parsedSession
+				}
+
+				// Session: 2006.01.02
+				match = treesitter.QueryOne(&capture.Node, `(task_session (date) @start_date)`)
+				if session == nil && match != nil {
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+
+					parsedSession := NewTaskSessionFromStr(startDateString, "00:00", nil, nil)
+					parsedSession.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					session = parsedSession
 				}
 
@@ -415,11 +459,11 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 			}
 
 			// schedule
-			if capture.Node.Type() == "task_schedule" {
+			if capture.Node.Kind() == "task_schedule" {
 				var schedule *TaskSchedule
 
 				// Schedule: 2006.01.02 15:04 - 2006.01.03 15:04
-				match := treesitter.QueryOne(capture.Node, `
+				match := treesitter.QueryOne(&capture.Node, `
           (task_schedule
             (datetimerange
               (datetime (date) @start_date (time) @start_time)
@@ -427,18 +471,18 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
             )
           )`)
 				if match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
-					endDateString := match.Captures[2].Node.Content([]byte(document.source))
-					endTimeString := match.Captures[3].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+					endDateString := match.Captures[2].Node.Utf8Text([]byte(document.source))
+					endTimeString := match.Captures[3].Node.Utf8Text([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, &endDateString, &endTimeString)
-					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSchedule.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					schedule = &parsedSchedule
 				}
 
 				// Schedule: 2006.01.02 15:04 - 16:05
-				match = treesitter.QueryOne(capture.Node, `
+				match = treesitter.QueryOne(&capture.Node, `
 				      (task_schedule
 				        (datetimerange
 				          (datetime (date) @start_date (time) @start_time)
@@ -446,51 +490,74 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 				        )
 				      )`)
 				if schedule == nil && match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
-					endTimeString := match.Captures[2].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+					endTimeString := match.Captures[2].Node.Utf8Text([]byte(document.source))
 
 					// pp.Println("start date string", startDateString)
 					// pp.Println("start time string", startTimeString)
 					// pp.Println("end time string", endTimeString)
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, nil, &endTimeString)
-					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSchedule.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					schedule = &parsedSchedule
 				}
 
 				// Schedule: 2006.01.02 15:04
-				match = treesitter.QueryOne(capture.Node, `
+				match = treesitter.QueryOne(&capture.Node, `
           (task_schedule
             (datetime (date) @start_date (time) @start_time)
             (task_recurrence)? @recurrence
           )
         `)
 				if schedule == nil && match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, &startTimeString, nil, nil)
-					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSchedule.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					schedule = &parsedSchedule
 
 					if len(match.Captures) > 2 {
-						recurrenceStr := match.Captures[2].Node.Content([]byte(document.source))
+						recurrenceStr := match.Captures[2].Node.Utf8Text([]byte(document.source))
+						schedule.Repeat = stripRecurrenceString(recurrenceStr)
+					}
+				}
+
+				// Schedule: 2006.01.02 - 2006.01.03
+				match = treesitter.QueryOne(&capture.Node, `
+          (task_schedule
+            (daterange
+              (date) @start_date
+              (date) @end_date
+            )
+            (task_recurrence)? @recurrence
+          )`)
+				if schedule == nil && match != nil {
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					endDateString := match.Captures[1].Node.Utf8Text([]byte(document.source))
+
+					parsedSchedule := NewTaskScheduleFromStr(startDateString, nil, &endDateString, nil)
+					parsedSchedule.Line = uint32(match.Captures[0].Node.StartPosition().Row)
+					schedule = &parsedSchedule
+
+					if len(match.Captures) > 2 {
+						recurrenceStr := match.Captures[2].Node.Utf8Text([]byte(document.source))
 						schedule.Repeat = stripRecurrenceString(recurrenceStr)
 					}
 				}
 
 				// Schedule: 2006.01.02
-				match = treesitter.QueryOne(capture.Node, `(task_schedule (date) @start_date (task_recurrence)? @recurrence)`)
+				match = treesitter.QueryOne(&capture.Node, `(task_schedule (date) @start_date (task_recurrence)? @recurrence)`)
 				if match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
 
 					parsedSchedule := NewTaskScheduleFromStr(startDateString, nil, nil, nil)
-					parsedSchedule.Line = match.Captures[0].Node.StartPoint().Row
+					parsedSchedule.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					schedule = &parsedSchedule
 
 					if len(match.Captures) > 1 {
-						recurrenceStr := match.Captures[1].Node.Content([]byte(document.source))
+						recurrenceStr := match.Captures[1].Node.Utf8Text([]byte(document.source))
 						schedule.Repeat = stripRecurrenceString(recurrenceStr)
 					}
 				}
@@ -498,21 +565,31 @@ func queryTasksWithStatus(document *Document, queryString string, status TaskSta
 				task.Schedule = schedule
 			}
 
-			if capture.Node.Type() == "task_completion" {
+			if capture.Node.Kind() == "task_completion" {
 				var completion *TaskCompletion
 
 				// Completion: 2006.01.02 15:04
-				match := treesitter.QueryOne(capture.Node, `
+				match := treesitter.QueryOne(&capture.Node, `
           (task_completion
             (datetime (date) @start_date (time) @start_time)
           )
         `)
 				if match != nil {
-					startDateString := match.Captures[0].Node.Content([]byte(document.source))
-					startTimeString := match.Captures[1].Node.Content([]byte(document.source))
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+					startTimeString := match.Captures[1].Node.Utf8Text([]byte(document.source))
 
 					parsedCompletion := NewTaskCompletionFromStr(startDateString, startTimeString)
-					parsedCompletion.Line = match.Captures[0].Node.StartPoint().Row
+					parsedCompletion.Line = uint32(match.Captures[0].Node.StartPosition().Row)
+					completion = &parsedCompletion
+				}
+
+				// Completion: 2006.01.02
+				match = treesitter.QueryOne(&capture.Node, `(task_completion (date) @start_date)`)
+				if completion == nil && match != nil {
+					startDateString := match.Captures[0].Node.Utf8Text([]byte(document.source))
+
+					parsedCompletion := NewTaskCompletionFromStr(startDateString, "00:00")
+					parsedCompletion.Line = uint32(match.Captures[0].Node.StartPosition().Row)
 					completion = &parsedCompletion
 				}
 

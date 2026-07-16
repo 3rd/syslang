@@ -9,16 +9,39 @@ Not a [ ] task
   [ ] Level 2 task
 [x] Level 0 task
 ---
+
 (document
-  (text_line (text))
-  (task_default (task_marker_default) (text_line (text) (number) (text)))
+  (text_line
+    (text))
+  (task_default
+    (task_marker_default)
+    (text_line
+      (text)
+      (number)
+      (text)))
   (task_active
-    (task_marker_active) (text_line (text) (number) (text))
-      (task_default (task_marker_default) (text_line (text) (number) (text))
-        (text_line (text)))
-      (task_default (task_marker_default) (text_line (text) (number) (text)))
-  )
-  (task_done (task_marker_done) (text_to_eol)))
+    (task_marker_active)
+    (text_line
+      (text)
+      (number)
+      (text))
+    (task_default
+      (task_marker_default)
+      (text_line
+        (text)
+        (number)
+        (text))
+      (text_line
+        (text)))
+    (task_default
+      (task_marker_default)
+      (text_line
+        (text)
+        (number)
+        (text))))
+  (task_done
+    (task_marker_done)
+    (text_to_eol)))
 
 ==================
 Task types
@@ -28,13 +51,16 @@ Task types
 [x] Done
 [_] Cancelled
 ---
+
 (document
   (task_default
     (task_marker_default)
-    (text_line (text)))
+    (text_line
+      (text)))
   (task_active
     (task_marker_active)
-    (text_line (text)))
+    (text_line
+      (text)))
   (task_done
     (task_marker_done)
     (text_to_eol))
@@ -49,14 +75,24 @@ Task session
   Session: 2022-01-01 10:00 - 2022-01-01 11:00
   Session: 2022-01-01 10:00
 ---
+
 (document
   (task_default
-    (task_marker_default) (text_line (text))
+    (task_marker_default)
+    (text_line
+      (text))
     (task_session
-      (datetimerange (datetime (date) (time)) (datetime (date) (time))))
+      (datetimerange
+        (datetime
+          (date)
+          (time))
+        (datetime
+          (date)
+          (time))))
     (task_session
-      (datetime (date) (time))))
-)
+      (datetime
+        (date)
+        (time)))))
 
 ==================
 Task schedule
@@ -67,12 +103,32 @@ Task schedule
   Schedule: 2022-01-01 10:00-10:30
   Schedule: 2022-01-01 10:00 - 2022-01-01 11:00
 ---
+
 (document
-  (task_default (task_marker_default) (text_line (text))
-    (task_schedule (date))
-    (task_schedule (datetime (date) (time)))
-    (task_schedule (datetimerange (datetime (date) (time)) (time)))
-    (task_schedule (datetimerange (datetime (date) (time)) (datetime (date) (time))))))
+  (task_default
+    (task_marker_default)
+    (text_line
+      (text))
+    (task_schedule
+      (date))
+    (task_schedule
+      (datetime
+        (date)
+        (time)))
+    (task_schedule
+      (datetimerange
+        (datetime
+          (date)
+          (time))
+        (time)))
+    (task_schedule
+      (datetimerange
+        (datetime
+          (date)
+          (time))
+        (datetime
+          (date)
+          (time))))))
 
 ==================
 Task recurrence and completion
@@ -82,18 +138,122 @@ Task recurrence and completion
   Schedule: 2022-01-01 @daily
   Done: 2022-01-01 10:00
 ---
+
+(document
+  (task_default
+    (task_marker_default)
+    (text_line
+      (text))
+    (task_schedule
+      (datetime
+        (date)
+        (time))
+      (task_recurrence))
+    (task_schedule
+      (date)
+      (task_recurrence))
+    (task_completion
+      (datetime
+        (date)
+        (time)))))
+
+==================
+Session accepts a bare date like schedule does
+==================
+[ ] T
+  Session: 2022-01-01
+---
+
+(document
+  (task_default
+    (task_marker_default)
+    (text_line
+      (text))
+    (task_session
+      (date))))
+
+==================
+Bracket marker without trailing space is text
+==================
+[ ]nospace
+---
+
+(document
+  (text_line
+    (text)))
+
+==================
+Malformed schedule range keeps following task at top level
+==================
+[ ] A
+  Schedule: 2022-01-01 10:00 - 2022-01-02
+[ ] B
+---
+
 (document
   (task_default (task_marker_default) (text_line (text))
     (task_schedule
-      (datetime (date) (time))
-      (task_recurrence)
-    )
-    (task_schedule
-      (date)
-      (task_recurrence)
-    )
+      (ERROR (datetime (date) (time)) (list_item_label_marker))
+      (date)))
+  (task_default (task_marker_default) (text_line (text))))
+
+==================
+Done accepts a bare date like schedule
+==================
+[ ] t
+  Done: 2022-01-01
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (task_completion (date))))
+
+==================
+Session with trailing annotation keeps the session node
+==================
+[ ] t
+  Session: 2022-01-01 10:00 late note
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (task_session (datetime (date) (time)) (text_to_eol))))
+
+==================
+Done with trailing annotation keeps the completion node
+==================
+[ ] t
+  Done: 2022-01-01 10:00 finished early
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (task_completion (datetime (date) (time)) (text_to_eol))))
+
+==================
+Empty task marker is a valid empty task
+==================
+[ ] 
+after
+---
+(document
+  (task_default (task_marker_default))
+  (text_line (text)))
+
+==================
+Inline label before emphasis works in a task title
+==================
+[ ] key:*b*
+---
+(document
+  (task_default (task_marker_default)
+    (text_line (label) (bold (bold_start) (bold_content) (bold_end)))))
+
+==================
+Unsupported completion range is an error
+==================
+[ ] t
+  Done: 2022-01-01 - 2022-01-02
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
     (task_completion
-      (datetime (date) (time))
-    )
-  )
-)
+      (ERROR (date) (list_item_label_marker))
+      (date))))

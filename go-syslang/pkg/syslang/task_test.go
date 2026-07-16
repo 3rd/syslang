@@ -256,6 +256,65 @@ func (s *SyslangTestSuite) TestTaskComplete() {
 	assert.Equal(s.T(), completions, tasks[0].Completions)
 }
 
+func (s *SyslangTestSuite) TestTaskCompleteWithDate() {
+	document, err := NewDocument(`[ ] task
+  Done: 2020-01-01
+[ ] following
+`)
+	s.Require().NoError(err)
+	defer document.Close()
+
+	tasks := QueryTasks(document)
+	s.Require().Len(tasks, 2)
+	s.Require().Len(tasks[0].Completions, 1)
+	s.Equal("2020-01-01 00:00", tasks[0].Completions[0].Start.Format("2006-01-02 15:04"))
+}
+
+func (s *SyslangTestSuite) TestTaskDateOnlySessionsAndScheduleRange() {
+	document, err := NewDocument(`[ ] task
+  Session: 2020-01-01
+  Session: 2020-01-02 - 2020-01-03
+  Schedule: 2020-01-04 - 2020-01-05
+`)
+	s.Require().NoError(err)
+	defer document.Close()
+
+	tasks := QueryTasks(document)
+	s.Require().Len(tasks, 1)
+	s.Require().Len(tasks[0].Sessions, 2)
+	s.Equal("2020-01-01 00:00", tasks[0].Sessions[0].Start.Format("2006-01-02 15:04"))
+	s.Equal("2020-01-02 00:00", tasks[0].Sessions[1].Start.Format("2006-01-02 15:04"))
+	s.Require().NotNil(tasks[0].Sessions[1].End)
+	s.Equal("2020-01-03 00:00", tasks[0].Sessions[1].End.Format("2006-01-02 15:04"))
+	s.Require().NotNil(tasks[0].Schedule)
+	s.Equal("2020-01-04 00:00", tasks[0].Schedule.Start.Format("2006-01-02 15:04"))
+	s.Require().NotNil(tasks[0].Schedule.End)
+	s.Equal("2020-01-05 00:00", tasks[0].Schedule.End.Format("2006-01-02 15:04"))
+}
+
+func (s *SyslangTestSuite) TestEmptyTask() {
+	document, err := NewDocument("[ ] \n[ ] titled\n")
+	s.Require().NoError(err)
+	defer document.Close()
+
+	tasks := QueryTasks(document)
+	s.Require().Len(tasks, 2)
+	s.Empty(tasks[0].Title)
+	s.Equal("titled", tasks[1].Title)
+	s.Equal("- [ ] \n- [ ] titled\n", document.ToMarkdown())
+}
+
+func (s *SyslangTestSuite) TestEmptyTaskDoesNotUseIndentedBodyAsTitle() {
+	document, err := NewDocument("[ ] \n  body\n[ ] following\n")
+	s.Require().NoError(err)
+	defer document.Close()
+
+	tasks := QueryTasks(document)
+	s.Require().Len(tasks, 2)
+	s.Empty(tasks[0].Title)
+	s.Equal("following", tasks[1].Title)
+}
+
 func (s *SyslangTestSuite) TestTaskPriority() {
 	source := `
 [ ] task

@@ -44,3 +44,59 @@ Not child.
   (text_line (text))
 )
 
+
+==================
+Section in outline releases same-indent sibling text
+==================
+* O
+  > Sec
+    child
+  back
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (section (section_marker) (text_to_eol)
+      (text_line (text)))
+    (text_line (text))))
+
+==================
+Section in outline releases same-indent sub-outline
+==================
+* A
+  > S
+  ** B
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (section (section_marker) (text_to_eol))
+    (outline_2 (outline_2_marker) (text_to_eol))))
+
+==================
+Section in outline releases same-indent heading
+==================
+* Top
+  > Sec
+  # H
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (section (section_marker) (text_to_eol))
+    (heading (heading_1 (heading_1_marker) (text_to_eol)))))
+
+==================
+Outline marker followed by paren degrades to text
+==================
+*(foo)
+---
+(document
+  (text_line (text) (text)))
+
+==================
+Empty outline marker is a valid empty outline
+==================
+* 
+after
+---
+(document
+  (outline_1 (outline_1_marker))
+  (text_line (text)))

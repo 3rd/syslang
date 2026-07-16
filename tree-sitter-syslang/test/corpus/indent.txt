@@ -19,3 +19,92 @@ Indent
   )
   (task_default (task_marker_default) (text_line (text)))
 )
+
+==================
+Task keeps child across blank line
+==================
+[ ] task
+  first child
+
+  second child
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (text_line (text))
+    (text_line (text))))
+
+==================
+Section keeps child across blank line
+==================
+> section
+  first child
+
+  second child
+---
+(document
+  (section (section_marker) (text_to_eol)
+    (text_line (text))
+    (text_line (text))))
+
+==================
+List keeps child across blank line
+==================
+- item
+  first child
+
+  second child
+---
+(document
+  (list_item (list_item_marker) (text_line (text))
+    (text_line (text))
+    (text_line (text))))
+
+==================
+Over-indented then shallower line stays in task
+==================
+[ ] parent
+    deep line
+  shallow line
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (text_line (text))
+    (text_line (text))))
+
+==================
+Tab-indented sections under an outline are siblings
+==================
+* out
+	> secA
+	> secB
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (section (section_marker) (text_to_eol))
+    (section (section_marker) (text_to_eol))))
+
+==================
+Tab-indented section keeps deeper child and releases same-level sibling
+==================
+* O
+	> Sec
+		child
+	back
+---
+(document
+  (outline_1 (outline_1_marker) (text_to_eol)
+    (section (section_marker) (text_to_eol)
+      (text_line (text)))
+    (text_line (text))))
+
+==================
+Tab-indented sections inside a task are siblings
+==================
+[ ] t
+	> a
+	> b
+---
+(document
+  (task_default (task_marker_default) (text_line (text))
+    (section (section_marker) (text_to_eol))
+    (section (section_marker) (text_to_eol))))

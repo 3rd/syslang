@@ -31,6 +31,24 @@ module.exports = grammar({
     $.internal_link_target,
     $.internal_link_end,
     $.label_line,
+    // Range separators are external so the dash only commits when the operand
+    // that follows actually completes the range (lookahead). _range_sep_date
+    // accepts a bare-date tail (daterange); _range_sep_datetime requires a time
+    // or a full datetime tail so "datetime - bare-date" degrades to inline text.
+    $._range_sep_date,
+    $._range_sep_datetime,
+    // External so emitting it persists the section's own indent level as the
+    // scanner baseline. A line-internal token returns without a token in outline
+    // bodies (where INDENT is not valid), and tree-sitter rolls back the indent
+    // bookkeeping, which made a nested section adopt its own level as its child
+    // baseline and swallow same-indent siblings.
+    $.section_marker,
+    // A line-start "word:" immediately followed by an inline modifier or link
+    // (no space), e.g. "key:*b*" or "key:[[t]]". The internal label token loses
+    // here because the greedy text token matches the longer "key:*b*"; the
+    // scanner emits this only in that exact shape so text keeps ':' everywhere
+    // else (mid-line "word: value" stays plain text). Aliased to `label`.
+    $._inline_label,
   ],
   extras: () => [/ /, /\t/, /\n/],
   rules: {
@@ -65,6 +83,10 @@ module.exports = grammar({
         $.list_item,
         $.section,
         $.label_line,
+        // A bare comment line ("-- " with no body): the inline comment requires
+        // a body, so this document-level form keeps an empty marker line from
+        // erroring. Non-empty comment lines still parse as (text_line (comment)).
+        alias($._empty_comment, $.comment),
         $.text_line,
         $.horizontal_rule,
         $.double_horizontal_rule,
@@ -72,8 +94,17 @@ module.exports = grammar({
       ),
 
     // document title (basic)
+    // The emoji marker accepts full grapheme sequences, not just a single
+    // codepoint: a base pictographic followed by skin-tone modifiers, VS16, and
+    // ZWJ-joined pictographics, or a two-codepoint regional-indicator flag.
     document_title_basic_marker: () =>
-      choice(token(/=/), token(/\p{Extended_Pictographic}/)),
+      choice(
+        token(/=/),
+        token(/\p{Regional_Indicator}\p{Regional_Indicator}/),
+        token(
+          /\p{Extended_Pictographic}(\p{Emoji_Modifier}|\u{FE0F}|\u{200D}\p{Extended_Pictographic})*/,
+        ),
+      ),
     document_title_basic: ($) =>
       seq(
         $.document_title_basic_marker,
@@ -88,12 +119,21 @@ module.exports = grammar({
         token.immediate(/@meta/),
         repeat($.document_meta_field),
         token(/@end/),
+        // @end must be followed by a line end so it is not the rule's final
+        // symbol; otherwise tree-sitter treats a missing @end at EOF (after a
+        // trailing newline) as insertable and accepts an unterminated block.
+        choice($._eol, $._eof),
       ),
     document_meta_field: ($) =>
       seq(
         field("key", $.document_meta_field_key),
-        token.immediate(": "),
-        field("value", $.document_meta_field_value),
+        token.immediate(":"),
+        optional(
+          seq(
+            token.immediate(/[ \t]+/),
+            field("value", $.document_meta_field_value),
+          ),
+        ),
         $._eol,
       ),
     document_meta_field_key: () => token(/[\w]+/),
@@ -102,6 +142,7 @@ module.exports = grammar({
     // comments
     _comment_marker: () => token(/-- /),
     comment: ($) => seq($._comment_marker, /[^\n]+/),
+    _empty_comment: ($) => seq($._comment_marker, choice($._eol, $._eof)),
 
     // emphasis
     bold_content: () => token(/[^\*]+/),
@@ -127,23 +168,23 @@ module.exports = grammar({
     date: () =>
       choice(
         token(prec(1, /\d{4}-\d{2}-\d{2}/)),
-        token(prec(1, /\d{4}.\d{2}.\d{2}/)),
+        token(prec(1, /\d{4}\.\d{2}\.\d{2}/)),
         token(prec(1, /\d{4}\/\d{2}\/\d{2}/)),
       ),
-    daterange: ($) => prec(1, seq($.date, token(/-/), $.date)),
+    daterange: ($) => prec(1, seq($.date, $._range_sep_date, $.date)),
     time: () =>
       choice(
         token(prec(1, /\d{2}:\d{2}/)),
         token(prec(1, /\d{2}:\d{2}:\d{2}/)),
       ),
-    timerange: ($) => prec(1, seq($.time, token(/-/), $.time)),
+    timerange: ($) => prec(1, seq($.time, $._range_sep_datetime, $.time)),
     datetime: ($) => prec(1, seq($.date, $.time)),
     datetimerange: ($) =>
       prec(
         1,
         choice(
-          seq($.datetime, token(/-/), $.datetime),
-          seq($.datetime, token(/-/), $.time),
+          seq($.datetime, $._range_sep_datetime, $.datetime),
+          seq($.datetime, $._range_sep_datetime, $.time),
         ),
       ),
 
@@ -156,19 +197,21 @@ module.exports = grammar({
     tag_identifier: () => token(/\$[\pL\pN][^\$\s]*/), // $tag
 
     // outlines
-    outline_1_marker: () => token("*"),
-    outline_2_marker: () => token("**"),
-    outline_3_marker: () => token("***"),
-    outline_4_marker: () => token("****"),
-    outline_5_marker: () => token("*****"),
-    outline_6_marker: () => token("******"),
+    // Markers include the required trailing space so a marker not followed by a
+    // space (e.g. "*(foo)") never tokenizes as a marker and degrades to text
+    // instead of erroring. The space is part of the marker token.
+    outline_1_marker: () => token("* "),
+    outline_2_marker: () => token("** "),
+    outline_3_marker: () => token("*** "),
+    outline_4_marker: () => token("**** "),
+    outline_5_marker: () => token("***** "),
+    outline_6_marker: () => token("****** "),
     outline_1: ($) =>
       prec.right(
         seq(
           seq(
             field("marker", $.outline_1_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -191,8 +234,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.outline_2_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -214,8 +256,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.outline_3_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -236,8 +277,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.outline_4_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -255,8 +295,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.outline_5_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -273,8 +312,7 @@ module.exports = grammar({
         seq(
           seq(
             field("marker", $.outline_6_marker),
-            token.immediate(" "),
-            $.text_to_eol,
+            optional($.text_to_eol),
             choice($._eol, $._eof),
           ),
           repeat(
@@ -289,22 +327,22 @@ module.exports = grammar({
     // headings
     heading_1_marker: () => token(/# /),
     heading_1: ($) =>
-      seq($.heading_1_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_1_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading_2_marker: () => token(/## /),
     heading_2: ($) =>
-      seq($.heading_2_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_2_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading_3_marker: () => token(/### /),
     heading_3: ($) =>
-      seq($.heading_3_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_3_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading_4_marker: () => token(/#### /),
     heading_4: ($) =>
-      seq($.heading_4_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_4_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading_5_marker: () => token(/##### /),
     heading_5: ($) =>
-      seq($.heading_5_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_5_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading_6_marker: () => token(/###### /),
     heading_6: ($) =>
-      seq($.heading_6_marker, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.heading_6_marker, optional($.text_to_eol), choice($._eol, $._eof)),
     heading: ($) =>
       choice(
         $.heading_1,
@@ -316,7 +354,8 @@ module.exports = grammar({
       ),
 
     // section
-    section_marker: () => token(/>/),
+    // section_marker is defined in externals so the scanner can record the
+    // section's indent level when it fires (see scanner.c scan_section_marker).
     _section_children: ($) =>
       seq(
         $._indent,
@@ -337,7 +376,7 @@ module.exports = grammar({
       seq(
         $.section_marker,
         / /,
-        $.text_to_eol,
+        optional($.text_to_eol),
         choice($._eol, $._eof),
         optional($._section_children),
       ),
@@ -345,27 +384,29 @@ module.exports = grammar({
     // banner
     banner_marker: () => token(/\|/),
     banner: ($) =>
-      seq($.banner_marker, / /, $.text_to_eol, choice($._eol, $._eof)),
+      seq($.banner_marker, / /, optional($.text_to_eol), choice($._eol, $._eof)),
 
     // diviers
-    horizontal_rule: ($) => seq(token(/---/), choice($._eol, $._eof)),
-    double_horizontal_rule: ($) => seq(token(/===/), choice($._eol, $._eof)),
+    horizontal_rule: () => token(/---/),
+    double_horizontal_rule: () => token(/===/),
 
     // tasks
     _task: ($) =>
       choice($.task_default, $.task_active, $.task_done, $.task_cancelled),
     task_default: ($) =>
-      seq($.task_marker_default, / /, $.text_line, optional($._task_children)),
+      prec.right(seq($.task_marker_default, / /, optional($.text_line), optional($._task_children))),
     task_active: ($) =>
-      seq($.task_marker_active, / /, $.text_line, optional($._task_children)),
+      prec.right(seq($.task_marker_active, / /, optional($.text_line), optional($._task_children))),
     task_done: ($) =>
-      seq($.task_marker_done, / /, $.text_to_eol, optional($._task_children)),
+      prec.right(seq($.task_marker_done, / /, optional($.text_to_eol), optional($._task_children))),
     task_cancelled: ($) =>
-      seq(
-        $.task_marker_cancelled,
-        / /,
-        $.text_to_eol,
-        optional($._task_children),
+      prec.right(
+        seq(
+          $.task_marker_cancelled,
+          / /,
+          optional($.text_to_eol),
+          optional($._task_children),
+        ),
       ),
     _task_children: ($) =>
       seq(
@@ -378,6 +419,7 @@ module.exports = grammar({
             $._task,
             $.section,
             $.banner,
+            $.image,
             $.text_line,
             $.list_item,
             $.code_block,
@@ -389,9 +431,15 @@ module.exports = grammar({
     task_session: ($) =>
       seq(
         "Session: ",
-        choice($.datetime, $.datetimerange),
+        choice($.date, $.daterange, $.datetime, $.datetimerange),
+        optional(alias($._task_annotation, $.text_to_eol)),
         choice($._eol, $._eof),
       ),
+    // Trailing human annotation after a session/completion operand. It must not
+    // begin with a digit or '-' so a time/date continuation (keeping the operand
+    // maximal) or a "- datetime" range separator is never swallowed; a plain
+    // greedy text_to_eol here ends past those and would win the lex by length.
+    _task_annotation: () => token(/[^\s\d\-][^\n]*/),
     task_recurrence: () => token(/@[^\s]+/),
     task_schedule: ($) =>
       seq(
@@ -401,7 +449,12 @@ module.exports = grammar({
         choice($._eol, $._eof),
       ),
     task_completion: ($) =>
-      seq(token("Done: "), $.datetime, choice($._eol, $._eof)),
+      seq(
+        token("Done: "),
+        choice($.date, $.datetime),
+        optional(alias($._task_annotation, $.text_to_eol)),
+        choice($._eol, $._eof),
+      ),
 
     // list items
     list_item_label: ($) => repeat1($._inline),
@@ -427,7 +480,7 @@ module.exports = grammar({
     _list_item_children: ($) =>
       seq(
         $._indent,
-        repeat1(choice($.list_item, $.text_line, $.code_block)),
+        repeat1(choice($.list_item, $.image, $.text_line, $.code_block)),
         choice($._dedent, $._eof),
       ),
 
@@ -453,16 +506,20 @@ module.exports = grammar({
 
     // code blocks
     code_block_language: () => token.immediate(/[a-z]+/),
-    code_block_line: () => token(/[^\n]+/),
+    // @end closes the block only when it's on its own line: equal lexical
+    // precedence with code_block_line makes the longest match win (so
+    // "@end fake" stays content), and declaring code_block_end first wins
+    // the exact-"@end" tie via rule order.
+    code_block_end: () => token(prec(2, /[ \t]*@end/)),
+    code_block_line: () => token(prec(2, /[^\n]+/)),
     code_block_content: ($) =>
       repeat1(seq($.code_block_line, choice($._eol, $._eof))),
     code_block_start: ($) =>
       seq(
-        token(prec(1, "@code")),
+        token("@code"),
         optional(seq(token.immediate(/\s/), $.code_block_language)),
         $._eol,
       ),
-    code_block_end: () => token(prec(2, /[ \t]*@end/)),
     code_block: ($) =>
       seq(
         $.code_block_start,
@@ -510,10 +567,22 @@ module.exports = grammar({
     text_to_eol: () => token(/[^\n]+/),
     text_line: ($) =>
       seq(
-        choice(seq(optional($.label), repeat1($._inline)), $.label),
+        choice(
+          seq(
+            optional(choice($.label, alias($._inline_label, $.label))),
+            repeat1($._inline),
+          ),
+          $.label,
+        ),
         choice(token(/\n/), $._eof),
       ),
-    text: () => prec.right(repeat1(token(/[^\s()]+/))),
+    // Boundaries are the exact grammar extras (space, tab, newline) plus '(' ')'.
+    // Using an explicit set instead of \s means other control-space characters
+    // like form feed (\x0c) or vertical tab (\x0b) are absorbed into the text run
+    // rather than becoming unlexable gaps that error out the line. ':' stays IN
+    // text so mid-line colons ("word: value") do not fragment; the line-start
+    // "key:*b*" label case is handled by the scanner's inline-label token.
+    text: () => prec.right(repeat1(token(/[^ \t\n()]+/))),
     _raw_text_line: ($) => seq(repeat1($.text), choice($._eol, $._eof)),
   },
 });
